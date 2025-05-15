@@ -14,7 +14,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Quicksand:wght@300..700&display=swap"
         rel="stylesheet">
 
-    <title>user</title>
+    <title>Profiles</title>
 
 </head>
 
@@ -22,47 +22,30 @@
     <div class="container mt-4">
         <fieldset class="border p-4 shadow agregar bg-light rounded">
             <div class="text-center bg-success-subtle">
-                    <h2 class="title"><b>Menu Usuarios</b></h2>
+                    <h2 class="title"><b>Menu Perfiles</b></h2>
             </div>
             <hr/>
             <div class="d-flex">
                 <div class="col">
                 </div>
-                <div class="col text-end"><button id="AddUser" class="btn_add btn bg-info-subtle border-black"
-                        onclick=""><i class="bi bi-plus-circle"></i> Agregar Usuario</button></div>
+                <div class="col text-end"><button id="AddProfile" class="btn_add btn bg-info-subtle border-black"
+                        onclick=""><i class="bi bi-plus-circle"></i> Agregar Perfil</button></div>
             </div>
             <hr/>
         
-           <div class="container" id="UserTable">
+           <div class="container" id="ProfileTable">
 		<div class="table-responsive">
 		<table class="table table-striped">
 			<thead class="table-secondary">
 			<tr>
-				<th>Id</th>
 				<th>
-				Cedula
-				<button class="btn btn-sm btn-light ms-2"  id="PersonalIdFilter">
-					<i class="bi bi-arrow-down-circle"></i> 
-				</button>
-				</th>
-				<th>
-				Nombre y Apellido
-				<button class="btn btn-sm btn-light ms-2"  id="NameFilter">
-					<i class="bi bi-arrow-down-circle"></i> 
-				</button>
-				</th>
-				<th>
-				Perfil 
+				Perfil
 				<button class="btn btn-sm btn-light ms-2" id="ProfileFilter">
 					<i class="bi bi-arrow-down-circle"></i> 
 				</button>
 				</th>
-				<th>Última Conexión
-				<button class="btn btn-sm btn-light ms-2" id="ConectionFilter">
-					<i class="bi bi-arrow-down-circle"></i>  
-				</button>
-				</th>
-				<th>Estado
+				<th>
+				Estado
 				<button class="btn btn-sm btn-light ms-2" id="EstateFilter">
 					<i class="bi bi-arrow-down-circle"></i> 
 				</button>
@@ -71,17 +54,6 @@
 			</tr>
 			</thead>
 			<tbody id="tabla-body">
-                                    <tr>
-                <td>1</td>
-                <td>1234567890</td>
-                <td>Juan Perez</td>
-                <td>Administrador</td>
-                <td>2023-10-01 12:00:00</td>
-                <td>Activo</td>
-                <td>
-                    <button class="btn btn-sm btn-primary" id="EditUser"><i class="bi bi-pencil-square"></i></button>
-                    <button class="btn btn-sm btn-danger" id="DeleteUser"><i class="bi bi-trash"></i></button>
-                </td>
 			</tbody>
 		</table>
 		</div>
