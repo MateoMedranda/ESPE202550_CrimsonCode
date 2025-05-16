@@ -1,0 +1,15 @@
+.image_container{
+    overflow: hidden;
+    height: 250px;
+}
+
+.image_container img {
+  height: auto;
+  box-shadow: 0px 6px 5px rgb(85, 85, 85);
+}
+
+.projects{
+    border:1px solid rgba(65, 65, 65, 0.384);
+    background-color: white;
+    box-shadow: 0px 6px 5px rgb(85, 85, 85);
+}

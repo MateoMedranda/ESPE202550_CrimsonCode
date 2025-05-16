@@ -1,0 +1,35 @@
+body{
+  background-image: url('../IMG/fondoLogin.jpg'); /* Cambia por tu imagen */
+  background-size: cover;
+  background-position: center;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-box {
+  background: white;
+  border: 2px solid black;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 5px 5px black;
+  text-align: center;
+}
+
+
+.login-box img {
+  width: 100px;
+  margin-bottom: 1rem;
+}
+
+
+.login-box .btn {
+  background-color: #cbe6c1;
+  border: none;
+  box-shadow: 2px 2px black;
+}
