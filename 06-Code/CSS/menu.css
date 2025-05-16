@@ -1,0 +1,40 @@
+.btn_add:hover{
+    background-color: rgb(143, 201, 255) !important;
+}
+
+.header_sistem{
+    background-color: rgb(255, 255, 255);
+}
+
+.conf_user{
+    z-index: 1050 !important;
+}
+
+.menu{
+    background-color: rgba(162, 187, 255, 0.795);
+}
+
+body{
+    background-image:linear-gradient(to bottom, rgba(0, 0, 0, 0.13), rgba(0, 0, 0, 0.151)), 
+                      url("../IMG/fondo.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    height: 100vh;
+}
+
+
+.inter-menu {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: bold;
+  font-style: normal;
+}
+
+.inter-title {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  letter-spacing: 2px;
+}
