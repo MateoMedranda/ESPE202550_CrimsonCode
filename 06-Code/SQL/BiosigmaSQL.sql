@@ -10,17 +10,17 @@ drop table if exists ACTIVITY;
 
 drop table if exists AMBIENTALPLAN;
 
-drop table if exists EVENT;
+drop table if exists EVENTS;
 
 drop table if exists EVIDENCE;
 
-drop table if exists LOCATION;
+drop table if exists LOCATIONS;
 
 drop table if exists MONITORING;
 
 drop table if exists PERMIT;
 
-drop table if exists PROFILE;
+drop table if exists PROFILES;
 
 drop table if exists PROJECT;
 
@@ -28,15 +28,84 @@ drop table if exists REMINDER;
 
 drop table if exists SUPERVISITONPERIOD;
 
-drop table if exists USER;
+drop table if exists USERS;
+
+Create database biosigma_db;
+/*==============================================================*/
+/* Table: PROFILES                                               */
+/*==============================================================*/
+
+create table PROFILES
+(
+   PROFILES_ID           int not null Auto_increment,
+   PROFILES_NAME         varchar(64) not null,
+   PROFILES_READPROJECTS boolean,
+   PROFILES_CREATEPROJECTS boolean,
+   PROFILES_UPDATEPROJECTS boolean,
+   PROFILES_DELETEPROJECTS boolean,
+   PROFILES_READAMBIENTALPLANS boolean,
+   PROFILES_CREATEAMBIENTALPLANS boolean,
+   PROFILES_UPDATEAMBIENTALPLANS boolean,
+   PROFILES_DELETEAMBIENTALPLANS boolean,
+   PROFILES_READMONITORINGS boolean,
+   PROFILES_WRITEMONITORINGS boolean,
+   PROFILES_UPDATEMONITORINGS boolean,
+   PROFILES_DELETEMONITORINGS boolean,
+   PROFILES_CREATEACTIVITYS boolean,
+   PROFILES_READACTIVITY boolean,
+   PROFILES_UPDATEACTIVITYS boolean,
+   PROFILES_CREATEEVENTS boolean,
+   PROFILES_READEVENTS   boolean,
+   PROFILES_UPDATEEVENTS boolean,
+   PROFILES_DELETEEVENTS boolean,
+   PROFILES_CREATEUSERS  boolean,
+   PROFILES_READUSERS    boolean,
+   PROFILES_UPDATEUSERS  boolean,
+   PROFILES_DELETEUSERS  boolean,
+   PROFILES_CREATEPROFILES boolean,
+   PROFILES_UPDATEPROFILES boolean,
+   PROFILES_READPROFILES boolean,
+   PROFILES_DELETEPROFILES boolean,
+   PROFILES_READACTIONS  boolean,
+   PROFILES_READSUPERVISIONPERIOD boolean,
+   PROFILES_CREATESUPERVISIONPERIOD boolean,
+   PROFILES_DELETESUPERVISIONPERIOD boolean,
+   PROFILES_UPDATESUPERVISIONPERIOD boolean,
+   PROFILES_READPERMIT   boolean,
+   PROFILES_CREATEPERMIT boolean,
+   PROFILES_UPDATEPERMIT boolean,
+   PROFILES_DELETEPERMIT boolean,
+   PROFILES_READREMINDER boolean,
+   PROFILES_CREATEREMINDER boolean,
+   PROFILES_DELETEREMINDER boolean,
+   PROFILES_UPDATEREMINDER boolean,
+   primary key (PROFILES_ID)
+);
+
+/*==============================================================*/
+/* Table: USERS                                                  */
+/*==============================================================*/
+create table USERS
+(
+   USERS_ID              int not null Auto_increment,
+   PROFILES_ID           int not null,
+   USERS_NAME            varchar(64) not null,
+   USERS_SURNAME         varchar(64) not null,
+   USERS_BORNDATE        date not null,
+   USERS_EMAIL           varchar(128) not null,
+   USERS_PHONENUMBER     varchar(16) not null,
+   USERS_USERS            varchar(64) not null,
+   USERS_PASSWORD        varchar(128) not null,
+   primary key (USERS_ID)
+);
 
 /*==============================================================*/
 /* Table: ACTIONS                                               */
 /*==============================================================*/
 create table ACTIONS
 (
-   ACTIONS_ID           int not null,
-   USER_ID              int not null,
+   ACTIONS_ID           int not null Auto_increment,
+   USERS_ID              int not null,
    ACTIONS_DESCRIPTION  varchar(256) not null,
    ACTIONS_DATE         date not null,
    primary key (ACTIONS_ID)
@@ -47,9 +116,9 @@ create table ACTIONS
 /*==============================================================*/
 create table ACTIVITY
 (
-   ACTIVITY_ID          int not null,
+   ACTIVITY_ID          int not null Auto_increment,
    AMBIENTALPLAN_ID     int not null,
-   USER_ID              int not null,
+   USERS_ID              int not null,
    ACTIVITY_NAME        varchar(64) not null,
    ACTIVITY_OBJECTIVE   varchar(64) not null,
    ACTIVITY_TYPE        varchar(128) not null,
@@ -62,7 +131,7 @@ create table ACTIVITY
 /*==============================================================*/
 create table AMBIENTALPLAN
 (
-   AMBIENTALPLAN_ID     int not null,
+   AMBIENTALPLAN_ID     int not null Auto_increment,
    PROJECT_ID           int not null,
    AMBIENTALPLAN_NAME   varchar(128) not null,
    AMBIENTALPLAN_STARTDATE date not null,
@@ -74,17 +143,17 @@ create table AMBIENTALPLAN
 );
 
 /*==============================================================*/
-/* Table: EVENT                                                 */
+/* Table: EVENTS                                                 */
 /*==============================================================*/
-create table EVENT
+create table EVENTS
 (
-   EVENT_ID             int not null,
-   USER_ID              int not null,
-   EVENT_NAME           varchar(64) not null,
-   EVENT_STARTDATE      date not null,
-   EVENT_ENDDATE        date not null,
-   EVENT_DESCRIPTION    varchar(64) not null,
-   primary key (EVENT_ID)
+   EVENTS_ID             int not null Auto_increment,
+   USERS_ID              int not null,
+   EVENTS_NAME           varchar(64) not null,
+   EVENTS_STARTDATE      date not null,
+   EVENTS_ENDDATE        date not null,
+   EVENTS_DESCRIPTION    varchar(64) not null,
+   primary key (EVENTS_ID)
 );
 
 /*==============================================================*/
@@ -92,7 +161,7 @@ create table EVENT
 /*==============================================================*/
 create table EVIDENCE
 (
-   EVIDENCE_ID          int not null,
+   EVIDENCE_ID          int not null Auto_increment,
    SUPERVISITONPERIOD_ID int not null,
    EVIDENCE_NAME        varchar(64) not null,
    EVIDENCE_DATE        date not null,
@@ -101,17 +170,17 @@ create table EVIDENCE
 );
 
 /*==============================================================*/
-/* Table: LOCATION                                              */
+/* Table: LOCATIONS                                              */
 /*==============================================================*/
-create table LOCATION
+create table LOCATIONS
 (
-   LOCATION_ID          int not null,
+   LOCATIONS_ID          int not null Auto_increment,
    ACTIVITY_ID          int not null,
-   LOCATION_NAME        varchar(64) not null,
-   LOCATION_LATITUDE    varchar(128) not null,
-   LOCATION_ALTITUDE    varchar(128) not null,
-   LOCATION_LENGHT      varchar(128) not null,
-   primary key (LOCATION_ID)
+   LOCATIONS_NAME        varchar(64) not null,
+   LOCATIONS_LATITUDE    varchar(128) not null,
+   LOCATIONS_ALTITUDE    varchar(128) not null,
+   LOCATIONS_LENGHT      varchar(128) not null,
+   primary key (LOCATIONS_ID)
 );
 
 /*==============================================================*/
@@ -119,7 +188,7 @@ create table LOCATION
 /*==============================================================*/
 create table MONITORING
 (
-   MONITORING_ID        int not null,
+   MONITORING_ID        int not null Auto_increment,
    PROJECT_ID           int not null,
    MONITORING_DESCRIPTION varchar(512) not null,
    MONITORING_DATE      date not null,
@@ -133,7 +202,7 @@ create table MONITORING
 /*==============================================================*/
 create table PERMIT
 (
-   PERMIT_ID            int not null,
+   PERMIT_ID            int not null Auto_increment,
    PROJECT_ID           int not null,
    PERMIT_NAME          varchar(128) not null,
    PERMIT_DESCRIPTION   varchar(256) not null,
@@ -141,62 +210,14 @@ create table PERMIT
    primary key (PERMIT_ID)
 );
 
-/*==============================================================*/
-/* Table: PROFILE                                               */
-/*==============================================================*/
-create table PROFILE
-(
-   PROFILE_ID           int not null,
-   PROFILE_READPROJECTS bool,
-   PROFILE_CREATEPROJECTS bool,
-   PROFILE_UPDATEPROJECTS bool,
-   PROFILE_DELETEPROJECTS bool,
-   PROFILE_READAMBIENTALPLANS bool,
-   PROFILE_CREATEAMBIENTALPLANS bool,
-   PROFILE_UPDATEAMBIENTALPLANS bool,
-   PROFILE_DELETEAMBIENTALPLANS bool,
-   PROFILE_READMONITORINGS bool,
-   PROFILE_WRITEMONITORINGS bool,
-   PROFILE_UPDATEMONITORINGS bool,
-   PROFILE_DELETEMONITORINGS bool,
-   PROFILE_CREATEACTIVITYS bool,
-   PROFILE_READACTIVITY bool,
-   PROFILE_UPDATEACTIVITYS bool,
-   PROFILE_CREATEEVENTS bool,
-   PROFILE_READEVENTS   bool,
-   PROFILE_UPDATEEVENTS bool,
-   PROFILE_DELETEEVENTS bool,
-   PROFILE_CREATEUSERS  bool,
-   PROFILE_READUSERS    bool,
-   PROFILE_UPDATEUSERS  bool,
-   PROFILE_DELETEUSERS  bool,
-   PROFILE_CREATEPROFILES bool,
-   PROFILE_UPDATEPROFILES bool,
-   PROFILE_READPROFILES bool,
-   PROFILE_DELETEPROFILES bool,
-   PROFILE_READACTIONS  bool,
-   PROFILE_READSUPERVISIONPERIOD bool,
-   PROFILE_CREATESUPERVISIONPERIOD bool,
-   PROFILE_DELETESUPERVISIONPERIOD bool,
-   PROFILE_UPDATESUPERVISIONPERIOD bool,
-   PROFILE_READPERMIT   bool,
-   PROFILE_CREATEPERMIT bool,
-   PROFILE_UPDATEPERMIT bool,
-   PROFILE_DELETEPERMIT bool,
-   PROFILE_READREMINDER bool,
-   PROFILE_CREATEREMINDER bool,
-   PROFILE_DELETEREMINDER bool,
-   PROFILE_UPDATEREMINDER bool,
-   primary key (PROFILE_ID)
-);
 
 /*==============================================================*/
 /* Table: PROJECT                                               */
 /*==============================================================*/
 create table PROJECT
 (
-   PROJECT_ID           int not null,
-   USER_ID              int not null,
+   PROJECT_ID           int not null Auto_increment,
+   USERS_ID              int not null,
    PROJECT_NAME         varchar(128) not null,
    PROJECT_STARTDATE    date not null,
    PROJECT_ENDDATE      date not null,
@@ -209,8 +230,8 @@ create table PROJECT
 /*==============================================================*/
 create table REMINDER
 (
-   REMINDER_ID          int not null,
-   USER_ID              int not null,
+   REMINDER_ID          int not null Auto_increment,
+   USERS_ID              int not null,
    REMINDER_REGISTERDATE date,
    REMINDER_TOREMEMBERDATE date not null,
    REMINDER_CONTENT     varchar(128) not null,
@@ -222,49 +243,34 @@ create table REMINDER
 /*==============================================================*/
 create table SUPERVISITONPERIOD
 (
-   SUPERVISITONPERIOD_ID int not null,
+   SUPERVISITONPERIOD_ID int not null Auto_increment,
    ACTIVITY_ID          int not null,
    SUPERVISITONPERIOD_STARTDATE date not null,
    SUPERVISITONPERIOD_ENDDATE date not null,
    primary key (SUPERVISITONPERIOD_ID)
 );
 
-/*==============================================================*/
-/* Table: USER                                                  */
-/*==============================================================*/
-create table USER
-(
-   USER_ID              int not null,
-   PROFILE_ID           int not null,
-   USER_NAME            varchar(64) not null,
-   USER_SURNAME         varchar(64) not null,
-   USER_BORNDATE        date not null,
-   USER_EMAIL           varchar(128) not null,
-   USER_PHONENUMBER     varchar(16) not null,
-   USER_USER            varchar(64) not null,
-   USER_PASSWORD        varchar(128) not null,
-   primary key (USER_ID)
-);
 
-alter table ACTIONS add constraint FK_DOES foreign key (USER_ID)
-      references USER (USER_ID) on delete restrict on update restrict;
+
+alter table ACTIONS add constraint FK_DOES foreign key (USERS_ID)
+      references USERS (USERS_ID) on delete restrict on update restrict;
 
 alter table ACTIVITY add constraint FK_GENERATES foreign key (AMBIENTALPLAN_ID)
       references AMBIENTALPLAN (AMBIENTALPLAN_ID) on delete restrict on update restrict;
 
-alter table ACTIVITY add constraint FK_ISCREATEDBY foreign key (USER_ID)
-      references USER (USER_ID) on delete restrict on update restrict;
+alter table ACTIVITY add constraint FK_ISCREATEDBY foreign key (USERS_ID)
+      references USERS (USERS_ID) on delete restrict on update restrict;
 
 alter table AMBIENTALPLAN add constraint FK_MANAGES foreign key (PROJECT_ID)
       references PROJECT (PROJECT_ID) on delete restrict on update restrict;
 
-alter table EVENT add constraint FK_PROGRAMS foreign key (USER_ID)
-      references USER (USER_ID) on delete restrict on update restrict;
+alter table EVENTS add constraint FK_PROGRAMS foreign key (USERS_ID)
+      references USERS (USERS_ID) on delete restrict on update restrict;
 
 alter table EVIDENCE add constraint FK_NEEDS foreign key (SUPERVISITONPERIOD_ID)
       references SUPERVISITONPERIOD (SUPERVISITONPERIOD_ID) on delete restrict on update restrict;
 
-alter table LOCATION add constraint FK_ISIN foreign key (ACTIVITY_ID)
+alter table LOCATIONS add constraint FK_ISIN foreign key (ACTIVITY_ID)
       references ACTIVITY (ACTIVITY_ID) on delete restrict on update restrict;
 
 alter table MONITORING add constraint FK_HAS foreign key (PROJECT_ID)
@@ -273,15 +279,15 @@ alter table MONITORING add constraint FK_HAS foreign key (PROJECT_ID)
 alter table PERMIT add constraint FK_REQUIRES foreign key (PROJECT_ID)
       references PROJECT (PROJECT_ID) on delete restrict on update restrict;
 
-alter table PROJECT add constraint FK_BELONGSTO foreign key (USER_ID)
-      references USER (USER_ID) on delete restrict on update restrict;
+alter table PROJECT add constraint FK_BELONGSTO foreign key (USERS_ID)
+      references USERS (USERS_ID) on delete restrict on update restrict;
 
-alter table REMINDER add constraint FK_CREATES foreign key (USER_ID)
-      references USER (USER_ID) on delete restrict on update restrict;
+alter table REMINDER add constraint FK_CREATES foreign key (USERS_ID)
+      references USERS (USERS_ID) on delete restrict on update restrict;
 
 alter table SUPERVISITONPERIOD add constraint FK_CONTAINS foreign key (ACTIVITY_ID)
       references ACTIVITY (ACTIVITY_ID) on delete restrict on update restrict;
 
-alter table USER add constraint FK_HASA foreign key (PROFILE_ID)
-      references PROFILE (PROFILE_ID) on delete restrict on update restrict;
+alter table USERS add constraint FK_HASA foreign key (PROFILES_ID)
+      references PROFILES (PROFILES_ID) on delete restrict on update restrict;
 
