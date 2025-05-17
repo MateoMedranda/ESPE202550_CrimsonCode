@@ -88,12 +88,12 @@
                     </li>
 
                     <!-- Dropdown de usuarios visible solo para admin -->
-                    <li class="nav-item dropdown opcion fw-bold menuNav mx-2">
+                    <li class="nav-item dropdown fw-bold mx-2">
                         <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-people-fill"></i> USUARIOS
                         </a>
-                        <ul class="dropdown-menu menu subNav-menu" aria-labelledby="usersDropdown">
+                        <ul class="dropdown-menu sub_menu subNav-menu" aria-labelledby="usersDropdown">
                             <li><a class="dropdown-item" href="#" onclick="">
                                     <i class="bi bi-person-lines-fill"></i> Lista de usuarios</a></li>
 
@@ -108,20 +108,18 @@
     </div>
 
     <div class="container mt-4">
-        <fieldset class="border p-4 shadow project_container bg-light rounded">
+        <fieldset class="p-2 shadow project_container rounded">
             <div class="d-flex">
                 <div class="col">
-                    <h2 class="title"><b>Proyectos</b></h2>
+                    <h2 class="title">Proyectos</h2>
                 </div>
-                <div class="col text-end"><button id="addProject" class="btn_add btn bg-info-subtle shadow"
-                        onclick=""><i class="bi bi-plus-circle"></i> Agregar Proyecto</button></div>
+                <div class="col text-end"><button id="addProject" class="btn_add_project btn bg-info-subtle border-black" onclick=""><i
+                            class="bi bi-plus-circle"></i> Agregar Proyecto</button></div>
             </div>
             <hr>
-            <div class="row">
+            <div class="d-flex div_filter_projects">
                 <div class="col-sm-12 col-md-2 mx-2">
-                    <label>Estados:</label>
-                    <select id="EstadoConsulta" class="form-control mb-3 form-select bg-success-subtle  shadow"
-                        onchange="">
+                    <select id="EstadoConsulta" class="form-control mb-3 form-select" onchange="">
                         <option value="1">Mostrar Todo</option>
                         <option value="2">Finalizado</option>
                         <option value="3">En progreso</option>
@@ -129,18 +127,18 @@
                 </div>
 
                 <div class="col-sm-12 col-md-2 mx-2">
-                    <label>Año:</label>
                     <div class="d-flex">
-                        <select class="form-control mb-3 form-select bg-success-subtle shadow">
+                        <select class="form-control mb-3 form-select ">
+                            <option>Todos los años</option>
                             <option>2024</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="col-sm-12 col-md-2 mx-2">
-                    <label>Mes:</label>
                     <div class="d-flex">
-                        <select class="form-control mb-3 form-select bg-success-subtle shadow">
+                        <select class="form-control mb-3 form-select">
+                            <option>Todos los meses</option>
                             <option>Enero</option>
                             <option>Febrero</option>
                             <option>Marzo</option>
@@ -160,47 +158,49 @@
             <hr>
 
             <div class="d-flex pt-4 pb-4">
-                <div class="projects col-3 m-auto">
+                <div class="card-proyecto col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            <div>
+                                <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                                <hr class="m-0">
+                            </div>
+                            <div class="project_options rounded">
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                        </div>
-                    </div>
-                    <h6 class="mt-2">Inicio: 2015</h6>
+                        
+                        <h6 class="mt-2">Inicio: 2015</h6>
                     </div>
                     <img src="../IMG/project1.png" width="100%">
                 </div>
 
-                <div class="projects col-3 m-auto">
+                <div class="card-proyecto col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            <div>
+                                <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            </div>
+                            <div>
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                        </div>
-                    </div>
-                    <h6 class="mt-2">Inicio: 2015</h6>
+                        <h6 class="mt-2">Inicio: 2015</h6>
                     </div>
                     <img src="../IMG/project1.png" width="100%">
                 </div>
 
-                <div class="projects col-3 m-auto">
+                <div class="card-proyecto col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            <div>
+                                <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            </div>
+                            <div>
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                        </div>
-                    </div>
-                    <h6 class="mt-2">Inicio: 2015</h6>
+                        <h6 class="mt-2">Inicio: 2015</h6>
                     </div>
                     <img src="../IMG/project1.png" width="100%">
                 </div>
@@ -210,6 +210,12 @@
             <br>
 
         </fieldset>
+
+        <div class="bg-success-subtle mt-4 rounded text-center">
+            
+            <br>
+            <br>
+        </div>
     </div>
 
 </body>
