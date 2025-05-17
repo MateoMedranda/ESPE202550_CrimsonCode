@@ -106,42 +106,53 @@
             </div>
         </div>
     </div>
-
     <div class="container mt-4">
-        <h2 class="mb-4" style="color:white">Plan de Prevención y Mitigación de Impactos</h2>
+        <h2 style="color:white">Plan de Mitigación y Contingencia</h2>
         <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
+            <table id="tablaIngresos" class="table text-center table-striped rounded">
                 <thead>
                     <tr>
-                        <th>Código</th>
-                        <th>Etapa</th>
-                        <th>Proceso / Actividad</th>
-                        <th>Aspecto Ambiental</th>
-                        <th>Impacto Ambiental</th>
-                        <th>Medidas</th>
-                        <th>Indicadores</th>
-                        <th>Medios de Verificación</th>
-                        <th>Plazo</th>
-                        <th>Frecuencia</th>
-                        <th>Costo</th>
+                        <th scope="col">Código</th>
+                        <th scope="col">Proceso / Actividad</th>
+                        <th scope="col">Impacto Ambiental</th>
+                        <th scope="col">Medidas</th>
+                        <th scope="col">Frecuencia</th>
+                        <th scope="col">Ultima actualización</th>
+                        <th scope="col">Cumplimiento</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
+                <tbody id="table-body">
+                    <tr class="align-middle">
                         <td>P1C1</td>
-                        <td>Construcción</td>
                         <td>Construcción de tomas, desarenadores, etc.</td>
-                        <td>Entorno ambiental y social</td>
                         <td>Degradación ambiental por desconocimiento</td>
                         <td>Mantener durante la construcción del proyecto el cumplimiento del PMA</td>
-                        <td>Actividad ejecutada / propuesta</td>
-                        <td>Contrato de trabajo</td>
-                        <td>Durante la construcción</td>
                         <td>Permanente</td>
-                        <td>$30,000</td>
+                        <td>19-05-2025</td>
+                        <td><p class="bg-success-subtle text-center m-0 p-0">Cumple</p></td>
+                        <td>
+                            <i style="color:red;font-size: 25px;" class="bi bi-x-circle mx-2 icono-boton" title="Anular" onclick=""></i>
+                            <i style="color:blue;font-size: 25px;" class="bi bi-pencil-square mx-2 icono-boton" onclick=""></i>
+                        </td>
                     </tr>
                 </tbody>
             </table>
+            <hr>
+            <div class="d-flex">
+                <nav>
+                    <ul class="pagination shadow" id="pagination"></ul>
+                </nav>
+                <div class="mb-3 col-1 mx-3">
+                    <select id="itemsPerPage" class="form-select shadow" onchange="">
+                        <option value="5" selected>5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -150,4 +161,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
     crossorigin="anonymous"></script>
+
 </html>
