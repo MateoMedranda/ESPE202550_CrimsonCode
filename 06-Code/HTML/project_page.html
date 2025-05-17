@@ -19,7 +19,7 @@
 
 </head>
 
-<body >
+<body class="letter_quicksand">
     <header class="navbar bg-whitenavbar-expand-lg header_sistem">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center w-100">
@@ -50,7 +50,7 @@
 
     </header>
 
-    <div class="navbar navbar-expand-lg navbar-light sticky-top shadow menu">
+    <div class="navbar navbar-expand-lg navbar-light sticky-top menu">
         <div class="container-fluid">
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
@@ -110,7 +110,7 @@
     <div class="container mt-4">
         <fieldset class="border p-4 shadow agregar bg-light rounded">
             <div class="text-center bg-success-subtle">
-                    <h2 class="title"><b>Proyecto Hidroabanico</b></h2>
+                <h2 class="title"><b>Proyecto Hidroabanico</b></h2>
             </div>
             <hr>
             <div class="row">
@@ -134,50 +134,47 @@
                         onclick=""><i class="bi bi-plus-circle"></i> Agregar Permiso</button></div>
             </div>
             <hr>
-        
+
             <div class="d-flex pt-4 pb-4">
-                <div class="projects col-3 m-auto bg-dark-subtle">
-                    <div class="px-2 pt-2 ">
-                        <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-0 title_project fw-bold">Permiso De Agua</h5>
+                <div class="project_permission_card col-3 m-auto bg-dark-subtle rounded">
+                    <div class="px-2">
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <div>
+                                <h5 class="mb-0 title_project fw-bold">Permiso de Agua</h5>
+                            </div>
+                            <div>
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                        </div>
-                    </div>
-                    <h6 class="mt-2">Inicio: 2015</h6>
                     </div>
                 </div>
 
-                <div class="projects col-3 m-auto bg-dark-subtle">
-                    <div class="px-2 pt-2">
-                        <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-0 title_project fw-bold">Permiso Ambiental</h5>
+                <div class="project_permission_card col-3 m-auto bg-dark-subtle rounded">
+                    <div class="px-2">
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <div>
+                                <h5 class="mb-0 title_project fw-bold">Permiso de Agua</h5>
+                            </div>
+                            <div>
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                        </div>
-                    </div>
-                    <h6 class="mt-2">Inicio: 2015</h6>
                     </div>
                 </div>
 
-                <div class="projects col-3 m-auto bg-dark-subtle">
-                    <div class="px-2 pt-2">
-                        <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-0 title_project fw-bold">Permiso Ambiental</h5>
+                <div class="project_permission_card col-3 m-auto bg-dark-subtle rounded">
+                    <div class="px-2">
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <div>
+                                <h5 class="mb-0 title_project fw-bold">Permiso de Agua</h5>
+                            </div>
+                            <div>
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                        </div>
-                    </div>
-                    <h6 class="mt-2">Inicio: 2015</h6>
                     </div>
                 </div>
-                                
+
             </div>
             <hr>
             <div class="d-flex">
@@ -185,49 +182,60 @@
                     <h3 class="title inter-title">Plan De Manejo Ambiental</h3>
                 </div>
                 <div class="col text-end"><button id="addProject" class="btn_add btn bg-info-subtle border-black"
-                        onclick=""><i class="bi bi-plus-circle"></i> Agregar Plan</button></div>
+                        onclick=""><i class="bi bi-plus-circle"></i> Agregar Plan</button>
+                </div>
+                
             </div>
             <hr>
             <div class="d-flex pt-4 pb-4">
-                <div class="projects col-3 m-auto">
+                <div class="project_plan_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            <div>
+                                <h5 class="mb-0 title_project">Plan de Mitigación y Prevención de Impactos</h5>
+                            </div>
+                            <div>
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                        <hr>
+                        <div class="plan_progress_container">
+                            <div class="plan_progress_bar" id="plan_progress_bar">0%</div>
                         </div>
-                    </div>
-                    <h6 class="mt-2">Inicio: 2015</h6>
                     </div>
                 </div>
 
-                <div class="projects col-3 m-auto">
+                <div class="project_plan_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            <div>
+                                <h5 class="mb-0 title_project">Plan de Mitigación y Prevención de Impactos</h5>
+                            </div>
+                            <div>
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                        <hr>
+                        <div class="plan_progress_container">
+                            <div class="plan_progress_bar" id="plan_progress_bar">0%</div>
                         </div>
-                    </div>
-                    <h6 class="mt-2">Inicio: 2015</h6>
                     </div>
                 </div>
 
-                <div class="projects col-3 m-auto">
+                <div class="project_plan_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            <div>
+                                <h5 class="mb-0 title_project">Plan de Mitigación y Prevención de Impactos</h5>
+                            </div>
+                            <div>
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                        <hr>
+                        <div class="plan_progress_container">
+                            <div class="plan_progress_bar" id="plan_progress_bar">0%</div>
                         </div>
-                    </div>
-                    <h6 class="mt-2">Inicio: 2015</h6>
                     </div>
                 </div>
             </div>
@@ -236,54 +244,68 @@
                 <div class="col">
                     <h3 class="title inter-title">Monitoreos</h3>
                 </div>
+                <div class="col text-end"><button id="addProject" class="btn_add btn bg-info-subtle border-black"
+                        onclick=""><i class="bi bi-plus-circle"></i> Agregar Monitoreo</button>
+                </div>
             </div>
             <hr>
             <div class="d-flex pt-4 pb-4">
-                <div class="projects col-3 m-auto">
+                <div class="project_monitoring_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            <div>
+                                <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            </div>
+                            <div>
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                        </div>
-                    </div>
-                    <h6 class="mt-2">Inicio: 2015</h6>
+                        <h6 class="mt-2">Inicio: 2015</h6>
                     </div>
                     <img src="../IMG/project1.png" width="100%">
                 </div>
 
-                <div class="projects col-3 m-auto">
+                <div class="project_monitoring_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            <div>
+                                <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            </div>
+                            <div>
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                        </div>
-                    </div>
-                    <h6 class="mt-2">Inicio: 2015</h6>
+                        <h6 class="mt-2">Inicio: 2015</h6>
                     </div>
                     <img src="../IMG/project1.png" width="100%">
                 </div>
 
-                <div class="projects col-3 m-auto">
+                <div class="project_monitoring_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            <div>
+                                <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                            </div>
+                            <div>
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                        </div>
-                    </div>
-                    <h6 class="mt-2">Inicio: 2015</h6>
+                        <h6 class="mt-2">Inicio: 2015</h6>
                     </div>
                     <img src="../IMG/project1.png" width="100%">
                 </div>
             </div>
+            <hr>
+            <div class="d-flex">
+                <div class="col">
+                    <h3 class="title inter-title">Recordatorios</h3>
+                </div>
+                <div class="col text-end"><button id="addProject" class="btn_add btn bg-info-subtle border-black"
+                        onclick=""><i class="bi bi-plus-circle"></i> Agregar Recordatorio</button>
+                </div>
+            </div>
+            <hr>
+
             <br>
             <br>
             <br>
