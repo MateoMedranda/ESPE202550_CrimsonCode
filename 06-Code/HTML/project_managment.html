@@ -107,17 +107,59 @@
         </div>
     </div>
 
-    <div class="container mt-4">
-        <fieldset class="p-2 shadow project_container rounded">
-            <div class="d-flex">
-                <div class="col">
-                    <h2 class="title">Proyectos</h2>
+    <dialog id="modal_add_project" class="container m-auto bg-light rounded shadow">
+        <form id="register_project">
+            <fieldset class="border p-2 bg-light border-0">
+                <h3 class="titulo">Nuevo Proyecto</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row px-4">
+                            <div class="col-3 px-2">
+                                <label class="mb-0">Fecha de Inicio: *</label>
+                                <input name="project_begin_date" type="date" class="form-control mb-3 shadow">
+                            </div>
+                            <div class="col-5 px-2">
+                                <label>Ubicación*</label>
+                                <input name="project_ubication" type="text" class="form-control mb-3 shadow">
+                            </div>
+                            <div class="col-4 d-grid px-md-2">
+                                <label class="mb-0">Imagen: *</label>
+                                <input name="project_image" type="file" class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12">
+                                <label>Descripción*</label>
+                                <input name="descripcionIngreso" type="text" class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <label class="text-center">Imagen Seleccionada</label>
+                        <div class="mx-auto bg-black d-flex justify-content-center align-items-center" style="width: 300px;height: 130px;">
+                        </div>
+                    </div>
                 </div>
-                <div class="col text-end"><button id="addProject" class="btn_add_project btn bg-info-subtle border-black" onclick=""><i
-                            class="bi bi-plus-circle"></i> Agregar Proyecto</button></div>
+                <hr>
+                <button type="submit" onclick="" class="btn bg-success-subtle">Guardar</button>
+                <button type="button" class="btn bg-danger-subtle" onclick="">Cancelar</button>
+            </fieldset>
+        </form>
+    </dialog>
+
+    <div class="container mt-4">
+        <div class="d-flex">
+            <div class="col">
+                <h2 class="title" style="color:white">Vista General de Proyectos</h2>
             </div>
+            <div class="col text-end"><button id="addProject" class="btn_add_project btn bg-info-subtle border-black"
+                    onclick=""><i class="bi bi-plus-circle"></i> Agregar Proyecto</button></div>
+        </div>
+        <fieldset class="p-2 shadow project_container rounded">
+
             <hr>
-            <div class="d-flex div_filter_projects">
+            <div class="pt-3 m-0 d-flex div_filter_projects">
                 <div class="col-sm-12 col-md-2 mx-2">
                     <select id="EstadoConsulta" class="form-control mb-3 form-select" onchange="">
                         <option value="1">Mostrar Todo</option>
@@ -169,7 +211,7 @@
                                 <h2 class="mb-0"><i class="bi bi-list"></i></h2>
                             </div>
                         </div>
-                        
+
                         <h6 class="mt-2">Inicio: 2015</h6>
                     </div>
                     <img src="../IMG/project1.png" width="100%">
@@ -212,7 +254,7 @@
         </fieldset>
 
         <div class="bg-success-subtle mt-4 rounded text-center">
-            
+
             <br>
             <br>
         </div>

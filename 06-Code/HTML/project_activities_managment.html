@@ -106,54 +106,167 @@
             </div>
         </div>
     </div>
+
+    <!-- This is the dialog for the controlls -->
+    <dialog id="modal_add_control" class="container m-auto bg-light rounded shadow">
+        <form id="register_control">
+            <fieldset class="p-2">
+                <h3 class="titulo">Nuevo Control</h3>
+                <hr>
+                <div class="row px-4">
+                    <div class="col-12 col-md-2">
+                        <div class="row">
+                            <label>Criterio*</label>
+                            <select class="form-control form-select">
+                                <option>Cumple</option>
+                                <option>No cumple</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <div class="row px-2">
+                            <label>Observación*</label>
+                            <input type="text" class="form-control mb-3">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="row px-2">
+                            <label>Evidencia*</label>
+                            <input  type="file" class="form-control mb-3">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-1">
+                        <div class="row">
+                            <label>.</label>
+                            <button type="button" class="btn bg-success-subtle" onclick="">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </fieldset>
+        </form>
+
+        <h3 class="text-center">Seguimiento de cumplimiento</h3>
+        <div class=" px-3 activities_control_container rounded letter_quicksand">
+            <br>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered align-middle text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Fecha de Control</th>
+                            <th>Cumplimiento</th>
+                            <th>Observación</th>
+                            <th>Evidencias</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaEgresos">
+                        <!-- Dinamic Files Here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Begin of the content about activities -->
+
     <div class="container mt-4">
-        <h2 style="color:white">Plan de Mitigación y Contingencia</h2>
-        <div class="table-responsive">
-            <table id="tablaIngresos" class="table text-center table-striped rounded">
-                <thead>
-                    <tr>
-                        <th scope="col">Código</th>
-                        <th scope="col">Proceso / Actividad</th>
-                        <th scope="col">Impacto Ambiental</th>
-                        <th scope="col">Medidas</th>
-                        <th scope="col">Frecuencia</th>
-                        <th scope="col">Ultima actualización</th>
-                        <th scope="col">Cumplimiento</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody id="table-body">
-                    <tr class="align-middle">
-                        <td>P1C1</td>
-                        <td>Construcción de tomas, desarenadores, etc.</td>
-                        <td>Degradación ambiental por desconocimiento</td>
-                        <td>Mantener durante la construcción del proyecto el cumplimiento del PMA</td>
-                        <td>Permanente</td>
-                        <td>19-05-2025</td>
-                        <td><p class="bg-success-subtle text-center m-0 p-0">Cumple</p></td>
-                        <td>
-                            <i style="color:red;font-size: 25px;" class="bi bi-x-circle mx-2 icono-boton" title="Anular" onclick=""></i>
-                            <i style="color:blue;font-size: 25px;" class="bi bi-pencil-square mx-2 icono-boton" onclick=""></i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="d-flex">
+            <div class="col">
+                <h2 style="color:white">Plan de Mitigación y Contingencia</h2>
+
+            </div>
+            <div class="col text-end"><button id="addProject" class="btn_add_project btn bg-info-subtle border-black"
+                    onclick=""><i class="bi bi-plus-circle"></i> Agregar Actividad</button></div>
+        </div>
+
+        <fieldset class="project_activities_container rounded shadow p-2">
             <hr>
-            <div class="d-flex">
-                <nav>
-                    <ul class="pagination shadow" id="pagination"></ul>
-                </nav>
-                <div class="mb-3 col-1 mx-3">
-                    <select id="itemsPerPage" class="form-select shadow" onchange="">
-                        <option value="5" selected>5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
+            <div class="m-0 d-flex div_filter_activities">
+                <div class="col-sm-12 col-md-2 mx-2">
+                    <label>Frecuencia: </label>
+                    <select class="form-control mb-3 form-select" onchange="">
+                        <option value="1">Mostrar Todo</option>
+                        <option value="2">Permantente</option>
+                        <option value="3">Anual</option>
+                        <option value="3">Mensual</option>
                     </select>
                 </div>
-            </div>
+                <div class="col-sm-12 col-md-2 mx-2">
+                    <label>Ordenar Por: </label>
+                    <select id="ordenar" class="form-control mb-3 form-select">
+                        <option value="1">Código</option>
+                        <option value="2">Fecha: más reciente primero</option>
+                        <option value="3">Fecha: más antigua primero</option>
+                    </select>
 
-        </div>
+                </div>
+
+                <div class="col-sm-12 col-md-2 mx-2">
+                    <label>Buscar:</label>
+                    <div class="d-flex align-items-center"><input type="text" class="form-control"
+                            placeholder="Escribe aquí"><i class="bi bi-search ms-2"></i> </div>
+                </div>
+            </div>
+            <hr>
+            <div class="table-responsive">
+                <table class="table text-center table-striped rounded">
+                    <thead>
+                        <tr>
+                            <th scope="col">Código</th>
+                            <th scope="col">Proceso / Actividad</th>
+                            <th scope="col">Impacto Ambiental</th>
+                            <th scope="col">Medidas</th>
+                            <th scope="col">Frecuencia</th>
+                            <th scope="col">Actualización</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr class="align-middle">
+                            <td>P1C1</td>
+                            <td>Construcción de tomas, desarenadores, etc.</td>
+                            <td>Degradación ambiental por desconocimiento</td>
+                            <td>Mantener durante la construcción del proyecto el cumplimiento del PMA</td>
+                            <td>Permanente</td>
+                            <td>19-05-2025</td>
+                            <td>
+                                <div class="d-flex">
+                                    <button class="d-flex align-items-center btn bg-success-subtle btn-sm mx-2"><i
+                                            class="bi bi-clipboard-check-fill me-2"></i> Controles</button>
+                                    <i class="bi bi-pencil-square icono-boton mx-2"
+                                        style="color:blue; font-size: 25px; cursor:pointer;" title="Editar"
+                                        onclick=""></i>
+                                    <i class="bi bi-x-circle icono-boton mx-2"
+                                        style="color:red; font-size: 25px; cursor:pointer;" title="Anular"
+                                        onclick=""></i>
+
+                                </div>
+                            </td>
+                        </tr>
+                        </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <div class="d-flex">
+                    <nav>
+                        <ul class="pagination shadow" id="pagination"></ul>
+                    </nav>
+                    <div class="mb-3 col-1 mx-3">
+                        <select id="itemsPerPage" class="form-select shadow" onchange="">
+                            <option value="5" selected>5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+        </fieldset>
+
     </div>
 
 
