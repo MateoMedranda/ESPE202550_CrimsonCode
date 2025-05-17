@@ -61,14 +61,14 @@
                 <ul class="navbar-nav mx-auto">
                     <!-- Home option always visible -->
                     <li class="nav-item opcion fw-bold mx-2">
-                        <a id="home" class="nav-link active" href="#" onclick="">
+                        <a id="home" class="nav-link" href="#" onclick="">
                             <i class="bi bi-speedometer2"></i> INICIO
                         </a>
                     </li>
 
                     <!-- Project option visible for admins and customers -->
                     <li class="nav-item opcion fw-bold mx-2">
-                        <a id="projects" class="nav-link" href="#" onclick="">
+                        <a id="projects" class="nav-link active" href="#" onclick="">
                             <i class="bi bi-folder"></i> PROYECTOS
                         </a>
                     </li>
@@ -108,7 +108,7 @@
     </div>
 
     <dialog id="modal_add_project" class="container m-auto bg-light rounded shadow">
-        <form id="register_project">
+        <form id="register_project" method="post" action="project_register.php">
             <fieldset class="border p-2 bg-light border-0">
                 <h3 class="titulo">Nuevo Proyecto</h3>
                 <hr>
@@ -125,7 +125,8 @@
                             </div>
                             <div class="col-4 d-grid px-md-2">
                                 <label class="mb-0">Imagen: *</label>
-                                <input name="project_image" type="file" class="form-control mb-3 shadow">
+                                <input id="project_image_input" name="project_image" type="file"
+                                    class="form-control mb-3 shadow">
                             </div>
                         </div>
                         <div class="row px-4">
@@ -137,13 +138,17 @@
                     </div>
                     <div class="col-4 text-center">
                         <label class="text-center">Imagen Seleccionada</label>
-                        <div class="mx-auto bg-black d-flex justify-content-center align-items-center" style="width: 300px;height: 130px;">
+                        <div id="image_preview"
+                            class="mx-auto bg-black d-flex justify-content-center align-items-center shadow"
+                            style="width: 300px; height: 130px; overflow: hidden;">
                         </div>
+
                     </div>
                 </div>
                 <hr>
                 <button type="submit" onclick="" class="btn bg-success-subtle">Guardar</button>
-                <button type="button" class="btn bg-danger-subtle" onclick="">Cancelar</button>
+                <button name="btn_cancel_add_project" id="btn_cancel_add_project" type="button"
+                    class="btn bg-danger-subtle" onclick="">Cancelar</button>
             </fieldset>
         </form>
     </dialog>
@@ -153,7 +158,7 @@
             <div class="col">
                 <h2 class="title" style="color:white">Vista General de Proyectos</h2>
             </div>
-            <div class="col text-end"><button id="addProject" class="btn_add_project btn bg-info-subtle border-black"
+            <div class="col text-end"><button id="add_project" class="btn_add_project btn bg-info-subtle border-black"
                     onclick=""><i class="bi bi-plus-circle"></i> Agregar Proyecto</button></div>
         </div>
         <fieldset class="p-2 shadow project_container rounded">
@@ -264,5 +269,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
     crossorigin="anonymous"></script>
+<script src="../JS/project_managment.js"></script>
 
 </html>

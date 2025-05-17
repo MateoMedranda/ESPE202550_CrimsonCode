@@ -1,25 +1,25 @@
-.projects{
-    border:1px solid rgba(65, 65, 65, 0.384);
+.projects {
+    border: 1px solid rgba(65, 65, 65, 0.384);
     background-color: white;
     box-shadow: 0px 6px 5px rgb(85, 85, 85);
 }
 
-.title{
-    font-family: "Quicksand",sans-serif;
+.title {
+    font-family: "Quicksand", sans-serif;
 }
 
-.project_container{
+.project_container {
     backdrop-filter: blur(4px);
     background-color: rgb(255, 255, 255);
 }
 
 
 .card-proyecto {
-    font-family: "Quicksand",sans-serif;
+    font-family: "Quicksand", sans-serif;
     box-shadow: 0 4px 10px rgba(65, 65, 65, 0.284);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background: linear-gradient(to bottom,#b3d7ec,#ffffff);
+    background: linear-gradient(to bottom, #b3d7ec, #ffffff);
 }
 
 .card-proyecto:hover {
@@ -29,14 +29,53 @@
 }
 
 .project_options:hover {
-    transform: scale(1.2); /* 1.0 es el tamaño original */
+    transform: scale(1.2);
+    /* 1.0 es el tamaño original */
     transition: transform 0.2s ease-in-out;
 }
 
-.div_filter_projects{
-    background: 
-    linear-gradient(to right, rgb(106, 173, 164), rgb(128, 255, 166)),
-    linear-gradient(to bottom, rgb(0, 238, 255), rgb(0, 51, 128));
-  
-  
+.div_filter_projects {
+    background:
+        linear-gradient(to right, rgb(106, 173, 164), rgb(128, 255, 166)),
+        linear-gradient(to bottom, rgb(0, 238, 255), rgb(0, 51, 128));
+}
+
+dialog{
+    border:0;
+}
+
+dialog[open] {
+    animation: slide_down_fade 0.5s ease-out forwards;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    transition: background 0.4s ease;
+}
+
+@keyframes slide_down_fade {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+dialog.closing {
+    animation: slide_up_fade 0.4s ease-in forwards;
+}
+
+@keyframes slide_up_fade {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
 }
