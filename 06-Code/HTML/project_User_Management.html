@@ -28,12 +28,12 @@
             <div class="d-flex">
                 <div class="col">
                 </div>
-                <div class="col text-end"><button id="AddUser" class="btn_add btn bg-info-subtle border-black"
+                <div class="col text-end"><button id="add_user" class="btn_add btn bg-info-subtle border-black"
                         onclick=""><i class="bi bi-plus-circle"></i> Agregar Usuario</button></div>
             </div>
             <hr/>
         
-           <div class="container" id="UserTable">
+           <div class="container" id="user_table">
 		<div class="table-responsive">
 		<table class="table table-striped">
 			<thead class="table-secondary">
@@ -41,36 +41,36 @@
 				<th>Id</th>
 				<th>
 				Cedula
-				<button class="btn btn-sm btn-light ms-2"  id="PersonalIdFilter">
+				<button class="btn btn-sm btn-light ms-2"  id="personal_id_filter">
 					<i class="bi bi-arrow-down-circle"></i> 
 				</button>
 				</th>
 				<th>
 				Nombre y Apellido
-				<button class="btn btn-sm btn-light ms-2"  id="NameFilter">
+				<button class="btn btn-sm btn-light ms-2"  id="name_filter">
 					<i class="bi bi-arrow-down-circle"></i> 
 				</button>
 				</th>
 				<th>
 				Perfil 
-				<button class="btn btn-sm btn-light ms-2" id="ProfileFilter">
+				<button class="btn btn-sm btn-light ms-2" id="profile_filter">
 					<i class="bi bi-arrow-down-circle"></i> 
 				</button>
 				</th>
 				<th>Última Conexión
-				<button class="btn btn-sm btn-light ms-2" id="ConectionFilter">
+				<button class="btn btn-sm btn-light ms-2" id="conection_filter">
 					<i class="bi bi-arrow-down-circle"></i>  
 				</button>
 				</th>
 				<th>Estado
-				<button class="btn btn-sm btn-light ms-2" id="EstateFilter">
+				<button class="btn btn-sm btn-light ms-2" id="estate_filter">
 					<i class="bi bi-arrow-down-circle"></i> 
 				</button>
 				</th>
 				<th></th>
 			</tr>
 			</thead>
-			<tbody id="tabla-body">
+			<tbody id="table_body">
                                     <tr>
                 <td>1</td>
                 <td>1234567890</td>
@@ -79,8 +79,8 @@
                 <td>2023-10-01 12:00:00</td>
                 <td>Activo</td>
                 <td>
-                    <button class="btn btn-sm btn-primary" id="EditUser"><i class="bi bi-pencil-square"></i></button>
-                    <button class="btn btn-sm btn-danger" id="DeleteUser"><i class="bi bi-trash"></i></button>
+                    <button class="btn btn-sm btn-primary" id="edit_user"><i class="bi bi-pencil-square"></i></button>
+                    <button class="btn btn-sm btn-danger" id="delete_user"><i class="bi bi-trash"></i></button>
                 </td>
 			</tbody>
 		</table>
