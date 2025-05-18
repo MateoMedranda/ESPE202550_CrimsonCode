@@ -23,7 +23,7 @@ body{
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
-    height: 100vh;
+
 }
 
 .letter_quicksand{
@@ -35,7 +35,7 @@ body{
     margin-top: 0;
 }
 
-
-
-
+.active{
+    border-bottom: 1px solid black !important;
+}
 
