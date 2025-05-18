@@ -2,8 +2,8 @@
 include 'connection_db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $profileName = misqlysqli_real_escape_string($connection, $_POST['name']);
-    $profilePermits = $_POST["permits"]; 
+    $profile_name = misqlysqli_real_escape_string($connection, $_POST['name']);
+    $profile_permits = $_POST["permits"]; 
 
     $permits = [
     "PROFILE_READPROJECTS" ,"PROFILE_CREATEPROJECTS" , "PROFILE_UPDATEPROJECTS" ,"PROFILE_DELETEPROJECTS",
@@ -21,10 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $values = [];
     $placeholders = [];
     $types = "s";  
-    $params = [$profileName];
+    $params = [$profile_name];
 
     foreach ($permits as $permit) {
-        $values[] = in_array($permit, $profilePermits) ? 1 : 0;  
+        $values[] = in_array($permit, $profile_permits) ? 1 : 0;  
         $placeholders[] = "?";
         $types .= "i";  
     }
@@ -36,9 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Error en la preparación de la consulta: " . $connection->error);
     }
 
-
     $params = array_merge([$types], $params, $values);
-
 
     $stmt->bind_param(...$params);
 
