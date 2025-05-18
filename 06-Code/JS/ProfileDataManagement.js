@@ -1,3 +1,4 @@
+//get permits from database to show in modal
 var add_button = document.getElementById("add_profile");
 if (add_button&& !add_button.dataset.addedevent) {
     add_button.addEventListener("click", function () {
@@ -21,9 +22,9 @@ if (add_button&& !add_button.dataset.addedevent) {
 
                     let checkboxHtml = `
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="permisos[]" 
-                                value="${permitKey}" id="permiso_${permitKey}" ${permitvalue ? "checked" : ""}>
-                            <label class="form-check-label" for="permiso_${permitKey}">${permitLabel}</label>
+                            <input class="form-check-input" type="checkbox" name="permits[]" 
+                                value="${permitKey}" id="permit_${permitKey}" ${permitvalue ? "checked" : ""}>
+                            <label class="form-check-label" for="permit_${permitKey}">${permitLabel}</label>
                         </div>`;
                     
                     container.append(checkboxHtml);
@@ -43,4 +44,64 @@ if (add_button&& !add_button.dataset.addedevent) {
     });
 
     add_button.dataset.addedevent = "true";
+}
+
+//Save profile data from Form
+
+if (add_button && !add_button.dataset.eventoAgregado) {
+    document.getElementById("insert").addEventListener("click", function(event) {
+        event.preventDefault(); 
+        
+        let profile_name = document.getElementById("profile_name").value;
+        let letters_only = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
+
+        if (profile_name === "") {
+            message("Ingrese un nombre para el perfil");
+            return;
+        }
+
+        if (!letters_only.test(profile_name)) {
+            message("El Nombre del perfil solo debe contener letras y espacios");
+            return;
+        }
+
+        let selected_permits= [];
+        document.querySelectorAll("input[name='permits[]']:checked").forEach((checkbox) => {
+            selected_permits.push(checkbox.value);
+        });
+        
+        if (selected_permits.length === 0) {
+            message("Debe seleccionar al menos un permiso para el perfil");
+            return;
+        }
+        console.log("Permisos seleccionados:", selected_permits);
+        $.ajax({
+            url: '../PHP/profile_data_register.php',
+            method: 'POST',
+            data: {
+                profile_name: profile_name, 
+                "selected_permits[]": selected_permits, 
+            },
+            success: function(response) {
+                message("Perfil generado correctamente!!!");
+
+            },
+            error: function() {
+                message("Error en el envio de datos!!!");
+            }
+        });
+    });
+
+    add_button.dataset.eventoAgregado = "true";
+}
+
+//message function
+function message(msg) {
+    var modal = bootstrap.Modal.getInstance(document.getElementById("information_container"));
+    document.getElementById("message").innerHTML = msg;
+    var modal = new bootstrap.Modal(document.getElementById("information_container"));
+    modal.show();
+    setTimeout(function() {
+        modal.hide();
+    }, 1000);
 }
