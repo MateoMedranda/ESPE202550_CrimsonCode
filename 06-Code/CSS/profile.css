@@ -1,0 +1,24 @@
+.permits-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+@media (max-width: 950px) {
+    .permits-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .permits-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+}
