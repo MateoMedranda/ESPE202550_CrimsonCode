@@ -77,3 +77,57 @@
   box-shadow: 0 8px 20px rgb(85, 85, 85);
   cursor: pointer;
 }
+
+dialog{
+    border:0;
+}
+
+dialog[open] {
+    animation: slide_down_fade 0.5s ease-out forwards;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+    transition: background 0.4s ease;
+}
+
+@keyframes slide_down_fade {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+dialog.closing {
+    animation: slide_up_fade 0.4s ease-in forwards;
+}
+
+@keyframes slide_up_fade {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+}
+
+.project_permission_card {
+    overflow: visible !important;
+}
+
+.dropdown-menu {
+    z-index: 1055; /* nivel típico de Bootstrap */
+    top: 100% !important;
+    left: auto !important;
+    right: 0; /* se alinea al borde derecho del botón */
+    margin-top: 0.3rem;
+    transform: none !important; /* desactiva transform de Bootstrap que podría malposicionar */
+}
+
+
