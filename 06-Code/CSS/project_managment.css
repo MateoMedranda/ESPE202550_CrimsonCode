@@ -29,9 +29,8 @@
 }
 
 .project_options:hover {
-    transform: scale(1.2);
-    /* 1.0 es el tamaño original */
-    transition: transform 0.2s ease-in-out;
+    transform: scale(1.2) !important;
+    transition: transform 0.2s ease-in-out !important;
 }
 
 .div_filter_projects {
@@ -50,7 +49,6 @@ dialog[open] {
 
 dialog::backdrop {
     background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(2px);
     transition: background 0.4s ease;
 }
 

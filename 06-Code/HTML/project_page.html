@@ -61,14 +61,14 @@
                 <ul class="navbar-nav mx-auto">
                     <!-- Home option always visible -->
                     <li class="nav-item opcion fw-bold mx-2">
-                        <a id="home" class="nav-link active" href="#" onclick="">
+                        <a id="home" class="nav-link" href="#" onclick="">
                             <i class="bi bi-speedometer2"></i> INICIO
                         </a>
                     </li>
 
                     <!-- Project option visible for admins and customers -->
                     <li class="nav-item opcion fw-bold mx-2">
-                        <a id="projects" class="nav-link" href="#" onclick="">
+                        <a id="projects" class="nav-link active" href="#" onclick="">
                             <i class="bi bi-folder"></i> PROYECTOS
                         </a>
                     </li>
@@ -107,6 +107,79 @@
         </div>
     </div>
 
+    <!-- Dialog to add new permission -->
+    <dialog id="modal_add_project_permission" class="container m-auto bg-light rounded shadow">
+        <form id="register_permission" method="post" action="project_permission_register.php">
+            <fieldset class="border p-2 bg-light border-0">
+                <h3 class="titulo">Nuevo Permiso</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row px-4">
+                            <div class="col-3 px-2">
+                                <label class="mb-0">Nombre del Permiso: *</label>
+                                <input name="project_permission_name" type="text" class="form-control mb-3 shadow">
+                            </div>
+                            <div class="col-9 px-2">
+                                <label>Descripción: *</label>
+                                <input name="project_permission_Description" type="text"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12">
+                                <label>Adjuntar Archivo (pdf): *</label>
+                                <input name="project_permission_file" id="project_permission_file" type="file"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <label class="text-center">Archivo seleccionado</label>
+                        <div id="file_preview"
+                            class="mx-auto bg-black d-flex justify-content-center align-items-center shadow"
+                            style="width: 300px; height: 130px; overflow: hidden;">
+                        </div>
+
+                    </div>
+                </div>
+                <hr>
+                <button type="submit" onclick="" class="btn bg-success-subtle">Guardar</button>
+                <button name="btn_cancel_add_project_permission" id="btn_cancel_add_project_permission" type="button"
+                    class="btn bg-danger-subtle" onclick="">Cancelar</button>
+            </fieldset>
+        </form>
+    </dialog>
+
+    <!-- Dialog to add EMP -->
+     <dialog id="modal_add_project_EMP" class="container m-auto bg-light rounded shadow">
+        <form id="register_EMP" method="post" action="project_EMP_register.php">
+            <fieldset class="border p-2 bg-light border-0">
+                <h3 class="titulo">Nuevo Plan de Manejo Ambiental</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row px-4">
+                            <div class="col-3 px-2">
+                                <label class="mb-0">Nombre del Plan: *</label>
+                                <input name="project_EMP_name" type="text" class="form-control mb-3 shadow">
+                            </div>
+                            <div class="col-9 px-2">
+                                <label>Descripción: *</label>
+                                <input name="project_EMP_Description" type="text"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <button type="submit" onclick="" class="btn bg-success-subtle">Guardar</button>
+                <button name="btn_cancel_add_project_EMP" id="btn_cancel_add_project_EMP" type="button"
+                    class="btn bg-danger-subtle" onclick="">Cancelar</button>
+            </fieldset>
+        </form>
+    </dialog>
+
     <div class="container mt-4">
         <fieldset class="border p-4 shadow agregar bg-light rounded">
             <div class="text-center bg-success-subtle">
@@ -130,7 +203,7 @@
                 <div class="col">
                     <h3 class="title inter-title">Permisos</h3>
                 </div>
-                <div class="col text-end"><button id="addProject" class="btn_add btn bg-info-subtle border-black"
+                <div class="col text-end"><button id="add_permission" class="btn_add btn bg-info-subtle border-black"
                         onclick=""><i class="bi bi-plus-circle"></i> Agregar Permiso</button></div>
             </div>
             <hr>
@@ -138,16 +211,27 @@
             <div class="d-flex pt-4 pb-4">
                 <div class="project_permission_card col-3 m-auto bg-dark-subtle rounded">
                     <div class="px-2">
-                        <div class="d-flex justify-content-between align-items-center py-2">
+                        <div class="d-flex justify-content-between align-items-center py-2 position-relative">
                             <div>
                                 <h5 class="mb-0 title_project fw-bold">Permiso de Agua</h5>
                             </div>
-                            <div>
-                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+
+                            <div class="dropdown">
+                                <div class="project_options rounded" data-bs-toggle="dropdown" aria-expanded="false"
+                                    role="button">
+                                    <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end shadow">
+                                    <li><a class="dropdown-item" href="#">Editar</a></li>
+                                    <li><a class="dropdown-item" href="#">Eliminar</a></li>
+                                    <li><a class="dropdown-item" href="#">Ver detalles</a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
 
                 <div class="project_permission_card col-3 m-auto bg-dark-subtle rounded">
                     <div class="px-2">
@@ -181,10 +265,10 @@
                 <div class="col">
                     <h3 class="title inter-title">Plan De Manejo Ambiental</h3>
                 </div>
-                <div class="col text-end"><button id="addProject" class="btn_add btn bg-info-subtle border-black"
+                <div class="col text-end"><button id="add_emp" class="btn_add btn bg-info-subtle border-black"
                         onclick=""><i class="bi bi-plus-circle"></i> Agregar Plan</button>
                 </div>
-                
+
             </div>
             <hr>
             <div class="d-flex pt-4 pb-4">
@@ -194,8 +278,16 @@
                             <div>
                                 <h5 class="mb-0 title_project">Plan de Mitigación y Prevención de Impactos</h5>
                             </div>
-                            <div>
-                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            <div class="dropdown">
+                                <div class="project_options rounded" data-bs-toggle="dropdown" aria-expanded="false"
+                                    role="button">
+                                    <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end shadow">
+                                    <li><a class="dropdown-item" href="#">Editar</a></li>
+                                    <li><a class="dropdown-item" href="#">Eliminar</a></li>
+                                    <li><a class="dropdown-item" href="#">Ver detalles</a></li>
+                                </ul>
                             </div>
                         </div>
                         <hr>
@@ -317,5 +409,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
     crossorigin="anonymous"></script>
+<script src="../JS/project_page.js"></script>
 
 </html>

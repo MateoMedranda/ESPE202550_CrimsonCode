@@ -107,10 +107,66 @@
         </div>
     </div>
 
+    <!-- Dialog for add a new project -->
     <dialog id="modal_add_project" class="container m-auto bg-light rounded shadow">
         <form id="register_project" method="post" action="project_register.php">
             <fieldset class="border p-2 bg-light border-0">
                 <h3 class="titulo">Nuevo Proyecto</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row px-4">
+                            <div class="col-4 d-grid px-md-2">
+                                <label class="mb-0">Nombre: *</label>
+                                <input id="project_name_input" name="project_name" type="text"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                            <div class="col-3 px-2">
+                                <label class="mb-0">Fecha de Inicio: *</label>
+                                <input name="project_begin_date" type="date" class="form-control mb-3 shadow">
+                            </div>
+                            <div class="col-5 px-2">
+                                <label>Ubicación*</label>
+                                <input name="project_ubication" type="text" class="form-control mb-3 shadow">
+                            </div>
+
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12">
+                                <label class="mb-0">Imagen: *</label>
+                                <input id="project_image_input" name="project_image" type="file"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12">
+                                <label>Descripción*</label>
+                                <input name="descripcionIngreso" type="text" class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <label class="text-center">Imagen Seleccionada</label>
+                        <div id="image_preview"
+                            class="mx-auto bg-black d-flex justify-content-center align-items-center shadow"
+                            style="width: 300px; height: 130px; overflow: hidden;">
+                        </div>
+
+                    </div>
+                </div>
+                <hr>
+                <button type="submit" onclick="" class="btn bg-success-subtle">Guardar</button>
+                <button name="btn_cancel_add_project" id="btn_cancel_add_project" type="button"
+                    class="btn bg-danger-subtle" onclick="">Cancelar</button>
+            </fieldset>
+        </form>
+    </dialog>
+
+    <!-- Dialog for update the project -->
+    <dialog id="modal_update_project" class="container m-auto bg-light rounded shadow">
+        <form id="register_project" method="post" action="project_register.php">
+            <fieldset class="border p-2 bg-light border-0">
+                <h3 class="titulo">Editar Proyecto</h3>
                 <hr>
                 <div class="row">
                     <div class="col-8">
@@ -146,7 +202,7 @@
                     </div>
                 </div>
                 <hr>
-                <button type="submit" onclick="" class="btn bg-success-subtle">Guardar</button>
+                <button type="submit" onclick="" class="btn bg-warning-subtle">Actualizar</button>
                 <button name="btn_cancel_add_project" id="btn_cancel_add_project" type="button"
                     class="btn bg-danger-subtle" onclick="">Cancelar</button>
             </fieldset>
@@ -212,8 +268,18 @@
                                 <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
                                 <hr class="m-0">
                             </div>
-                            <div class="project_options rounded">
-                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+
+                            <!-- Dropdown project -->
+                            <div class="dropdown">
+                                <div class="project_options rounded" data-bs-toggle="dropdown" aria-expanded="false"
+                                    role="button">
+                                    <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="#">Editar</a></li>
+                                    <li><a class="dropdown-item" href="#">Eliminar</a></li>
+                                    <li><a class="dropdown-item" href="#">Ver detalles</a></li>
+                                </ul>
                             </div>
                         </div>
 
@@ -221,6 +287,8 @@
                     </div>
                     <img src="../IMG/project1.png" width="100%">
                 </div>
+
+
 
                 <div class="card-proyecto col-3 m-auto rounded">
                     <div class="px-2 pt-2">
