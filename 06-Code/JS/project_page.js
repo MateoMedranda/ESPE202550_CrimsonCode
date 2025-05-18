@@ -4,6 +4,10 @@ const btn_add_project_permission = document.getElementById('add_permission');
 const modal_add_project_permission = document.getElementById('modal_add_project_permission');
 const btn_cancel_add_project_permission = document.getElementById('btn_cancel_add_project_permission');
 
+const btn_add_project_emp = document.getElementById('add_emp');
+const modal_add_project_emp = document.getElementById('modal_add_project_EMP');
+const btn_cancel_add_project_emp = document.getElementById('btn_cancel_add_project_EMP');
+
 btn_add_project_permission.addEventListener('click', () => {
     modal_add_project_permission.showModal(); 
 });
@@ -17,6 +21,18 @@ btn_cancel_add_project_permission.addEventListener('click', () => {
     }, { once: true }); 
 });
 
+btn_add_project_emp.addEventListener('click', () => {
+    modal_add_project_emp.showModal(); 
+});
+
+btn_cancel_add_project_emp.addEventListener('click', () => {
+    modal_add_project_emp.classList.add('closing'); 
+
+    modal_add_project_emp.addEventListener('animationend', () => {
+        modal_add_project_emp.classList.remove('closing');
+        modal_add_project_emp.close(); 
+    }, { once: true }); 
+});
 
 
 

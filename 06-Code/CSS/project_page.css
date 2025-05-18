@@ -121,13 +121,17 @@ dialog.closing {
     overflow: visible !important;
 }
 
+.project_plan_card {
+    overflow: visible !important;
+}
+
 .dropdown-menu {
-    z-index: 1055; /* nivel típico de Bootstrap */
+    z-index: 1055; 
     top: 100% !important;
     left: auto !important;
-    right: 0; /* se alinea al borde derecho del botón */
+    right: 0; 
     margin-top: 0.3rem;
-    transform: none !important; /* desactiva transform de Bootstrap que podría malposicionar */
+    transform: none !important; 
 }
 
 
