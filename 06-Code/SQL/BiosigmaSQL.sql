@@ -80,6 +80,7 @@ create table PROFILES
    PROFILES_CREATEREMINDER boolean,
    PROFILES_DELETEREMINDER boolean,
    PROFILES_UPDATEREMINDER boolean,
+   PROFILES_ESTATE varchar(32) default 'ACTIVE',
    primary key (PROFILES_ID)
 );
 

@@ -1,3 +1,21 @@
+//get profile table
+$(document).ready(function () {
+        document.getElementById("profile_name").value = "";
+        $.ajax({
+        url: '../PHP/get_profiles.php',
+        method: 'POST',
+        data: {},
+        success: function(response) {
+          document.getElementById("table_body").innerHTML = response;
+        },
+            error: function(xhr, status, error) {
+            console.error("AJAX request failed: " + error);
+            alert("Error al obtener los datos.");
+            }   
+        });
+});
+
+
 //get permits from database to show in modal
 var add_button = document.getElementById("add_profile");
 if (add_button&& !add_button.dataset.addedevent) {
