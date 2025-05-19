@@ -59,7 +59,7 @@ if (isset($_POST['id'])) {
                           WHERE TABLE_NAME = 'profiles' 
                           AND TABLE_SCHEMA = 'biosigma_db'
                           AND DATA_TYPE = 'tinyint'
-                          AND COLUMN_NAME != 'PROFILES_ESTATE'";
+                          AND COLUMN_NAME != 'PROFILES_STATE'";
 
         $data_result = mysqli_query($connection, $query_permits);
         $permits = [];

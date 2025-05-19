@@ -1,5 +1,7 @@
 //get profile table
-$(document).ready(function () {
+$(document).ready(function() {cargarTabla(); });
+
+function cargarTabla() {
         document.getElementById("profile_name").value = "";
         $.ajax({
         url: '../PHP/get_profiles.php',
@@ -13,9 +15,7 @@ $(document).ready(function () {
             alert("Error al obtener los datos.");
             }   
         });
-});
-
-
+}
 //get permits from database to show in modal
 var add_button = document.getElementById("add_profile");
 if (add_button&& !add_button.dataset.addedevent) {
@@ -100,11 +100,11 @@ if (add_button && !add_button.dataset.eventoAgregado) {
                 "selected_permits[]": selected_permits, 
             },
             success: function(response) {
-
-                if (response != "existing_user") {
+                if (response.trim() == "existing_user") {
                     message("Un perfil con ese nombre ya existe");
                 } else {
                     message("Perfil generado correctamente!!!");
+                    cargarTabla();
                 }
 
             },
@@ -202,7 +202,7 @@ let originalValues;
             },
             success: function (response) {
                 message(response)
-                
+                cargarTabla();
             },
             error: function () {
                 message("Error en el envío de datos.");
@@ -227,6 +227,32 @@ function permisosCambiaron(original, actual) {
         return true;
     }
 }
+//logic elimination
+
+  $(document).on("click", ".toggle-state", function() {
+      let profile = $(this).data("id");
+      let state = $(this).data("state");
+      let new_state = state === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+      $.ajax({
+          url: '../PHP/profile_logic_delete.php',
+          method: 'POST',
+          data: {
+              profile: profile,
+              state: new_state
+          },
+          success: function(response) {
+            if(response=="success"){
+            message("El cambio de estado ha sido realizado!!!");
+            cargarTabla();
+            }else{
+            message("El perfil esta asignado a un usuario, es imposible desactivar");
+            }
+        },
+        error: function() {
+            message("Error en el envio de datos!!!");
+        }
+      });
+  });
 
 
 //message function
