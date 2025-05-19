@@ -13,11 +13,11 @@ while ($register = mysqli_fetch_assoc($profiles)) {
     $tabla .= '<td>
         <button  class="btn btn-sm btn-primary me-1 edit-profile"
             data-id="' . htmlspecialchars($register['PROFILES_ID']) . '"
-            data-profile="' . htmlspecialchars($register['PROFILES_NAME']) . '">
+            data-name="' . htmlspecialchars($register['PROFILES_NAME']) . '">
             <i class="bi bi-pencil"></i> Editar
         </button>
         <button  class="btn btn-sm ' . ($register['PROFILES_ESTATE'] == 'ACTIVE' ? 'btn-danger' : 'btn-success') . ' toggle-estate"
-            data-profile="' . htmlspecialchars($register['PROFILES_NAME']) . '" 
+            data-id="' . htmlspecialchars($register['PROFILES_ID']) . '"
             data-estate="' . htmlspecialchars($register['PROFILES_ESTATE']) . '">
             <i class="bi ' . ($register['PROFILES_ESTATE'] == 'ACTIVE' ? 'bi-check-circle' : 'bi-x-circle') . '"></i> 
             ' . ($register['PROFILES_ESTATE'] == 'ACTIVE' ? 'Desactivar' : 'Activar') . '
