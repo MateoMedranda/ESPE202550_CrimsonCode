@@ -92,7 +92,6 @@ if (add_button && !add_button.dataset.eventoAgregado) {
             message("Debe seleccionar al menos un permiso para el perfil");
             return;
         }
-        console.log("Permisos seleccionados:", selected_permits);
         $.ajax({
             url: '../PHP/profile_data_register.php',
             method: 'POST',
@@ -101,7 +100,12 @@ if (add_button && !add_button.dataset.eventoAgregado) {
                 "selected_permits[]": selected_permits, 
             },
             success: function(response) {
-                message("Perfil generado correctamente!!!");
+
+                if (response != "existing_user") {
+                    message("Un perfil con ese nombre ya existe");
+                } else {
+                    message("Perfil generado correctamente!!!");
+                }
 
             },
             error: function() {
@@ -114,11 +118,12 @@ if (add_button && !add_button.dataset.eventoAgregado) {
 }
 
 //Update profile data
-
+let originalValues;
     $(document).on("click", ".edit-profile", function () {
         let profile = $(this).data("id");
         let name = $(this).data("name");
         document.getElementById("profile_name_edit").value = name;
+        document.getElementById("profile_id_edit").value = profile;
         $.ajax({
             url: "../PHP/get_permits_UPDATE.php",
             method: "POST",
@@ -128,7 +133,6 @@ if (add_button && !add_button.dataset.eventoAgregado) {
                     let permits = JSON.parse(response);
                     let container = $("#permits_container_edit");
                     originalValues = { profile: name, permits: {} };
-
                     container.html('');
 
                     Object.entries(permits).forEach(([permitKey, permitObj]) => {
@@ -160,17 +164,26 @@ if (add_button && !add_button.dataset.eventoAgregado) {
     });
 
     $("#update_profile").click(function () {
-        let new_profile_name = $("#profile_name_edit").val().trim();
-        $("#update_profile").data("id", profile_id);
-        let selected_permits= [];
-
+        let new_profile_name = document.getElementById("profile_name_edit").value.trim();
+        let profile = document.getElementById("profile_id_edit").value;
+        let selected_permits = {};
         $("input[name='permits[]']").each(function () {
-        selected_permits[$(this).val()] = $(this).is(":checked") ? 1 : 0;
+        selected_permits[$(this).val()] = $(this).is(":checked") ? true : false;
         });
 
-        const permisosSeleccionados = Object.values(selected_permits).some(value => value === 1);
+        const firstKey = Object.keys(selected_permits)[0];
+        if (firstKey !== undefined) {
+            delete selected_permits[firstKey];
+        }
+
+        const permisosSeleccionados = Object.values(selected_permits).some(value => value === true);
         if (!permisosSeleccionados) {
             message("Debe seleccionar al menos un permiso.");
+            return;
+        }
+
+        if (new_profile_name === "") {
+            message("El nombre del perfil no puede estar vacío.");
             return;
         }
 
@@ -179,35 +192,40 @@ if (add_button && !add_button.dataset.eventoAgregado) {
             message("No ha realizado cambios");
             return;
         }
-
-        if (new_profile_name === "") {
-            message("El nombre del perfil no puede estar vacío.");
-            return;
-        }
-        console.log(profile_id);
         $.ajax({
             url: "../PHP/update_profile.php",
             method: "POST",
             data: {
-                profile_id: profile_id,
+                profile_id: profile,
                 name: new_profile_name,
                 permits: JSON.stringify(selected_permits),
             },
             success: function (response) {
-                message(response);
+                message(response)
+                
             },
             error: function () {
                 message("Error en el envío de datos.");
             },
         });
+
     });
 
 
 function permisosCambiaron(original, actual) {
+    let value = 0;
+    let lenght = Object.keys(original).length;
     for (let key in original) {
-        if (original[key] !== actual[key]) return true;
+        if (original[key] === actual[key]) {
+            value++;
+        }
     }
-    return false;
+
+    if (value === lenght) {
+        return false;
+    }else {
+        return true;
+    }
 }
 
 

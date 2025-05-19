@@ -20,7 +20,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     "PROFILES_READREMINDER" ,"PROFILES_CREATEREMINDER" , "PROFILES_DELETEREMINDER" ,"PROFILES_UPDATEREMINDER"];
         
     $selected_permits_assoc = array_fill_keys($profile_permits, 1);
-
+    $query_profiles = "SELECT PROFILES_NAME FROM profiles WHERE PROFILES_NAME = '$profile_name'";
+    $profiles_query = mysqli_query($connection, $query_profiles);
+    if(mysqli_num_rows($profiles_query) > 0) {
+        echo "existing_user";
+        exit;
+    }
     $values = [];
     $placeholders = [];
     $types = "s";  

@@ -102,7 +102,7 @@
 			
 		</div>
 	</div>
-<div class="modal fade" id="edit_modal" tabindex="-1" aria-hidden="true" aria-labelledby="edit_modal" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="edit_modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="container">
@@ -114,6 +114,7 @@
                         Datos del perfil
                     </h3>
                     <div class="col-md-8">
+                        <input type="hidden" id="profile_id_edit" name="profile_id_edit">
                         <label for="profile_name_edit" class="form-label">Nombre del perfil:
                             <input type="text" id="profile_name_edit" name="profile_name_edit" class="form-control border-dark" required>
                         </label>

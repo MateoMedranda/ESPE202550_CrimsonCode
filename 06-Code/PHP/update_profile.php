@@ -2,8 +2,8 @@
 require 'connection_db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $profile_id = mysqli_real_escape_string($conn, $_POST["profile_id"]);
-    $new_profile_name = mysqli_real_escape_string($conn, $_POST["name"]);
+    $profile_id =  $_POST["profile_id"];
+    $new_profile_name = mysqli_real_escape_string($connection, $_POST["name"]);
     $permits = json_decode($_POST["permits"], true);
 
     $all_permits = [
@@ -20,37 +20,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         "PROFILES_READREMINDER", "PROFILES_CREATEREMINDER", "PROFILES_DELETEREMINDER", "PROFILES_UPDATEREMINDER"
     ];
 
-    $stmt = $conn->prepare("UPDATE profiles SET PROFILES_NAME = ? WHERE PROFILE_ID = ?");
-    if ($stmt === false) {
-        echo "Error en la preparación de la consulta: " . $conn->error;
-        exit;
+    $query_profiles = "SELECT PROFILES_NAME FROM profiles WHERE PROFILES_NAME = '$new_profile_name' AND PROFILES_ID != '$profile_id'";
+    $profiles_query = mysqli_query($connection, $query_profiles);
+
+    if(mysqli_num_rows($profiles_query) <= 0) {
+        $stmt = $connection->prepare("UPDATE profiles SET PROFILES_NAME = ? WHERE PROFILES_ID = ?");
+        if ($stmt === false) {
+            echo "Error en la preparación de la consulta: " . $connection->error;
+            exit;
+        }
+        
+        $stmt->bind_param("si", $new_profile_name, $profile_id);
+        
+        if (!$stmt->execute()) {
+            echo "Error al actualizar el nombre del perfil: " . $stmt->error;
+            exit;
+        }
+        $stmt->close();
     }
-    $stmt->bind_param("si", $new_profile_name, $profile_id);
-    if (!$stmt->execute()) {
-        echo "Error al actualizar el nombre del perfil: " . $stmt->error;
-        exit;
-    }
-    $stmt->close();
 
     $set_clause = [];
     $params = [];
     $types = "";
-
+ 
     foreach ($all_permits as $permit) {
         $value = isset($permits[$permit]) ? $permits[$permit] : 0;
         $set_clause[] = "$permit = ?";
         $params[] = $value;
         $types .= "i";
     }
-
+    
     $params[] = $profile_id;
     $types .= "i";
 
-    $sql = "UPDATE profiles SET " . implode(", ", $set_clause) . " WHERE PROFILE_ID = ?";
-    $stmt = $conn->prepare($sql);
+    $sql = "UPDATE profiles SET " . implode(", ", $set_clause) . " WHERE PROFILES_ID = ?";
+    $stmt = $connection->prepare($sql);
 
     if ($stmt === false) {
-        echo "Error en la preparación de la consulta de permisos: " . $conn->error;
+        echo "Error en la preparación de la consulta de permisos: " . $connection->error;
         exit;
     }
 
@@ -63,6 +70,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $stmt->close();
-    $conn->close();
+    $connection->close();
 }
 ?>
