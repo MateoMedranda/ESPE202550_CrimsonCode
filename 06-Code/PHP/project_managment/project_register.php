@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $project_name = htmlspecialchars(trim($_POST['project_name']));
     $begin_date = $_POST['project_begin_date'];
     $ubication = htmlspecialchars(trim($_POST['project_ubication']));
-    $description = htmlspecialchars(trim($_POST['descripcionIngreso']));
+    $description = htmlspecialchars(trim($_POST['project_description']));
     $project_state = "En progreso";
     
 

@@ -112,7 +112,7 @@
         <form id="register_project" method="post" action="../PHP/project_managment/project_register.php"
             enctype="multipart/form-data">
             <fieldset class="border p-2 bg-light border-0">
-                <h3 class="titulo">Nuevo Proyecto</h3>
+                <h3 class="title">Nuevo Proyecto</h3>
                 <hr>
                 <div class="row">
                     <div class="col-8">
@@ -142,7 +142,7 @@
                         <div class="row px-4">
                             <div class="col-12">
                                 <label>Descripción*</label>
-                                <input name="descripcionIngreso" type="text" class="form-control mb-3 shadow">
+                                <input name="project_description" type="text" class="form-control mb-3 shadow">
                             </div>
                         </div>
                     </div>
@@ -165,46 +165,54 @@
 
     <!-- Dialog for update the project -->
     <dialog id="modal_update_project" class="container m-auto bg-light rounded shadow">
-        <form id="register_project" method="post" action="project_register.php">
+        <form id="update_project" method="post" action="../PHP/project_managment/project_update.php" enctype="multipart/form-data">
             <fieldset class="border p-2 bg-light border-0">
-                <h3 class="titulo">Editar Proyecto</h3>
+                <h3 class="title">Editar Proyecto</h3>
                 <hr>
                 <div class="row">
                     <div class="col-8">
+                        <input type="hidden" id="update_project_id" name="update_project_id" value=".">
                         <div class="row px-4">
+                            <div class="col-4 d-grid px-md-2">
+                                <label class="mb-0">Nombre: *</label>
+                                <input id="update_project_name_input" name="update_project_name" type="text"
+                                    class="form-control mb-3 shadow">
+                            </div>
                             <div class="col-3 px-2">
                                 <label class="mb-0">Fecha de Inicio: *</label>
-                                <input name="project_begin_date" type="date" class="form-control mb-3 shadow">
+                                <input id="update_project_begin_date" name="update_project_begin_date" type="date" class="form-control mb-3 shadow">
                             </div>
                             <div class="col-5 px-2">
                                 <label>Ubicación*</label>
-                                <input name="project_ubication" type="text" class="form-control mb-3 shadow">
+                                <input id="update_project_ubication" name="update_project_ubication" type="text" class="form-control mb-3 shadow">
                             </div>
-                            <div class="col-4 d-grid px-md-2">
+                        </div>
+                        <div class="row px-4">
+                             <div class="col-12">
                                 <label class="mb-0">Imagen: *</label>
-                                <input id="project_image_input" name="project_image" type="file"
+                                <input id="update_project_image_input" name="update_project_image" type="file"
                                     class="form-control mb-3 shadow">
                             </div>
                         </div>
                         <div class="row px-4">
                             <div class="col-12">
                                 <label>Descripción*</label>
-                                <input name="descripcionIngreso" type="text" class="form-control mb-3 shadow">
+                                <input id="update_project_description" name="update_project_description" type="text" class="form-control mb-3 shadow">
                             </div>
                         </div>
                     </div>
                     <div class="col-4 text-center">
                         <label class="text-center">Imagen Seleccionada</label>
-                        <div id="image_preview"
+                        <div id="update_image_preview"
                             class="mx-auto bg-black d-flex justify-content-center align-items-center shadow"
-                            style="width: 300px; height: 130px; overflow: hidden;">
+                            style="width: 350px; height: 230px; overflow: hidden;">
                         </div>
 
                     </div>
                 </div>
                 <hr>
-                <button type="submit" onclick="" class="btn bg-warning-subtle">Actualizar</button>
-                <button name="btn_cancel_add_project" id="btn_cancel_add_project" type="button"
+                <button type="submit" class="btn bg-warning-subtle">Actualizar</button>
+                <button name="btn_cancel_update_project" id="btn_cancel_update_project" type="button"
                     class="btn bg-danger-subtle" onclick="">Cancelar</button>
             </fieldset>
         </form>
