@@ -127,7 +127,7 @@ if (add_button && !add_button.dataset.eventoAgregado) {
                 try {
                     let permits = JSON.parse(response);
                     let container = $("#permits_container_edit");
-                    originalValues = { profile: profile, permits: {} };
+                    originalValues = { profile: name, permits: {} };
 
                     container.html('');
 
@@ -141,7 +141,7 @@ if (add_button && !add_button.dataset.eventoAgregado) {
                                     value="${permitKey}" id="permit_${permitKey}" ${permitValue ? "checked" : ""}>
                                 <label class="form-check-label" for="permit_${permitKey}">${permitLabel}</label>
                             </div>`;
-                        originalValues.permits[permitLabel] = permitValue;
+                        originalValues.permits[permitKey] = permitValue;
                         container.append(checkboxHtml);
                         
                     });
@@ -159,63 +159,45 @@ if (add_button && !add_button.dataset.eventoAgregado) {
 
     });
 
-    $("#guardarCambios").click(function () {
-        let nuevoNombre = $("#nombrepfedit").val().trim();
-        let permisosSeleccionados = {};
+    $("#update_profile").click(function () {
+        let new_profile_name = $("#profile_name_edit").val().trim();
+        $("#update_profile").data("id", profile_id);
+        let selected_permits= [];
 
-        document.querySelectorAll("input[name='permisos[]']").forEach((checkbox) => {
-            permisosSeleccionados[checkbox.value] = checkbox.checked;
+        $("input[name='permits[]']").each(function () {
+        selected_permits[$(this).val()] = $(this).is(":checked") ? 1 : 0;
         });
 
-        if (!Object.values(permisosSeleccionados).includes(true)) {
-            mensaje("Debe seleccionar al menos un permiso para el perfil");
-            setTimeout(function()  {
-                var modal = bootstrap.Modal.getInstance(document.getElementById("infomodal"));
-                modal.hide();
-            }, 1000);
+        const permisosSeleccionados = Object.values(selected_permits).some(value => value === 1);
+        if (!permisosSeleccionados) {
+            message("Debe seleccionar al menos un permiso.");
             return;
         }
 
-        if (nuevoNombre === originalValues.perfil && !permisosCambiaron(originalValues.permisos, permisosSeleccionados)) {
-            mensaje("No ha realizado cambios");
-            setTimeout(function() {
-                var modal = bootstrap.Modal.getInstance(document.getElementById("infomodal"));
-                modal.hide();
-            }, 1000);
+        if (new_profile_name === originalValues.profile &&
+            !permisosCambiaron(originalValues.permits, selected_permits)) {
+            message("No ha realizado cambios");
             return;
         }
 
-        if (nuevoNombre === "") {
-            mensaje("El nombre del perfil no puede estar vacío.");
-            setTimeout(function() {
-                var modal = bootstrap.Modal.getInstance(document.getElementById("infomodal"));
-                modal.hide();
-            }, 1000);
+        if (new_profile_name === "") {
+            message("El nombre del perfil no puede estar vacío.");
             return;
         }
-
+        console.log(profile_id);
         $.ajax({
-            url: "../server/actualizarperfil.php",
+            url: "../PHP/update_profile.php",
             method: "POST",
             data: {
-                perfil: originalValues.perfil,
-                nuevoPerfil: nuevoNombre,
-                permisos: JSON.stringify(permisosSeleccionados),
+                profile_id: profile_id,
+                name: new_profile_name,
+                permits: JSON.stringify(selected_permits),
             },
-            success: function () {
-                mensaje("Perfil Actualizado Correctamente!!!");
-                setTimeout(function() {
-                    var modal = bootstrap.Modal.getInstance(document.getElementById("infomodal"));
-                    modal.hide();
-                    location.reload();
-                }, 1000);
+            success: function (response) {
+                message(response);
             },
             error: function () {
-                mensaje("Error en el envío de datos!!!");
-                setTimeout(function() {
-                    var modal = bootstrap.Modal.getInstance(document.getElementById("infomodal"));
-                    modal.hide();
-                }, 1000);
+                message("Error en el envío de datos.");
             },
         });
     });
