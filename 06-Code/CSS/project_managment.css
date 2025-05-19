@@ -25,12 +25,21 @@
 .card-proyecto:hover {
     transform: translateY(-8px);
     box-shadow: 0 8px 20px rgb(85, 85, 85);
-    cursor: pointer;
 }
 
 .project_options:hover {
     transform: scale(1.2) !important;
     transition: transform 0.2s ease-in-out !important;
+    cursor: pointer;
+}
+
+.div_project_title:hover{
+    cursor: pointer;
+    color:blue;
+}
+
+.div_project_image:hover{
+    cursor: pointer;
 }
 
 .div_filter_projects {
