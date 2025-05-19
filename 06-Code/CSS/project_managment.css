@@ -86,3 +86,7 @@ dialog.closing {
         transform: translateY(-50px);
     }
 }
+
+.sub_option{
+    cursor: pointer;
+}

@@ -1,6 +1,6 @@
 <?php
 include("../connection_db.php");
-    $request = 'SELECT p.PROJECT_ID AS "id" p.PROJECT_NAME AS "name" , p.PROJECT_STARTDATE AS "begin_date" p.PROJECT_IMAGE AS "image" FROM PROJECT p';
+    $request = 'SELECT p.PROJECT_ID AS "id", p.PROJECT_NAME AS "name" , p.PROJECT_STARTDATE AS "begin_date", p.PROJECT_IMAGE AS "image" FROM project p';
     $result = mysqli_query($connection,$request);
 
     if($result){

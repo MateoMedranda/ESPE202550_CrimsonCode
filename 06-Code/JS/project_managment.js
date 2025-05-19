@@ -80,16 +80,16 @@ function load_full_project_list(){
                                         <h2 class="mb-0"><i class="bi bi-list"></i></h2>
                                     </div>
                                     <ul class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item" onclick="update_project(${project.id})">Editar</a></li>
-                                        <li><a class="dropdown-item" onclick="delete_project(${project.id})">Eliminar</a></li>
-                                        <li><a class="dropdown-item" onclick="open_project(${project.id})">Ver detalles</a></li>
+                                        <li><a class="sub_option dropdown-item" onclick="update_project(${project.id})">Editar</a></li>
+                                        <li><a class="sub_option dropdown-item" onclick="delete_project(${project.id})">Eliminar</a></li>
+                                        <li><a class="sub_option dropdown-item" onclick="open_project(${project.id})">Ver detalles</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <h6 class="mt-2">Inicio: ${project.begin_date}</h6>
                         </div>
-                        <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_project(${project.id})"><img src="../${project.image}" width="100%"></div>
+                        <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_project(${project.id})"><img src="../PROJECTS/${project.image}" width="100%"></div>
                     </div>
                 </div>
             `;
