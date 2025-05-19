@@ -180,6 +180,56 @@
         </form>
     </dialog>
 
+    <!-- Dialog to add new monitoring -->
+    <dialog id="modal_add_project_monitoring" class="container m-auto bg-light rounded shadow">
+        <form id="register_monitoring" method="post" action="project_monitoring_register.php">
+            <fieldset class="border p-2 bg-light border-0">
+                <h3 class="titulo">Nuevo Monitoreo</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row px-4">
+                            <div class="col-3 px-2">
+                                <label class="mb-0">Nombre del Monitoreo: *</label>
+                                <input name="project_permission_name" type="text" class="form-control mb-3 shadow">
+                            </div>
+                            <div class="col-9 px-2">
+                                <label>Descripción: *</label>
+                                <input name="project_permission_Description" type="text"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12">
+                                <label>Adjuntar Imagen: *</label>
+                                <input name="project_monitoring_image" id="project_monitoring_image" type="file"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12">
+                                <label>Adjuntar Archivo: *</label>
+                                <input name="project_monitoring_file" id="project_monitoring_file" type="file"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <label class="text-center">Imagen seleccionada</label>
+                        <div id="image_preview"
+                            class="mx-auto bg-black d-flex justify-content-center align-items-center shadow"
+                            style="width: 300px; height: 130px; overflow: hidden;">
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <button type="submit" onclick="" class="btn bg-success-subtle">Guardar</button>
+                <button name="btn_cancel_add_project_monitoring" id="btn_cancel_add_project_monitoring" type="button"
+                    class="btn bg-danger-subtle" onclick="">Cancelar</button>
+            </fieldset>
+        </form>
+    </dialog>
+
     <div class="container mt-4">
         <fieldset class="border p-4 shadow agregar bg-light rounded">
             <div class="text-center bg-success-subtle">
@@ -336,7 +386,7 @@
                 <div class="col">
                     <h3 class="title inter-title">Monitoreos</h3>
                 </div>
-                <div class="col text-end"><button id="addProject" class="btn_add btn bg-info-subtle border-black"
+                <div class="col text-end"><button id="add_monitoring" class="btn_add btn bg-info-subtle border-black"
                         onclick=""><i class="bi bi-plus-circle"></i> Agregar Monitoreo</button>
                 </div>
             </div>
@@ -346,10 +396,18 @@
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
+                                <h5 class="mb-0 title_project fw-bold">Monitoreo 1</h5>
                             </div>
-                            <div>
-                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            <div class="dropdown">
+                                <div class="project_options rounded" data-bs-toggle="dropdown" aria-expanded="false"
+                                    role="button">
+                                    <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end shadow">
+                                    <li><a class="dropdown-item" href="#">Editar</a></li>
+                                    <li><a class="dropdown-item" href="#">Eliminar</a></li>
+                                    <li><a class="dropdown-item" href="#">Ver detalles</a></li>
+                                </ul>
                             </div>
                         </div>
                         <h6 class="mt-2">Inicio: 2015</h6>

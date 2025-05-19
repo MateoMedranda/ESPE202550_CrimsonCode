@@ -17,8 +17,6 @@ btn_cancel_add_project.addEventListener('click', () => {
     }, { once: true }); 
 });
 
-
-
 project_image_file.addEventListener('change', (event) => {
     const file = event.target.files[0];
 

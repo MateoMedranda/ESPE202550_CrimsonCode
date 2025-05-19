@@ -107,6 +107,56 @@
         </div>
     </div>
 
+    <!-- Dialog to add new activity -->
+    <dialog id="modal_add_project_monitoring" class="container m-auto bg-light rounded shadow">
+        <form id="register_monitoring" method="post" action="project_monitoring_register.php">
+            <fieldset class="border p-2 bg-light border-0">
+                <h3 class="titulo">Nuevo Monitoreo</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row px-4">
+                            <div class="col-3 px-2">
+                                <label class="mb-0">Nombre del Monitoreo: *</label>
+                                <input name="project_permission_name" type="text" class="form-control mb-3 shadow">
+                            </div>
+                            <div class="col-9 px-2">
+                                <label>Descripción: *</label>
+                                <input name="project_permission_Description" type="text"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12">
+                                <label>Adjuntar Imagen: *</label>
+                                <input name="project_monitoring_image" id="project_monitoring_image" type="file"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12">
+                                <label>Adjuntar Archivo: *</label>
+                                <input name="project_monitoring_file" id="project_monitoring_file" type="file"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <label class="text-center">Imagen seleccionada</label>
+                        <div id="image_preview"
+                            class="mx-auto bg-black d-flex justify-content-center align-items-center shadow"
+                            style="width: 300px; height: 130px; overflow: hidden;">
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <button type="submit" onclick="" class="btn bg-success-subtle">Guardar</button>
+                <button name="btn_cancel_add_project_monitoring" id="btn_cancel_add_project_monitoring" type="button"
+                    class="btn bg-danger-subtle" onclick="">Cancelar</button>
+            </fieldset>
+        </form>
+    </dialog>
+
     <!-- This is the dialog for the controlls -->
     <dialog id="modal_add_control" class="container m-auto bg-light rounded shadow">
         <form id="register_control">
