@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ssssss", $project_name, $begin_date,$project_state, $ubication, $description, $image_name);
     
     if ($stmt->execute()) {
-        header("Location: success.php"); 
+        header("Location: ../../HTML/project_managment.html"); 
         exit();
     } else {
         die("Error: " . $stmt->error);

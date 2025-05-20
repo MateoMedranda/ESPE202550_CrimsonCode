@@ -56,7 +56,7 @@ btn_cancel_add_project_monitoring.addEventListener('click', () => {
     }, { once: true });
 });
 
-function open_update_project_permission_modal(){
+function open_update_project_permission_modal() {
     modal_update_project_permission.showModal();
 }
 
@@ -118,10 +118,11 @@ function get_full_project_permission_list() {
 }
 
 function load_full_project_permission_list() {
-    let project_permission_content_div = document.getElementById("project_permission_content_div");
-    let string_divs = "";
-    project_permission_full_list.forEach((permission) => {
-        let new_div_permission = `
+    if (project_permission_full_list.length) {
+        let project_permission_content_div = document.getElementById("project_permission_content_div");
+        let string_divs = "";
+        project_permission_full_list.forEach((permission) => {
+            let new_div_permission = `
             <div class="project_permission_card col-3 m-auto bg-dark-subtle rounded">
                 <div class="px-2">
                     <div class="d-flex justify-content-between align-items-center py-2 position-relative">
@@ -144,13 +145,14 @@ function load_full_project_permission_list() {
                 </div>
             </div>`;
 
-        string_divs += new_div_permission;
-    });
-    project_permission_content_div.innerHTML = string_divs;
+            string_divs += new_div_permission;
+        });
+        project_permission_content_div.innerHTML = string_divs;
+    }
 }
 
 
-function load_project_permission_to_update(permission_id,project_id) {
+function load_project_permission_to_update(permission_id, project_id) {
     console.log("permission_id:", permission_id, "project_id:", project_id);
 
     const form_data = new FormData();
@@ -180,9 +182,9 @@ function load_project_permission_to_update(permission_id,project_id) {
         });
 }
 
-function update_project_permission(permission_id,project_id) {
+function update_project_permission(permission_id, project_id) {
     open_update_project_permission_modal();
-    load_project_permission_to_update(permission_id,project_id);
+    load_project_permission_to_update(permission_id, project_id);
 }
 
 
