@@ -176,6 +176,52 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
         </form>
     </dialog>
 
+    <!-- Dialog to update new permission -->
+    <dialog id="modal_update_project_permission" class="container m-auto bg-light rounded shadow">
+        <form id="update_permission" method="post" action="../PHP/project_managment/project_permission_update.php" enctype="multipart/form-data">
+            <fieldset class="border p-2 bg-light border-0">
+                <h3 class="title">Editar Permiso</h3>
+                <input type="hidden" id="update_project_id_permission" name="update_project_id_permission" value="<?php echo htmlspecialchars($data["PROJECT_ID"]); ?>">
+                <input type="hidden" id="update_project_folder" name="update_project_folder" value="<?php echo htmlspecialchars($project_folder_name); ?>">
+                <hr>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row px-4">
+                            <div class="col-3 px-2">
+                                <label class="mb-0">Nombre del Permiso: *</label>
+                                <input id="update_project_permission_name" name="update_project_permission_name" type="text" class="form-control mb-3 shadow">
+                            </div>
+                            <div class="col-9 px-2">
+                                <label>Descripción: *</label>
+                                <input id="update_project_permission_Description" name="update_project_permission_Description" type="text"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12">
+                                <label>Adjuntar Archivo (pdf): *</label>
+                                <input name="update_project_permission_file" id="update_project_permission_file" type="file"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <label class="text-center">Archivo seleccionado</label>
+                        <div id="update_file_preview"
+                            class="mx-auto bg-black d-flex justify-content-center align-items-center shadow"
+                            style="width: 300px; height: 130px; overflow: hidden;">
+                        </div>
+
+                    </div>
+                </div>
+                <hr>
+                <button type="submit" onclick="" class="btn bg-success-subtle">Guardar</button>
+                <button name="btn_cancel_update_project_permission" id="btn_cancel_update_project_permission" type="button"
+                    class="btn bg-danger-subtle" onclick="">Cancelar</button>
+            </fieldset>
+        </form>
+    </dialog>
+
     <!-- Dialog to add EMP -->
     <dialog id="modal_add_project_EMP" class="container m-auto bg-light rounded shadow">
         <form id="register_EMP" method="post" action="project_EMP_register.php">

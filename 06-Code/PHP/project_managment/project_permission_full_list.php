@@ -1,6 +1,6 @@
 <?php
 include("../connection_db.php");
-    $request = 'SELECT p.PERMIT_ID AS "id", p.PERMIT_NAME AS "name" FROM permit p INNER JOIN project o ON o.PROJECT_ID = p.PROJECT_ID';
+    $request = 'SELECT p.PERMIT_ID AS "id", p.PERMIT_NAME AS "name", p.PROJECT_ID AS "project" FROM permit p INNER JOIN project o ON o.PROJECT_ID = p.PROJECT_ID';
     $result = mysqli_query($connection,$request);
 
     if($result){
