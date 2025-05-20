@@ -78,11 +78,12 @@ function get_full_project_list() {
 }
 
 function load_full_project_list() {
-    let project_content_div = document.getElementById("project_content_div");
-    let string_divs = "";
-    project_full_list.forEach((project) => {
-        const project_folder_name = project.name.replace(/[^A-Za-z0-9\-]/g, '_');
-        let new_div_project = `
+    if (project_full_list.length) {
+        let project_content_div = document.getElementById("project_content_div");
+        let string_divs = "";
+        project_full_list.forEach((project) => {
+            const project_folder_name = project.name.replace(/[^A-Za-z0-9\-]/g, '_');
+            let new_div_project = `
             <div class="col-md-4 col-sm-12 mt-4 mb-4">
                     <div class="card-proyecto col-md-10 col-sm-12 m-auto rounded p-0">
                         <div class="px-2 pt-2">
@@ -113,9 +114,10 @@ function load_full_project_list() {
                 </div>
             `;
 
-        string_divs += new_div_project;
-    });
-    project_content_div.innerHTML = string_divs;
+            string_divs += new_div_project;
+        });
+        project_content_div.innerHTML = string_divs;
+    }
 }
 
 
