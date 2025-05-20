@@ -14,8 +14,10 @@ const btn_cancel_add_project_monitoring = document.getElementById('btn_cancel_ad
 const input_image = document.getElementById('project_monitoring_image');
 const preview_div = document.getElementById('image_preview');
 let project_permission_full_list = [];
+let project_emp_full_list = [];
 
 get_full_project_permission_list();
+get_full_project_emp_list();
 
 btn_add_project_permission.addEventListener('click', () => {
     modal_add_project_permission.showModal();
@@ -187,6 +189,57 @@ function update_project_permission(permission_id, project_id) {
     load_project_permission_to_update(permission_id, project_id);
 }
 
+function get_full_project_emp_list() {
+    fetch("../PHP/project_managment/project_emp_full_list.php")
+        .then(response => response.json())
+        .then(data => {
+            console.log("EMPs were catch:", data);
+            if (data.error) {
+                console.error("[ERROR load_fill_project_emp_list]: ", data.error);
+            } else {
+                project_emp_full_list = data;
+                load_full_project_emp_list();
+            }
+        })
+        .catch(error => console.error("Error en la solicitud fetch:", error));
+}
+
+function load_full_project_emp_list() {
+    if (project_emp_full_list.length) {
+        let project_emp_content_div = document.getElementById("project_emp_content_div");
+        let string_divs = "";
+        project_emp_full_list.forEach((emp) => {
+            let new_div_emp = `
+            <div class="project_plan_card col-3 m-auto rounded">
+                    <div class="px-2 pt-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-0 title_project">${emp.name}</h5>
+                            </div>
+                            <div class="dropdown">
+                                <div class="project_options rounded" data-bs-toggle="dropdown" aria-expanded="false"
+                                    role="button">
+                                    <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end shadow">
+                                    <li><a class="dropdown-item" href="update_emp(${emp.id})">Editar</a></li>
+                                    <li><a class="dropdown-item" href="delete_emp(${emp.id})">Eliminar</a></li>
+                                    <li><a class="dropdown-item" href="open_emp(${emp.id})">Ver detalles</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="plan_progress_container">
+                            <div class="plan_progress_bar" id="plan_progress_bar">0%</div>
+                        </div>
+                    </div>
+                </div>`;
+
+            string_divs += new_div_emp;
+        });
+        project_emp_content_div.innerHTML = string_divs;
+    }
+}
 
 
 

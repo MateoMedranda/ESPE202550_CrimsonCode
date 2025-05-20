@@ -224,7 +224,8 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
 
     <!-- Dialog to add EMP -->
     <dialog id="modal_add_project_EMP" class="container m-auto bg-light rounded shadow">
-        <form id="register_EMP" method="post" action="project_EMP_register.php">
+        <form id="register_EMP" method="post" action="../PHP/project_managment/project_EMP_register.php">
+            <input type="hidden" id="project_id_emp" name="project_id_emp" value="<?php echo htmlspecialchars($data["PROJECT_ID"]); ?>">
             <fieldset class="border p-2 bg-light border-0">
                 <h3 class="titulo">Nuevo Plan de Manejo Ambiental</h3>
                 <hr>
@@ -233,11 +234,11 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                         <div class="row px-4">
                             <div class="col-3 px-2">
                                 <label class="mb-0">Nombre del Plan: *</label>
-                                <input name="project_EMP_name" type="text" class="form-control mb-3 shadow">
+                                <input name="project_emp_name" type="text" class="form-control mb-3 shadow">
                             </div>
                             <div class="col-9 px-2">
                                 <label>Descripción: *</label>
-                                <input name="project_EMP_Description" type="text"
+                                <input name="project_emp_description" type="text"
                                     class="form-control mb-3 shadow">
                             </div>
                         </div>
@@ -370,65 +371,13 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
 
             </div>
             <hr>
-            <div class="d-flex pt-4 pb-4">
-                <div class="project_plan_card col-3 m-auto rounded">
-                    <div class="px-2 pt-2">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="mb-0 title_project">Plan de Mitigación y Prevención de Impactos</h5>
-                            </div>
-                            <div class="dropdown">
-                                <div class="project_options rounded" data-bs-toggle="dropdown" aria-expanded="false"
-                                    role="button">
-                                    <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                                </div>
-                                <ul class="dropdown-menu dropdown-menu-end shadow">
-                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                    <li><a class="dropdown-item" href="#">Eliminar</a></li>
-                                    <li><a class="dropdown-item" href="#">Ver detalles</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="plan_progress_container">
-                            <div class="plan_progress_bar" id="plan_progress_bar">0%</div>
-                        </div>
-                    </div>
+            <div id="project_emp_content_div" class="d-flex pt-4 pb-4">
+                
+                <div class="col-12 text-center my-1 py-1">
+                    <h1><i class="bi bi-stars"></i></h1>
+                    <h1><i class="bi bi-archive"></i> Aun no hay planes de manejo aquí</h1>
                 </div>
-
-                <div class="project_plan_card col-3 m-auto rounded">
-                    <div class="px-2 pt-2">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="mb-0 title_project">Plan de Mitigación y Prevención de Impactos</h5>
-                            </div>
-                            <div>
-                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="plan_progress_container">
-                            <div class="plan_progress_bar" id="plan_progress_bar">0%</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project_plan_card col-3 m-auto rounded">
-                    <div class="px-2 pt-2">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="mb-0 title_project">Plan de Mitigación y Prevención de Impactos</h5>
-                            </div>
-                            <div>
-                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="plan_progress_container">
-                            <div class="plan_progress_bar" id="plan_progress_bar">0%</div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
             <hr>
             <div class="d-flex">
