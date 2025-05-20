@@ -81,6 +81,7 @@ function load_full_project_list() {
     let project_content_div = document.getElementById("project_content_div");
     let string_divs = "";
     project_full_list.forEach((project) => {
+        const project_folder_name = project.name.replace(/[^A-Za-z0-9\-]/g, '_');
         let new_div_project = `
             <div class="col-md-4 col-sm-12 mt-4 mb-4">
                     <div class="card-proyecto col-md-10 col-sm-12 m-auto rounded p-0">
@@ -107,7 +108,7 @@ function load_full_project_list() {
 
                             <h6 class="mt-2">Inicio: ${project.begin_date}</h6>
                         </div>
-                        <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_project(${project.id})"><img src="../PROJECTS/${project.image}" width="100%"></div>
+                        <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_project(${project.id})"><img src="../PROJECTS/${project_folder_name}/imagen_proyecto/${project.image}" width="100%"></div>
                     </div>
                 </div>
             `;
@@ -133,12 +134,14 @@ function load_project_to_update(project_id) {
             if (data.error) {
                 console.error("[ERROR]:", data.error);
             } else {
+                const project_folder_name = data[0].PROJECT_NAME.replace(/[^A-Za-z0-9\-]/g, '_');
+
                 document.getElementById("update_project_id").value = data[0].PROJECT_ID;
                 document.getElementById("update_project_name_input").value = data[0].PROJECT_NAME;
                 document.getElementById("update_project_begin_date").value = data[0].PROJECT_STARTDATE;
                 document.getElementById("update_project_ubication").value = data[0].PROJECT_LOCATION;
                 document.getElementById("update_project_description").value = data[0].PROJECT_DESCRIPTION;
-                document.getElementById("update_image_preview").innerHTML = `<img style="width:100%;height:100%;object-fit:cover;border-radius:4px;" src="../PROJECTS/${data[0].PROJECT_IMAGE}">`;
+                document.getElementById("update_image_preview").innerHTML = `<img style="width:100%;height:100%;object-fit:cover;border-radius:4px;" src="../PROJECTS/${project_folder_name}/imagen_proyecto/${data[0].PROJECT_IMAGE}">`;
             }
         })
         .catch(error => {
@@ -149,4 +152,8 @@ function load_project_to_update(project_id) {
 function update_project(project_id) {
     open_update_project_modal();
     load_project_to_update(project_id);
+}
+
+function open_project(project_id) {
+    window.location.href = `../HTML/project_page.php?project_id=${project_id}`;
 }

@@ -11,6 +11,9 @@ const modal_add_project_monitoring = document.getElementById('modal_add_project_
 const btn_cancel_add_project_monitoring = document.getElementById('btn_cancel_add_project_monitoring');
 const input_image = document.getElementById('project_monitoring_image');
 const preview_div = document.getElementById('image_preview');
+let project_permission_full_list = [];
+
+get_full_project_permission_list();
 
 btn_add_project_permission.addEventListener('click', () => {
     modal_add_project_permission.showModal();
@@ -92,6 +95,57 @@ input_image.addEventListener('change', () => {
         preview_div.textContent = 'No se seleccionó una imagen válida';
     }
 });
+
+function get_full_project_permission_list() {
+    fetch("../PHP/project_managment/project_permission_full_list.php")
+        .then(response => response.json())
+        .then(data => {
+            console.log("Permissions were catch:", data);
+            if (data.error) {
+                console.error("[ERROR load_fill_project_list]: ", data.error);
+            } else {
+                project_permission_full_list = data;
+                load_full_project_permission_list();
+            }
+        })
+        .catch(error => console.error("Error en la solicitud fetch:", error));
+}
+
+function load_full_project_permission_list() {
+    let project_permission_content_div = document.getElementById("project_permission_content_div");
+    let string_divs = "";
+    project_permission_full_list.forEach((permission) => {
+        let new_div_permission = `
+            <div class="project_permission_card col-3 m-auto bg-dark-subtle rounded">
+                <div class="px-2">
+                    <div class="d-flex justify-content-between align-items-center py-2 position-relative">
+                        <div class="div_project_permission" onClick="open_project_permission(${permission.id})">
+                            <h5 class="mb-0 title_project fw-bold">${permission.name}</h5>
+                        </div>
+
+                        <div class="dropdown">
+                            <div class="project_options rounded" data-bs-toggle="dropdown" aria-expanded="false"
+                                role="button">
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li><a class="dropdown-item" onClick="update_project_permission(${permission.id})">Editar</a></li>
+                                <li><a class="dropdown-item" onClick="delete_project_permission(${permission.id})">Eliminar</a></li>
+                                <li><a class="dropdown-item" onClick="open_project_permission(${permission.id})">Ver detalles</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+        string_divs += new_div_permission;
+    });
+    project_permission_content_div.innerHTML = string_divs;
+}
+
+
+
+
 
 
 

@@ -132,6 +132,12 @@ dialog.closing {
     right: 0; 
     margin-top: 0.3rem;
     transform: none !important; 
+    background-color: #fff !important; 
+}
+
+.div_project_permission:hover{
+    cursor: pointer;
+    color:blue;
 }
 
 

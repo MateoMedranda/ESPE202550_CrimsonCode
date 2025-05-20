@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Prepare failed: " . $connection->error);
     }
     
-    $stmt->bind_param("ssssss", $project_name, $begin_date,$project_state, $ubication, $description, $image_path);
+    $stmt->bind_param("ssssss", $project_name, $begin_date,$project_state, $ubication, $description, $image_name);
     
     if ($stmt->execute()) {
         header("Location: success.php"); 
