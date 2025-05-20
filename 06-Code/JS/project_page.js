@@ -213,7 +213,7 @@ function load_full_project_emp_list() {
             <div class="project_plan_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
-                            <div>
+                            <div class="div_project_emp">
                                 <h5 class="mb-0 title_project">${emp.name}</h5>
                             </div>
                             <div class="dropdown">
