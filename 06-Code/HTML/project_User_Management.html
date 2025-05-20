@@ -19,6 +19,7 @@
 </head>
 
 <body >
+	
     <div class="container mt-4">
         <fieldset class="border p-4 shadow agregar bg-light rounded">
             <div class="text-center bg-success-subtle">
@@ -63,7 +64,7 @@
 				</button>
 				</th>
 				<th>Estado
-				<button class="btn btn-sm btn-light ms-2" id="estate_filter">
+				<button class="btn btn-sm btn-light ms-2" id="state_filter">
 					<i class="bi bi-arrow-down-circle"></i> 
 				</button>
 				</th>
@@ -90,9 +91,73 @@
             <hr/>
            
 
+<div class="modal fade" id="user_register" tabindex="-1" aria-labelledby="user_register_label" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
+			<div class="modal-content">
+				<div class="container">
+					<div class="row">
+						<h1 class="text-center">Registrar Usuario</h1>
+					</div>
+					<div class="row border border-dark p-3 my-4 mx-4 position-relative">
+							<h3 class="position-absolute top-0 start-0 ms-3 px-2" 
+							style="margin-top: -12px; background-color: white; display: inline;">
+							Datos del Usuario
+							</h3>
+						<div class="col-md-6">
+							<label for="nombre" class="form-label">Nombre:
+								<input type="text" id="name" name="nombre" class="form-control border-dark" required>
+							</label>
+						</div>
+						<div class="col-md-6">
+							<label for="apellido" class="form-label">Apellido:
+								<input type="text" id="apellido" name="apellido" class="form-control border-dark" required>
+							</label>
+						</div>
+					</div>
+					<div class="row border border-dark p-3 my-4 mx-4 position-relative">
+						<h3 class="position-absolute top-0 start-0 ms-3 px-2" 
+						style="margin-top: -12px; background-color: white; display: inline;">
+						Datos de la cuenta
+						</h3>
+					<div class="col-md-6">
+						<label for="usuario" class="form-label">Usuario:
+							<input type="text" id="userio" name="userio" class="form-control border-dark" required>
+						</label>
+					</div>
+					<div class="col-md-6">
+						<label for="cedula" class="form-label">Cedula:
+							<input type="text" id="cedula" name="cedula" class="form-control border-dark" required>
+						</label>
+					</div>
+					<div class="modal-footer">
+					<div class="col">
+					<label for="perfil" class="form-label">Perfil:</label>
+					<select class="form-control border-dark text-dark" id="perfil" name="perfil" required>
+					'<option value="seleccione"> Seleccione...</option>';
+						<?php
+						while ($registro = mysqli_fetch_assoc($listperfiles)) {
+							echo '<option value="' . htmlspecialchars($registro['perfil']) . '">' . htmlspecialchars($registro['perfil']) . '</option>';
+						}
+						?>
+					</select>
+					</div>
+
+				</div>	
+				</div>
+					<div class="modal-footer d-flex justify-content-center align-items-center">
+						<button type="button" class="btn btn-white border border-dark" data-bs-dismiss="modal">Cancelar</button>
+						<button type="button" class="btn btn-white border border-dark" id="ingreso" >Ingresar</button>
+					</div>
+				</div>
+			</div>
+			</div>
+			
+		</div>
+	</div>
+
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
     crossorigin="anonymous"></script>
-
+<script src="../JS/user_data_management.js"></script>
 </html>

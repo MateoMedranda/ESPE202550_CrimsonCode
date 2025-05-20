@@ -232,6 +232,7 @@ create table USERS
    PROFILES_ID          int not null,
    USERS_NAME           varchar(64) not null,
    USERS_SURNAME        varchar(64) not null,
+   USERS_PERSONAL_ID        varchar(11) not null,
    USERS_BORNDATE       date not null,
    USERS_EMAIL          varchar(128) not null,
    USERS_PHONENUMBER    varchar(16) not null,
