@@ -135,9 +135,12 @@ dialog.closing {
     background-color: #fff !important; 
 }
 
-.div_project_permission:hover,.div_project_emp:hover{
+.div_project_permission:hover,.div_project_emp:hover, .div_project_monitoring:hover{
     cursor: pointer;
     color:blue;
 }
 
+.div_project_image:hover{
+    cursor: pointer;
+}
 

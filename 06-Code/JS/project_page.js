@@ -15,9 +15,11 @@ const input_image = document.getElementById('project_monitoring_image');
 const preview_div = document.getElementById('image_preview');
 let project_permission_full_list = [];
 let project_emp_full_list = [];
+let project_monitoring_full_list = [];
 
 get_full_project_permission_list();
 get_full_project_emp_list();
+get_full_project_monitoring_list();
 
 btn_add_project_permission.addEventListener('click', () => {
     modal_add_project_permission.showModal();
@@ -213,7 +215,7 @@ function load_full_project_emp_list() {
             <div class="project_plan_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
-                            <div>
+                            <div class="div_project_emp">
                                 <h5 class="mb-0 title_project">${emp.name}</h5>
                             </div>
                             <div class="dropdown">
@@ -222,9 +224,9 @@ function load_full_project_emp_list() {
                                     <h2 class="mb-0"><i class="bi bi-list"></i></h2>
                                 </div>
                                 <ul class="dropdown-menu dropdown-menu-end shadow">
-                                    <li><a class="dropdown-item" href="update_emp(${emp.id})">Editar</a></li>
-                                    <li><a class="dropdown-item" href="delete_emp(${emp.id})">Eliminar</a></li>
-                                    <li><a class="dropdown-item" href="open_emp(${emp.id})">Ver detalles</a></li>
+                                    <li><a class="dropdown-item" onClick="update_emp(${emp.id})">Editar</a></li>
+                                    <li><a class="dropdown-item" onClick="delete_emp(${emp.id})">Eliminar</a></li>
+                                    <li><a class="dropdown-item" onClick="open_emp(${emp.id})">Ver detalles</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -243,3 +245,57 @@ function load_full_project_emp_list() {
 
 
 
+
+function get_full_project_monitoring_list() {
+    fetch("../PHP/project_managment/project_monitoring_full_list.php")
+        .then(response => response.json())
+        .then(data => {
+            console.log("Monitorings fetched:", data);
+            if (data.error) {
+                console.error("[ERROR get_full_project_monitoring_list]:", data.error);
+            } else {
+                project_monitoring_full_list = data;
+                load_full_project_monitoring_list(); 
+            }
+        })
+        .catch(error => console.error("Fetch error:", error));
+}
+
+
+function load_full_project_monitoring_list() {
+    if (project_monitoring_full_list.length) {
+        let project_monitoring_content_div = document.getElementById("project_monitoring_content_div");
+        let string_divs = "";
+        project_monitoring_full_list.forEach((monitoring) => {
+            let new_div_emp = `
+           <div class="project_monitoring_card col-3 m-auto rounded">
+                    <div class="px-2 pt-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="div_project_monitoring" onClick="open_monitoring(${monitoring.id})">
+                                <h5 class="mb-0 title_project fw-bold">${monitoring.name}</h5>
+                            </div>
+                            <div class="dropdown">
+                                <div class="project_options rounded" data-bs-toggle="dropdown" aria-expanded="false"
+                                    role="button">
+                                    <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end shadow">
+                                    <li><a class="dropdown-item" onClick="update_monitoring(${monitoring.id})">Editar</a></li>
+                                    <li><a class="dropdown-item" onClick="delete_monitoring(${monitoring.id})">Eliminar</a></li>
+                                    <li><a class="dropdown-item" onClick="open_monitoring(${monitoring.id})">Ver detalles</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+                            <h6 class="mt-2 text-truncate">${monitoring.description}</h6>
+                        </div>
+                        
+                    </div>
+                    <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_monitoring(${monitoring.id})"><img src="../IMG/project1.png" width="100%"></div>
+                </div>`;
+
+            string_divs += new_div_emp;
+        });
+        project_monitoring_content_div.innerHTML = string_divs;
+    }
+}

@@ -254,20 +254,29 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
 
     <!-- Dialog to add new monitoring -->
     <dialog id="modal_add_project_monitoring" class="container m-auto bg-light rounded shadow">
-        <form id="register_monitoring" method="post" action="project_monitoring_register.php">
+        <form id="register_monitoring" method="post" action="../PHP/project_managment/project_monitoring_register.php" enctype="multipart/form-data">
             <fieldset class="border p-2 bg-light border-0">
-                <h3 class="titulo">Nuevo Monitoreo</h3>
+                <h3 class="title">Nuevo Monitoreo</h3>
+                <input type="hidden" id="project_id_monitoring" name="project_id_monitoring" value="<?php echo htmlspecialchars($data["PROJECT_ID"]); ?>">
+                <input type="hidden" id="project_folder_monitoring" name="project_folder_monitoring" value="<?php echo htmlspecialchars($project_folder_name); ?>">
                 <hr>
                 <div class="row">
                     <div class="col-8">
                         <div class="row px-4">
                             <div class="col-3 px-2">
                                 <label class="mb-0">Nombre del Monitoreo: *</label>
-                                <input name="project_permission_name" type="text" class="form-control mb-3 shadow">
+                                <input name="project_monitoring_name" type="text" class="form-control mb-3 shadow">
                             </div>
                             <div class="col-9 px-2">
                                 <label>Descripción: *</label>
-                                <input name="project_permission_Description" type="text"
+                                <input name="project_monitoring_description" type="text"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12 px-2">
+                                <label>Observación: *</label>
+                                <input name="project_monitoring_observation" type="text"
                                     class="form-control mb-3 shadow">
                             </div>
                         </div>
@@ -289,8 +298,8 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                     <div class="col-4 text-center">
                         <label class="text-center">Imagen seleccionada</label>
                         <div id="image_preview"
-                            class="mx-auto bg-black d-flex justify-content-center align-items-center shadow"
-                            style="width: 300px; height: 130px; overflow: hidden;">
+                            class=" m-auto bg-black d-flex justify-content-center align-items-center shadow"
+                            style="width: 360px; height: 220px; overflow: hidden;">
                         </div>
                     </div>
                 </div>
@@ -332,32 +341,9 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
             </div>
             <hr>
             <div id="project_permission_content_div" class="d-flex pt-4 pb-4">
-                <!--  
-                <div class="project_permission_card col-3 m-auto bg-dark-subtle rounded">
-                    <div class="px-2">
-                        <div class="d-flex justify-content-between align-items-center py-2 position-relative">
-                            <div>
-                                <h5 class="mb-0 title_project fw-bold">Permiso de Agua</h5>
-                            </div>
-
-                            <div class="dropdown">
-                                <div class="project_options rounded" data-bs-toggle="dropdown" aria-expanded="false"
-                                    role="button">
-                                    <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                                </div>
-                                <ul class="dropdown-menu dropdown-menu-end shadow">
-                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                    <li><a class="dropdown-item" href="#">Eliminar</a></li>
-                                    <li><a class="dropdown-item" href="#">Ver detalles</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                -->
                 <div class="col-12 text-center my-1 py-1">
                     <h1><i class="bi bi-stars"></i></h1>
-                    <h1><i class="bi bi-archive"></i> Aun no hay permisos aquí</h1>
+                    <h1><i class="bi bi-shield-exclamation"></i> Aun no hay permisos aquí</h1>
                 </div>
             </div>
             <hr>
@@ -375,7 +361,7 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                 
                 <div class="col-12 text-center my-1 py-1">
                     <h1><i class="bi bi-stars"></i></h1>
-                    <h1><i class="bi bi-archive"></i> Aun no hay planes de manejo aquí</h1>
+                    <h1><i class="bi bi-bar-chart-steps"></i> Aun no hay planes de manejo aquí</h1>
                 </div>
                 
             </div>
@@ -389,7 +375,8 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                 </div>
             </div>
             <hr>
-            <div class="d-flex pt-4 pb-4">
+            <div id="project_monitoring_content_div" class="d-flex pt-4 pb-4">
+                <!--  
                 <div class="project_monitoring_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
@@ -412,36 +399,13 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                     </div>
                     <img src="../IMG/project1.png" width="100%">
                 </div>
+                -->
 
-                <div class="project_monitoring_card col-3 m-auto rounded">
-                    <div class="px-2 pt-2">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
-                            </div>
-                            <div>
-                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                            </div>
-                        </div>
-                        <h6 class="mt-2">Inicio: 2015</h6>
-                    </div>
-                    <img src="../IMG/project1.png" width="100%">
+                <div class="col-12 text-center my-1 py-1">
+                    <h1><i class="bi bi-stars"></i></h1>
+                    <h1><i class="bi bi-camera2"></i> Aun no hay monitoreos aquí</h1>
                 </div>
-
-                <div class="project_monitoring_card col-3 m-auto rounded">
-                    <div class="px-2 pt-2">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="mb-0 title_project fw-bold">Proyecto Hidroabanico</h5>
-                            </div>
-                            <div>
-                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                            </div>
-                        </div>
-                        <h6 class="mt-2">Inicio: 2015</h6>
-                    </div>
-                    <img src="../IMG/project1.png" width="100%">
-                </div>
+                
             </div>
             <hr>
             <div class="d-flex">
