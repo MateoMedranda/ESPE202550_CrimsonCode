@@ -1,3 +1,25 @@
+<?php
+include("../PHP/connection_db.php");
+
+$plan_id = $_GET["plan_id"] ?? null;
+
+if ($plan_id === null) {
+    echo json_encode(["error" => "No plan ID received"]);
+    exit;
+}
+
+$request = "SELECT * FROM ambientalplan WHERE AMBIENTALPLAN_ID = $plan_id LIMIT 1";
+$result = mysqli_query($connection, $request);
+
+if ($result) {
+    $data = $result->fetch_assoc();
+} else {
+    echo json_encode(["error" => "There is an error in the request for plan"]);
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -15,7 +37,9 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Quicksand:wght@300..700&display=swap"
         rel="stylesheet">
 
-    <title>Projects</title>
+    <link rel="icon" href="../IMG/Logo.png" type="image/png">
+
+    <title>SIMA | <?php echo htmlspecialchars($data["AMBIENTALPLAN_NAME"]); ?></title>
 
 </head>
 
@@ -50,7 +74,7 @@
 
     </header>
 
-    <div class="navbar navbar-expand-lg navbar-light sticky-top menu">
+    <div class="navbar navbar-expand-lg navbar-light sticky-top shadow menu">
         <div class="container-fluid">
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
@@ -61,14 +85,14 @@
                 <ul class="navbar-nav mx-auto">
                     <!-- Home option always visible -->
                     <li class="nav-item opcion fw-bold mx-2">
-                        <a id="home" class="nav-link active" href="#" onclick="">
+                        <a id="home" class="nav-link" href="project_home.html" onclick="">
                             <i class="bi bi-speedometer2"></i> INICIO
                         </a>
                     </li>
 
                     <!-- Project option visible for admins and customers -->
                     <li class="nav-item opcion fw-bold mx-2">
-                        <a id="projects" class="nav-link" href="#" onclick="">
+                        <a id="projects" class="nav-link active" href="project_managment.html" onclick="">
                             <i class="bi bi-folder"></i> PROYECTOS
                         </a>
                     </li>
@@ -88,12 +112,12 @@
                     </li>
 
                     <!-- Dropdown de usuarios visible solo para admin -->
-                    <li class="nav-item dropdown opcion fw-bold menuNav mx-2">
+                    <li class="nav-item dropdown fw-bold mx-2">
                         <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-people-fill"></i> USUARIOS
                         </a>
-                        <ul class="dropdown-menu menu subNav-menu" aria-labelledby="usersDropdown">
+                        <ul class="dropdown-menu sub_menu subNav-menu" aria-labelledby="usersDropdown">
                             <li><a class="dropdown-item" href="#" onclick="">
                                     <i class="bi bi-person-lines-fill"></i> Lista de usuarios</a></li>
 
@@ -107,55 +131,60 @@
         </div>
     </div>
 
-    <!-- Dialog to add new activity -->
-    <dialog id="modal_add_project_monitoring" class="container m-auto bg-light rounded shadow">
-        <form id="register_monitoring" method="post" action="project_monitoring_register.php">
-            <fieldset class="border p-2 bg-light border-0">
-                <h3 class="titulo">Nuevo Monitoreo</h3>
-                <hr>
-                <div class="row">
-                    <div class="col-8">
-                        <div class="row px-4">
-                            <div class="col-3 px-2">
-                                <label class="mb-0">Nombre del Monitoreo: *</label>
-                                <input name="project_permission_name" type="text" class="form-control mb-3 shadow">
-                            </div>
-                            <div class="col-9 px-2">
-                                <label>Descripción: *</label>
-                                <input name="project_permission_Description" type="text"
-                                    class="form-control mb-3 shadow">
-                            </div>
-                        </div>
-                        <div class="row px-4">
-                            <div class="col-12">
-                                <label>Adjuntar Imagen: *</label>
-                                <input name="project_monitoring_image" id="project_monitoring_image" type="file"
-                                    class="form-control mb-3 shadow">
-                            </div>
-                        </div>
-                        <div class="row px-4">
-                            <div class="col-12">
-                                <label>Adjuntar Archivo: *</label>
-                                <input name="project_monitoring_file" id="project_monitoring_file" type="file"
-                                    class="form-control mb-3 shadow">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4 text-center">
-                        <label class="text-center">Imagen seleccionada</label>
-                        <div id="image_preview"
-                            class="mx-auto bg-black d-flex justify-content-center align-items-center shadow"
-                            style="width: 300px; height: 130px; overflow: hidden;">
-                        </div>
-                    </div>
+    <!-- Dialog to add new environmental activity -->
+    <!-- Dialog to add new environmental activity -->
+<dialog id="modal_add_environmental_activity" class="container m-auto bg-light rounded shadow">
+    <form id="register_environmental_activity" method="post">
+        <fieldset class="border p-2 bg-light border-0">
+            <h3 class="title">Nueva Actividad Ambiental</h3>
+            <hr>
+            <div class="row px-4">
+                <!-- Primera fila: Código, Frecuencia, Responsable -->
+                <div class="col-md-3 mb-3">
+                    <label class="mb-1">Código: *</label>
+                    <input name="activity_code" type="text" class="form-control shadow" required>
                 </div>
-                <hr>
-                <button type="submit" onclick="" class="btn bg-success-subtle">Guardar</button>
-                <button name="btn_cancel_add_project_monitoring" id="btn_cancel_add_project_monitoring" type="button"
-                    class="btn bg-danger-subtle" onclick="">Cancelar</button>
-            </fieldset>
-        </form>
-    </dialog>
+                <div class="col-md-4 mb-3">
+                    <label class="mb-1">Frecuencia: *</label>
+                    <select name="frequency" class="form-control form-select shadow" required>
+                        <option value="">Seleccione</option>
+                        <option value="Anual">Anual</option>
+                        <option value="Mensual">Mensual</option>
+                        <option value="Permanente">Permanente</option>
+                        <option value="No aplica">No aplica</option>
+                    </select>
+                </div>
+                <div class="col-md-5 mb-3">
+                    <label class="mb-1">Responsable:</label>
+                    <input name="responsible" type="text" class="form-control shadow">
+                </div>
+
+                <!-- Segunda fila -->
+                <div class="col-md-6 mb-3">
+                    <label class="mb-1">Proceso / Actividad: *</label>
+                    <input name="activity_process" type="text" class="form-control shadow" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="mb-1">Impacto Ambiental: *</label>
+                    <input name="environmental_impact" type="text" class="form-control shadow" required>
+                </div>
+
+                <!-- Tercera fila -->
+                <div class="col-12 mb-3">
+                    <label class="mb-1">Medidas: *</label>
+                    <input name="mitigation_measures" type="text" class="form-control shadow" required>
+                </div>
+            </div>
+            <hr>
+            <div class="text-end px-4">
+                <button type="submit" class="btn bg-success-subtle">Guardar</button>
+                <button type="button" id="btn_cancel_add_activity" class="btn bg-danger-subtle">Cancelar</button>
+            </div>
+        </fieldset>
+    </form>
+</dialog>
+
+
 
     <!-- This is the dialog for the controlls -->
     <dialog id="modal_add_control" class="container m-auto bg-light rounded shadow">
@@ -180,24 +209,22 @@
                             <input type="text" class="form-control mb-3">
                         </div>
                     </div>
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-5">
                         <div class="row px-2">
                             <label>Evidencia*</label>
-                            <input  type="file" class="form-control mb-3">
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-1">
-                        <div class="row">
-                            <label>.</label>
-                            <button type="button" class="btn bg-success-subtle" onclick="">Guardar</button>
+                            <input type="file" class="form-control mb-3">
                         </div>
                     </div>
                 </div>
-                <hr>
+               <hr>
+               <button type="button" class="btn bg-success-subtle" onclick="">Guardar</button>
+               <button type="button" id="btn_cancel_add_controll" class="btn bg-danger-subtle">Cancelar</button>
             </fieldset>
         </form>
 
+        <hr>
         <h3 class="text-center">Seguimiento de cumplimiento</h3>
+        <hr>
         <div class=" px-3 activities_control_container rounded letter_quicksand">
             <br>
             <div class="table-responsive">
@@ -221,14 +248,14 @@
 
     <!-- Begin of the content about activities -->
 
-    <div class="container mt-4">
+    <div id="container" class="container mt-4">
         <div class="d-flex">
             <div class="col">
-                <h2 style="color:white">Plan de Mitigación y Contingencia</h2>
+                <h2 style="color:white"><?php echo htmlspecialchars($data["AMBIENTALPLAN_NAME"]); ?></h2>
 
             </div>
             <div class="col text-end"><button id="addProject" class="btn_add_project btn bg-info-subtle border-black"
-                    onclick=""><i class="bi bi-plus-circle"></i> Agregar Actividad</button></div>
+                    onclick="open_add_activities()"><i class="bi bi-plus-circle"></i> Agregar Actividad</button></div>
         </div>
 
         <fieldset class="project_activities_container rounded shadow p-2">
@@ -283,7 +310,8 @@
                             <td>19-05-2025</td>
                             <td>
                                 <div class="d-flex">
-                                    <button class="d-flex align-items-center btn bg-success-subtle btn-sm mx-2"><i
+                                    <button class="d-flex align-items-center btn bg-success-subtle btn-sm mx-2"
+                                        onClick="open_activities_control()"><i
                                             class="bi bi-clipboard-check-fill me-2"></i> Controles</button>
                                     <i class="bi bi-pencil-square icono-boton mx-2"
                                         style="color:blue; font-size: 25px; cursor:pointer;" title="Editar"
@@ -324,5 +352,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
     crossorigin="anonymous"></script>
-
+<script src="../JS/project_activities_managment.js"></script>
+<script src="../JS/menu.js"></script>
 </html>

@@ -43,3 +43,15 @@ body{
     color:rgb(27, 51, 33);
 }
 
+#container.fade-in {
+  opacity: 1;
+}
+
+#container.fade-out {
+  opacity: 0;
+}
+
+#container {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}

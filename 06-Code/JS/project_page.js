@@ -215,7 +215,7 @@ function load_full_project_emp_list() {
             <div class="project_plan_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="div_project_emp">
+                            <div onClick="open_emp(${emp.id})" class="div_project_emp">
                                 <h5 class="mb-0 title_project">${emp.name}</h5>
                             </div>
                             <div class="dropdown">
@@ -298,4 +298,8 @@ function load_full_project_monitoring_list() {
         });
         project_monitoring_content_div.innerHTML = string_divs;
     }
+}
+
+function open_emp(plan_id){
+    window.location.href = `../HTML/project_activities_managment.php?plan_id=${plan_id}`;
 }

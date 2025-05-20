@@ -312,7 +312,7 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
         </form>
     </dialog>
 
-    <div class="container mt-4">
+    <div id="container" class="container mt-4">
         <fieldset class="border p-4 shadow agregar bg-light rounded">
             <div class="text-center bg-success-subtle">
                 <h2 class="title"><b><?php echo htmlspecialchars($data["PROJECT_NAME"]); ?></b></h2>
@@ -377,31 +377,6 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
             </div>
             <hr>
             <div id="project_monitoring_content_div" class="d-flex pt-4 pb-4">
-                <!--  
-                <div class="project_monitoring_card col-3 m-auto rounded">
-                    <div class="px-2 pt-2">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="mb-0 title_project fw-bold">Monitoreo 1</h5>
-                            </div>
-                            <div class="dropdown">
-                                <div class="project_options rounded" data-bs-toggle="dropdown" aria-expanded="false"
-                                    role="button">
-                                    <h2 class="mb-0"><i class="bi bi-list"></i></h2>
-                                </div>
-                                <ul class="dropdown-menu dropdown-menu-end shadow">
-                                    <li><a class="dropdown-item" href="#">Editar</a></li>
-                                    <li><a class="dropdown-item" href="#">Eliminar</a></li>
-                                    <li><a class="dropdown-item" href="#">Ver detalles</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <h6 class="mt-2">Inicio: 2015</h6>
-                    </div>
-                    <img src="../IMG/project1.png" width="100%">
-                </div>
-                -->
-
                 <div class="col-12 text-center my-1 py-1">
                     <h1><i class="bi bi-stars"></i></h1>
                     <h1><i class="bi bi-camera2"></i> Aun no hay monitoreos aquí</h1>
@@ -431,5 +406,6 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
     integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
     crossorigin="anonymous"></script>
 <script src="../JS/project_page.js"></script>
+<script src="../JS/menu.js"></script>
 
 </html>

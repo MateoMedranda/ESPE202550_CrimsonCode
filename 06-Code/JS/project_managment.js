@@ -88,7 +88,7 @@ function load_full_project_list() {
                     <div class="card-proyecto col-md-10 col-sm-12 m-auto rounded p-0">
                         <div class="px-2 pt-2">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="div_project_title" onclick="open_project(${project.id})">
+                                <div class="div_project_title fade-link" onclick="open_project(${project.id})">
                                     <h5 class="mb-0 title_project fw-bold">${project.name}</h5>
                                     <hr class="m-0">
                                 </div>
@@ -102,14 +102,14 @@ function load_full_project_list() {
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li><a class="sub_option dropdown-item" onclick="update_project(${project.id})">Editar</a></li>
                                         <li><a class="sub_option dropdown-item" onclick="delete_project(${project.id})">Eliminar</a></li>
-                                        <li><a class="sub_option dropdown-item" onclick="open_project(${project.id})">Ver detalles</a></li>
+                                        <li><a class="sub_option dropdown-item fade-link" onclick="open_project(${project.id})">Ver detalles</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <h6 class="mt-2">Inicio: ${project.begin_date}</h6>
                         </div>
-                        <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_project(${project.id})"><img src="../PROJECTS/${project_folder_name}/imagen_proyecto/${project.image}" width="100%"></div>
+                        <div class="div_project_image w-100 d-sm-none d-md-block fade-link" onclick="open_project(${project.id})"><img src="../PROJECTS/${project_folder_name}/imagen_proyecto/${project.image}" width="100%"></div>
                     </div>
                 </div>
             `;
@@ -159,3 +159,6 @@ function update_project(project_id) {
 function open_project(project_id) {
     window.location.href = `../HTML/project_page.php?project_id=${project_id}`;
 }
+
+
+
