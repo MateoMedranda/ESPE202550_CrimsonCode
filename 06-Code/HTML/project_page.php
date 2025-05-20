@@ -37,8 +37,9 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Quicksand:wght@300..700&display=swap"
         rel="stylesheet">
+    <link rel="icon" href="../IMG/Logo.png" type="image/png">
 
-    <title>Projects</title>
+    <title>SIMA | <?php echo htmlspecialchars($data["PROJECT_NAME"]); ?></title>
 
 </head>
 
@@ -84,14 +85,14 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                 <ul class="navbar-nav mx-auto">
                     <!-- Home option always visible -->
                     <li class="nav-item opcion fw-bold mx-2">
-                        <a id="home" class="nav-link" href="#" onclick="">
+                        <a id="home" class="nav-link" href="project_home.html" onclick="">
                             <i class="bi bi-speedometer2"></i> INICIO
                         </a>
                     </li>
 
                     <!-- Project option visible for admins and customers -->
                     <li class="nav-item opcion fw-bold mx-2">
-                        <a id="projects" class="nav-link active" href="#" onclick="">
+                        <a id="projects" class="nav-link active" href="project_managment.html" onclick="">
                             <i class="bi bi-folder"></i> PROYECTOS
                         </a>
                     </li>
