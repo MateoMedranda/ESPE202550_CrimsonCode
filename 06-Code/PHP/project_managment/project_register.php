@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $project_name = htmlspecialchars(trim($_POST['project_name']));
     $begin_date = $_POST['project_begin_date'];
     $ubication = htmlspecialchars(trim($_POST['project_ubication']));
-    $description = htmlspecialchars(trim($_POST['descripcionIngreso']));
+    $description = htmlspecialchars(trim($_POST['project_description']));
     $project_state = "En progreso";
     
 
@@ -52,10 +52,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Prepare failed: " . $connection->error);
     }
     
-    $stmt->bind_param("ssssss", $project_name, $begin_date,$project_state, $ubication, $description, $image_path);
+    $stmt->bind_param("ssssss", $project_name, $begin_date,$project_state, $ubication, $description, $image_name);
     
     if ($stmt->execute()) {
-        header("Location: success.php"); 
+        header("Location: ../../HTML/project_managment.html"); 
         exit();
     } else {
         die("Error: " . $stmt->error);

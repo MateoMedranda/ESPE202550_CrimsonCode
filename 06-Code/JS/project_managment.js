@@ -1,24 +1,42 @@
 const btn_add_project = document.getElementById('add_project');
+const btn_update_project = document.getElementById('update_project');
 const modal_add_project = document.getElementById('modal_add_project');
+const modal_update_project = document.getElementById('modal_update_project');
 const btn_cancel_add_project = document.getElementById('btn_cancel_add_project');
+const btn_cancel_update_project = document.getElementById('btn_cancel_update_project');
 const project_image_file = document.getElementById('project_image_input');
+const update_project_image_file = document.getElementById('update_project_image_input');
 const preview_image_box = document.getElementById('image_preview');
-let  project_full_list = [];
+const update_preview_image_box = document.getElementById('update_image_preview');
+let project_full_list = [];
 
 get_full_project_list();
 
 btn_add_project.addEventListener('click', () => {
-    modal_add_project.showModal(); 
+    modal_add_project.showModal();
 });
 
 btn_cancel_add_project.addEventListener('click', () => {
-    modal_add_project.classList.add('closing'); 
+    modal_add_project.classList.add('closing');
 
     modal_add_project.addEventListener('animationend', () => {
         modal_add_project.classList.remove('closing');
-        modal_add_project.close(); 
-    }, { once: true }); 
+        modal_add_project.close();
+    }, { once: true });
 });
+
+btn_cancel_update_project.addEventListener('click', () => {
+    modal_update_project.classList.add('closing');
+
+    modal_update_project.addEventListener('animationend', () => {
+        modal_update_project.classList.remove('closing');
+        modal_update_project.close();
+    }, { once: true });
+});
+
+function open_update_project_modal() {
+    modal_update_project.showModal();
+}
 
 project_image_file.addEventListener('change', (event) => {
     const file = event.target.files[0];
@@ -30,10 +48,10 @@ project_image_file.addEventListener('change', (event) => {
             preview_image_box.innerHTML = '';
             const img = document.createElement('img');
             img.src = e.target.result;
-            img.style.width = '100%';         
-            img.style.height = '100%';       
-            img.style.objectFit = 'cover';    
-            img.style.borderRadius = '4px';    
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '4px';
             preview_image_box.appendChild(img);
         };
 
@@ -44,26 +62,28 @@ project_image_file.addEventListener('change', (event) => {
 });
 
 
-function get_full_project_list(){
+function get_full_project_list() {
     fetch("../PHP/project_managment/project_full_list.php")
-    .then(response => response.json())
-    .then(data => {
-        console.log("Projects were catch:", data);
-        if (data.error) {
-            console.error("[ERROR load_fill_project_list]: ", data.error);
-        } else {
-            project_full_list = data;
-            load_full_project_list();
-        }
-    })
-    .catch(error => console.error("Error en la solicitud fetch:", error));
+        .then(response => response.json())
+        .then(data => {
+            console.log("Projects were catch:", data);
+            if (data.error) {
+                console.error("[ERROR load_fill_project_list]: ", data.error);
+            } else {
+                project_full_list = data;
+                load_full_project_list();
+            }
+        })
+        .catch(error => console.error("Error en la solicitud fetch:", error));
 }
 
-function load_full_project_list(){
-    let project_content_div = document.getElementById("project_content_div");
-    let string_divs = "";
-    project_full_list.forEach((project) =>{
-        let new_div_project = `
+function load_full_project_list() {
+    if (project_full_list.length) {
+        let project_content_div = document.getElementById("project_content_div");
+        let string_divs = "";
+        project_full_list.forEach((project) => {
+            const project_folder_name = project.name.replace(/[^A-Za-z0-9\-]/g, '_');
+            let new_div_project = `
             <div class="col-md-4 col-sm-12 mt-4 mb-4">
                     <div class="card-proyecto col-md-10 col-sm-12 m-auto rounded p-0">
                         <div class="px-2 pt-2">
@@ -89,12 +109,53 @@ function load_full_project_list(){
 
                             <h6 class="mt-2">Inicio: ${project.begin_date}</h6>
                         </div>
-                        <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_project(${project.id})"><img src="../PROJECTS/${project.image}" width="100%"></div>
+                        <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_project(${project.id})"><img src="../PROJECTS/${project_folder_name}/imagen_proyecto/${project.image}" width="100%"></div>
                     </div>
                 </div>
             `;
 
-        string_divs +=new_div_project;
-    });
-    project_content_div.innerHTML = string_divs;
+            string_divs += new_div_project;
+        });
+        project_content_div.innerHTML = string_divs;
+    }
+}
+
+
+function load_project_to_update(project_id) {
+    const form_data = new FormData();
+    form_data.append("project_id", project_id);
+
+    fetch("../PHP/project_managment/get_project_by_id.php", {
+        method: "POST",
+        body: form_data
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("project catch:", data);
+
+            if (data.error) {
+                console.error("[ERROR]:", data.error);
+            } else {
+                const project_folder_name = data[0].PROJECT_NAME.replace(/[^A-Za-z0-9\-]/g, '_');
+
+                document.getElementById("update_project_id").value = data[0].PROJECT_ID;
+                document.getElementById("update_project_name_input").value = data[0].PROJECT_NAME;
+                document.getElementById("update_project_begin_date").value = data[0].PROJECT_STARTDATE;
+                document.getElementById("update_project_ubication").value = data[0].PROJECT_LOCATION;
+                document.getElementById("update_project_description").value = data[0].PROJECT_DESCRIPTION;
+                document.getElementById("update_image_preview").innerHTML = `<img style="width:100%;height:100%;object-fit:cover;border-radius:4px;" src="../PROJECTS/${project_folder_name}/imagen_proyecto/${data[0].PROJECT_IMAGE}">`;
+            }
+        })
+        .catch(error => {
+            console.error("Error en la solicitud fetch:", error);
+        });
+}
+
+function update_project(project_id) {
+    open_update_project_modal();
+    load_project_to_update(project_id);
+}
+
+function open_project(project_id) {
+    window.location.href = `../HTML/project_page.php?project_id=${project_id}`;
 }

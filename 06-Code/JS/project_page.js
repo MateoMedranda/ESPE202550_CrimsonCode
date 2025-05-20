@@ -2,7 +2,9 @@ const file_input = document.getElementById('project_permission_file');
 const file_preview = document.getElementById('file_preview');
 const btn_add_project_permission = document.getElementById('add_permission');
 const modal_add_project_permission = document.getElementById('modal_add_project_permission');
+const modal_update_project_permission = document.getElementById("modal_update_project_permission");
 const btn_cancel_add_project_permission = document.getElementById('btn_cancel_add_project_permission');
+const btn_cancel_update_project_permission = document.getElementById('btn_cancel_update_project_permission');
 const btn_add_project_emp = document.getElementById('add_emp');
 const modal_add_project_emp = document.getElementById('modal_add_project_EMP');
 const btn_cancel_add_project_emp = document.getElementById('btn_cancel_add_project_EMP');
@@ -11,6 +13,11 @@ const modal_add_project_monitoring = document.getElementById('modal_add_project_
 const btn_cancel_add_project_monitoring = document.getElementById('btn_cancel_add_project_monitoring');
 const input_image = document.getElementById('project_monitoring_image');
 const preview_div = document.getElementById('image_preview');
+let project_permission_full_list = [];
+let project_emp_full_list = [];
+
+get_full_project_permission_list();
+get_full_project_emp_list();
 
 btn_add_project_permission.addEventListener('click', () => {
     modal_add_project_permission.showModal();
@@ -50,6 +57,10 @@ btn_cancel_add_project_monitoring.addEventListener('click', () => {
         modal_add_project_monitoring.close();
     }, { once: true });
 });
+
+function open_update_project_permission_modal() {
+    modal_update_project_permission.showModal();
+}
 
 file_input.addEventListener('change', function () {
     const selected_file = file_input.files[0];
@@ -92,6 +103,143 @@ input_image.addEventListener('change', () => {
         preview_div.textContent = 'No se seleccionó una imagen válida';
     }
 });
+
+function get_full_project_permission_list() {
+    fetch("../PHP/project_managment/project_permission_full_list.php")
+        .then(response => response.json())
+        .then(data => {
+            console.log("Permissions were catch:", data);
+            if (data.error) {
+                console.error("[ERROR load_fill_project_list]: ", data.error);
+            } else {
+                project_permission_full_list = data;
+                load_full_project_permission_list();
+            }
+        })
+        .catch(error => console.error("Error en la solicitud fetch:", error));
+}
+
+function load_full_project_permission_list() {
+    if (project_permission_full_list.length) {
+        let project_permission_content_div = document.getElementById("project_permission_content_div");
+        let string_divs = "";
+        project_permission_full_list.forEach((permission) => {
+            let new_div_permission = `
+            <div class="project_permission_card col-3 m-auto bg-dark-subtle rounded">
+                <div class="px-2">
+                    <div class="d-flex justify-content-between align-items-center py-2 position-relative">
+                        <div class="div_project_permission" onClick="open_project_permission(${permission.id})">
+                            <h5 class="mb-0 title_project fw-bold">${permission.name}</h5>
+                        </div>
+
+                        <div class="dropdown">
+                            <div class="project_options rounded" data-bs-toggle="dropdown" aria-expanded="false"
+                                role="button">
+                                <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                            </div>
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li><a class="dropdown-item" onClick="update_project_permission(${permission.id},${permission.project})">Editar</a></li>
+                                <li><a class="dropdown-item" onClick="delete_project_permission(${permission.id})">Eliminar</a></li>
+                                <li><a class="dropdown-item" onClick="open_project_permission(${permission.id})">Ver detalles</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+            string_divs += new_div_permission;
+        });
+        project_permission_content_div.innerHTML = string_divs;
+    }
+}
+
+
+function load_project_permission_to_update(permission_id, project_id) {
+    console.log("permission_id:", permission_id, "project_id:", project_id);
+
+    const form_data = new FormData();
+    form_data.append("permission_id", permission_id);
+    form_data.append("project_id", project_id);
+
+    fetch("../PHP/project_managment/get_project_permission_by_id.php", {
+        method: "POST",
+        body: form_data
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("project catch:", data);
+
+            if (data.error) {
+                console.error("[ERROR]:", data.error);
+            } else {
+                const folder = document.getElementById("update_project_folder").value;
+                document.getElementById("update_project_permission_name").value = data.PERMIT_NAME;
+                document.getElementById("update_project_permission_Description").value = data.PERMIT_DESCRIPTION;
+                document.getElementById("update_file_preview").innerHTML = `<embed src="../PROJECTS/${folder}/PERMITS/${data.PERMIT_ARCHIVE}" type="application/pdf" width="100%" height="100%"/>
+`;
+            }
+        })
+        .catch(error => {
+            console.error("Error en la solicitud fetch:", error);
+        });
+}
+
+function update_project_permission(permission_id, project_id) {
+    open_update_project_permission_modal();
+    load_project_permission_to_update(permission_id, project_id);
+}
+
+function get_full_project_emp_list() {
+    fetch("../PHP/project_managment/project_emp_full_list.php")
+        .then(response => response.json())
+        .then(data => {
+            console.log("EMPs were catch:", data);
+            if (data.error) {
+                console.error("[ERROR load_fill_project_emp_list]: ", data.error);
+            } else {
+                project_emp_full_list = data;
+                load_full_project_emp_list();
+            }
+        })
+        .catch(error => console.error("Error en la solicitud fetch:", error));
+}
+
+function load_full_project_emp_list() {
+    if (project_emp_full_list.length) {
+        let project_emp_content_div = document.getElementById("project_emp_content_div");
+        let string_divs = "";
+        project_emp_full_list.forEach((emp) => {
+            let new_div_emp = `
+            <div class="project_plan_card col-3 m-auto rounded">
+                    <div class="px-2 pt-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-0 title_project">${emp.name}</h5>
+                            </div>
+                            <div class="dropdown">
+                                <div class="project_options rounded" data-bs-toggle="dropdown" aria-expanded="false"
+                                    role="button">
+                                    <h2 class="mb-0"><i class="bi bi-list"></i></h2>
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end shadow">
+                                    <li><a class="dropdown-item" href="update_emp(${emp.id})">Editar</a></li>
+                                    <li><a class="dropdown-item" href="delete_emp(${emp.id})">Eliminar</a></li>
+                                    <li><a class="dropdown-item" href="open_emp(${emp.id})">Ver detalles</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="plan_progress_container">
+                            <div class="plan_progress_bar" id="plan_progress_bar">0%</div>
+                        </div>
+                    </div>
+                </div>`;
+
+            string_divs += new_div_emp;
+        });
+        project_emp_content_div.innerHTML = string_divs;
+    }
+}
 
 
 
