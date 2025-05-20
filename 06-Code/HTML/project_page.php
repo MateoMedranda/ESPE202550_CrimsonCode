@@ -375,7 +375,7 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                 </div>
             </div>
             <hr>
-            <div class="d-flex pt-4 pb-4">
+            <div id="project_monitoring_content_div" class="d-flex pt-4 pb-4">
                 <!--  
                 <div class="project_monitoring_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
