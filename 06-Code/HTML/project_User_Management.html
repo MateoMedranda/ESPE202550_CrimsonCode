@@ -19,7 +19,93 @@
 </head>
 
 <body >
-	
+	        <header class="navbar bg-whitenavbar-expand-lg header_sistem">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="d-flex align-items-center">
+                    <img class="mx-3 d-none d-md-flex" src="../IMG/Logo.png" alt="Logo" width="80">
+                    <h1 class="fs-3 my-2">SIMA</h1>
+                </div>
+
+                <!-- User - Dropdown -->
+                <div class="dropdown ms-auto d-flex align-items-center text-center">
+                    <i class="bi bi-bell"></i>
+                    <i>&nbsp;&nbsp;&nbsp;</i>
+                    <a class="d-flex align-items-center text-center text-black text-decoration-none nav-link dropdown-toggle"
+                        id="PerfilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span id="username" class="me-2 d-none d-md-flex">Nombre Apellido</span>
+                        <i class="bi bi-person-circle"></i>
+                    </a>
+
+                    <!-- Menu User -->
+                    <ul class="dropdown-menu dropdown-menu-end conf_user" aria-labelledby="PerfilDropdown">
+                        <li><a class="dropdown-item" href=""><i class="bi bi-person-fill"></i>Mi Perfil</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="">Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+
+    </header>
+
+    <div class="navbar navbar-expand-lg navbar-light sticky-top menu">
+        <div class="container-fluid">
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuNav">
+                <ul class="navbar-nav mx-auto">
+                    <!-- Home option always visible -->
+                    <li class="nav-item opcion fw-bold mx-2">
+                        <a id="home" class="nav-link" href="#" onclick="">
+                            <i class="bi bi-speedometer2"></i> INICIO
+                        </a>
+                    </li>
+
+                    <!-- Project option visible for admins and customers -->
+                    <li class="nav-item opcion fw-bold mx-2">
+                        <a id="projects" class="nav-link" href="#" onclick="">
+                            <i class="bi bi-folder"></i> PROYECTOS
+                        </a>
+                    </li>
+
+                    <!-- Opción de reportes visible según permisos -->
+                    <li class="nav-item opcion fw-bold mx-2">
+                        <a id="reportes" class="nav-link" href="#" onclick="">
+                            <i class="bi bi-info-square"></i> REPORTES
+                        </a>
+                    </li>
+
+                    <!-- Opción de categorias visible según permisos -->
+                    <li class="nav-item opcion fw-bold mx-2">
+                        <a id="categorias" class="nav-link" href="#" onclick="">
+                            <i class="bi bi-calendar"></i> CALENDARIO
+                        </a>
+                    </li>
+
+                    <!-- Dropdown de usuarios visible solo para admin -->
+                    <li class="nav-item dropdown opcion fw-bold menuNav mx-2 active">
+                        <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-people-fill"></i> USUARIOS
+                        </a>
+                        <ul class="dropdown-menu menu subNav-menu " aria-labelledby="usersDropdown">
+                            <li><a class="dropdown-item active" href="#" onclick="">
+                                    <i class="bi bi-person-lines-fill"></i> Lista de usuarios</a></li>
+
+                            <li><a class="dropdown-item " href="#" onclick="">
+                                    <i class="bi bi-person-check-fill"></i> Gestionar Roles</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div class="container mt-4">
         <fieldset class="border p-4 shadow agregar bg-light rounded">
             <div class="text-center bg-success-subtle">
@@ -103,42 +189,52 @@
 							style="margin-top: -12px; background-color: white; display: inline;">
 							Datos del Usuario
 							</h3>
-						<div class="col-md-6">
-							<label for="nombre" class="form-label">Nombre:
-								<input type="text" id="name" name="nombre" class="form-control border-dark" required>
+						<div class="col-md-4">
+							<label for="name" class="form-label">Nombre:
+								<input type="text" id="name" name="name" class="form-control border-dark" required>
 							</label>
 						</div>
-						<div class="col-md-6">
-							<label for="apellido" class="form-label">Apellido:
-								<input type="text" id="apellido" name="apellido" class="form-control border-dark" required>
+						<div class="col-md-4">
+							<label for="surname" class="form-label">Apellido:
+								<input type="text" id="surname" name="surname" class="form-control border-dark" required>
+							</label>
+						</div>
+						<div class="col-md-8">
+							<label for="email" class="form-label">Correo:
+								<input type="email" id="email" name="email" class="form-control border-dark" required>
+							</label>
+						</div>
+						<div class="col-md-8">
+							<label for="born_date" class="form-label">Fecha de nacimiento:
+								<input type="date" id="born_date" name="born_date" class="form-control border-dark" required>
+							</label>
+						</div>
+						<div class="col-md-4">
+							<label for="phone_number" class="form-label">Numero de telefono:
+								<input type="text" id="phone_number" name="phone_number" class="form-control border-dark" required>
 							</label>
 						</div>
 					</div>
+					
 					<div class="row border border-dark p-3 my-4 mx-4 position-relative">
 						<h3 class="position-absolute top-0 start-0 ms-3 px-2" 
 						style="margin-top: -12px; background-color: white; display: inline;">
 						Datos de la cuenta
 						</h3>
 					<div class="col-md-6">
-						<label for="usuario" class="form-label">Usuario:
-							<input type="text" id="userio" name="userio" class="form-control border-dark" required>
+						<label for="username" class="form-label">Usuario:
+							<input type="text" id="username" name="username" class="form-control border-dark" required>
 						</label>
 					</div>
 					<div class="col-md-6">
-						<label for="cedula" class="form-label">Cedula:
-							<input type="text" id="cedula" name="cedula" class="form-control border-dark" required>
+						<label for="personal_id" class="form-label">Cedula:
+							<input type="text" id="personal_id" name="personal_id" class="form-control border-dark" required>
 						</label>
 					</div>
 					<div class="modal-footer">
 					<div class="col">
-					<label for="perfil" class="form-label">Perfil:</label>
-					<select class="form-control border-dark text-dark" id="perfil" name="perfil" required>
-					'<option value="seleccione"> Seleccione...</option>';
-						<?php
-						while ($registro = mysqli_fetch_assoc($listperfiles)) {
-							echo '<option value="' . htmlspecialchars($registro['perfil']) . '">' . htmlspecialchars($registro['perfil']) . '</option>';
-						}
-						?>
+					<label for="user_profile" class="form-label">Perfil:</label>
+					<select class="form-control border-dark text-dark" id="user_profile" name="user_profile" required>
 					</select>
 					</div>
 
@@ -146,7 +242,7 @@
 				</div>
 					<div class="modal-footer d-flex justify-content-center align-items-center">
 						<button type="button" class="btn btn-white border border-dark" data-bs-dismiss="modal">Cancelar</button>
-						<button type="button" class="btn btn-white border border-dark" id="ingreso" >Ingresar</button>
+						<button type="button" class="btn btn-white border border-dark" id="submit_user" >Ingresar</button>
 					</div>
 				</div>
 			</div>
@@ -154,10 +250,22 @@
 			
 		</div>
 	</div>
+	<div class="modal fade" id="information_container" tabindex="-1" aria-labelledby="information_container" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-lg my-5">
+				<div class="modal-content my-5">
+					<div class="container my-5">
+						<div class="row">
+							<h1 class="text-center" id="message"></h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
     crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="../JS/user_data_management.js"></script>
 </html>
