@@ -68,7 +68,7 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item text-danger" href="">Cerrar Sesión</a></li>
+                        <li><a class="dropdown-item text-danger" href="project_login.html">Cerrar Sesión</a></li>
                     </ul>
                 </div>
 
@@ -118,10 +118,10 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                             <i class="bi bi-people-fill"></i> USUARIOS
                         </a>
                         <ul class="dropdown-menu menu subNav-menu" aria-labelledby="usersDropdown">
-                            <li><a class="dropdown-item" href="#" onclick="">
+                            <li><a class="dropdown-item" href="project_Profiles_Management.html" onclick="">
                                     <i class="bi bi-person-lines-fill"></i> Lista de usuarios</a></li>
 
-                            <li><a class="dropdown-item" href="#" onclick="">
+                            <li><a class="dropdown-item" href="project_User_Management.html" onclick="">
                                     <i class="bi bi-person-check-fill"></i> Gestionar Roles</a></li>
                         </ul>
                     </li>
