@@ -1,6 +1,7 @@
 var add_button = document.getElementById("add_user");
 if (add_button&& !add_button.dataset.addedevent) {
     add_button.addEventListener("click", function () {
+        getprofiles();
         var modal = new bootstrap.Modal(document.getElementById("user_register"));
         document.getElementById("name").value = "";
         document.getElementById("surname").value = "";
@@ -16,10 +17,27 @@ if (add_button&& !add_button.dataset.addedevent) {
     add_button.dataset.addedevent = "true";
 }
 
+
+function getprofiles() {
+        $.ajax({
+        url: '../PHP/get_profiles_names.php',
+        method: 'POST',
+        data: {},
+        success: function(response) {
+           document.getElementById('user_profile').innerHTML = 
+           '<option value="seleccione">Seleccione...</option>' + response;
+        },
+            error: function(xhr, status, error) {
+            console.error("AJAX request failed: " + error);
+            alert("Error al obtener los datos.");
+            }   
+        });
+}
+
 var insert_button = document.getElementById("submit_user");
 if (insert_button) {
   insert_button.addEventListener("click", function (){
-
+    
     let name = document.getElementById("name").value.trim();
     let surname = document.getElementById("surname").value.trim();
     let email = document.getElementById("email").value.trim();
@@ -30,21 +48,27 @@ if (insert_button) {
     let user_profile = document.getElementById("user_profile").value;
     let password = personal_id;
     let regex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ]+$/;
-    let regex_phone = /^[0-9]+{10}$/;
-
+    let regex_phone = /^[0-9]{10}$/;
     if (name === "" || surname === "" || email === "" || born_date === "" 
         || username === "" ||personal_id === "" || user_profile === "seleccione") {
         message("Todos los campos son obligatorios");
         return;
-    }    
+    }  
+    
+    if(test_users(username)){
+        message("El usuario ya existe");
+        return;
+    }
     if (!regex_phone.test(phone_number)) {
         message("El numero de telefono solo debe contener numeros y de 10 digitos");
         return;
     }
+
     if (!regex.test(name)) {
         message("El Nombre solo debe contener letras y espacios");
         return;
     }
+
     if (!regex.test(surname)) {
         message("El Apellido solo debe contener letras y espacios");
         return;
@@ -55,8 +79,7 @@ if (insert_button) {
         return;
     }
     if (isNaN(personal_id)) {
-        mensaje("La cedula debe ser numerica");
-        timeout();
+        menssage("La cedula debe ser numerica");
         return;
     }
 
@@ -84,6 +107,30 @@ if (insert_button) {
     });
 }
 
+function test_users(username){
+    let value ;
+    $.ajax({
+        url: '../PHP/test_repeated_user.php',
+        method: 'POST',
+        data: {
+            username: username
+        },
+        success: function(response) {
+            if(response){
+                value = false;
+            }
+            else{
+                value = true;
+            }
+        },
+        error: function() {
+            message("Error en la consulta de datos!!!");
+            value = false;
+        }
+    });
+
+    return value;
+}
 //message function
 function message(msg) {
     var modal = bootstrap.Modal.getInstance(document.getElementById("information_container"));
