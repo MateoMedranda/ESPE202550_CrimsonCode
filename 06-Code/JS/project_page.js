@@ -17,6 +17,10 @@ const preview_div = document.getElementById('image_preview');
 let project_permission_full_list = [];
 let project_emp_full_list = [];
 let project_monitoring_full_list = [];
+const thumbnailImage = document.getElementById('thumbnail_image');
+const modal = document.getElementById('image_modal');
+const modalImage = document.getElementById('modal_image');
+const closeBtn = document.getElementById('modal_close_btn');
 
 get_full_project_permission_list();
 get_full_project_emp_list();
@@ -408,5 +412,21 @@ function load_project_monitoring_to_update(project_id, monitoring_id) {
     });
 }
 
+
+thumbnailImage.addEventListener('click', () => {
+    modal.style.display = 'flex';
+    modalImage.src = thumbnailImage.src;
+    modalImage.alt = thumbnailImage.alt;
+});
+
+closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+    modalImage.src = ''; 
+});
+
+modal.querySelector('.modal_overlay').addEventListener('click', () => {
+    modal.style.display = 'none';
+    modalImage.src = '';
+});
 
 

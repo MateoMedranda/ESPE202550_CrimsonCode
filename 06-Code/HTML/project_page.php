@@ -424,8 +424,23 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                     <p>Descripción: <?php echo htmlspecialchars($data["PROJECT_DESCRIPTION"]); ?></p>
                 </div>
                 <div class="image_container col-md-7 border-black border-1">
-                    <img src="../PROJECTS/<?php echo preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME"]); ?>/imagen_proyecto/<?php echo htmlspecialchars($data["PROJECT_IMAGE"]); ?>" width="100%">
+                    <img
+                        id="thumbnail_image"
+                        src="../PROJECTS/<?php echo preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME"]); ?>/imagen_proyecto/<?php echo htmlspecialchars($data["PROJECT_IMAGE"]); ?>"
+                        width="100%"
+                        style="cursor: pointer;"
+                        alt="Imagen Proyecto">
                 </div>
+
+                <!-- Modal para imagen grande -->
+                <div id="image_modal" style="display:none;">
+                    <div class="modal_overlay"></div>
+                    <div class="modal_content">
+                        <button id="modal_close_btn" aria-label="Cerrar imagen">&times;</button>
+                        <img id="modal_image" src="" alt="Imagen ampliada">
+                    </div>
+                </div>
+
             </div>
             <hr>
             <div class="d-flex">
