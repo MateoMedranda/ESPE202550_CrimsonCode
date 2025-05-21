@@ -5,6 +5,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
 
+    echo "Usuario: '$username'<br>";
+echo "Contraseña: '$password'<br>";
+
+
     $query = "SELECT * FROM USERS WHERE USERS_USERS = ? AND USERS_PASSWORD = ?";
     $stmt = mysqli_prepare($connection, $query);
     mysqli_stmt_bind_param($stmt, "ss", $username, $password);

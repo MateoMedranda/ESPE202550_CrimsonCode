@@ -8,7 +8,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ubication = $_POST['update_project_ubication'];
     $description = $_POST['update_project_description'];
 
-    // Obtener datos actuales del proyecto
     $stmt_select = $connection->prepare("SELECT PROJECT_IMAGE, PROJECT_NAME FROM project WHERE PROJECT_ID = ?");
     $stmt_select->bind_param("i", $project_id);
     $stmt_select->execute();
@@ -23,29 +22,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $new_base_dir = "../../PROJECTS/" . $new_safe_name;
     $image_dir = $new_base_dir . "/imagen_proyecto/";
 
-    // Si el nombre cambió, renombrar la carpeta
     if ($old_safe_name !== $new_safe_name) {
         if (is_dir($old_base_dir)) {
             rename($old_base_dir, $new_base_dir);
         } else {
-            mkdir($image_dir, 0755, true); // Crear ruta si no existía
+            mkdir($image_dir, 0755, true); 
         }
     }
 
-    // Procesamiento de nueva imagen
     if (isset($_FILES['update_project_image']) && $_FILES['update_project_image']['error'] === UPLOAD_ERR_OK) {
-        // Eliminar imagen anterior si existe
         $old_image_path = $new_base_dir . "/imagen_proyecto/" . $old_image;
         if (!empty($old_image) && file_exists($old_image_path)) {
             unlink($old_image_path);
         }
 
-        // Asegurar que la carpeta exista
         if (!is_dir($image_dir)) {
             mkdir($image_dir, 0755, true);
         }
 
-        // Guardar nueva imagen
         $image_extension = pathinfo($_FILES['update_project_image']['name'], PATHINFO_EXTENSION);
         $new_image_name = uniqid() . '.' . $image_extension;
         $new_image_path = $image_dir . $new_image_name;
@@ -55,7 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
         }
 
-        // Actualizar también la imagen en base de datos
         $query = "UPDATE project 
                   SET PROJECT_NAME = ?, PROJECT_STARTDATE = ?, PROJECT_LOCATION = ?, PROJECT_DESCRIPTION = ?, PROJECT_IMAGE = ?
                   WHERE PROJECT_ID = ?";
@@ -63,7 +56,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $connection->prepare($query);
         $stmt->bind_param("sssssi", $name, $begin_date, $ubication, $description, $new_image_name, $project_id);
     } else {
-        // Solo actualizar datos sin imagen
         $query = "UPDATE project 
                   SET PROJECT_NAME = ?, PROJECT_STARTDATE = ?, PROJECT_LOCATION = ?, PROJECT_DESCRIPTION = ?
                   WHERE PROJECT_ID = ?";

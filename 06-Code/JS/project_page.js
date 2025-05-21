@@ -1,5 +1,3 @@
-const file_input = document.getElementById('project_permission_file');
-const file_preview = document.getElementById('file_preview');
 const btn_add_project_permission = document.getElementById('add_permission');
 const modal_add_project_permission = document.getElementById('modal_add_project_permission');
 const modal_update_project_permission = document.getElementById("modal_update_project_permission");
@@ -64,7 +62,18 @@ function open_update_project_permission_modal() {
     modal_update_project_permission.showModal();
 }
 
-file_input.addEventListener('change', function () {
+btn_cancel_update_project_permission.addEventListener('click', () => {
+    modal_update_project_permission.classList.add('closing');
+
+    modal_update_project_permission.addEventListener('animationend', () => {
+       modal_update_project_permission.classList.remove('closing');
+        modal_update_project_permission.close();
+    }, { once: true });
+});
+
+function load_preview_file(input_id,preview_id){
+    let file_input = document.getElementById(input_id);
+    let file_preview = document.getElementById(preview_id);
     const selected_file = file_input.files[0];
 
     file_preview.innerHTML = '';
@@ -85,7 +94,7 @@ file_input.addEventListener('change', function () {
         error_message.classList.add('text-danger', 'm-2');
         file_preview.appendChild(error_message);
     }
-});
+}
 
 input_image.addEventListener('change', () => {
     const file = input_image.files[0];
@@ -169,7 +178,7 @@ function load_project_permission_to_update(permission_id, project_id) {
     })
         .then(response => response.json())
         .then(data => {
-            console.log("project catch:", data);
+            console.log("permission catch:", data);
 
             if (data.error) {
                 console.error("[ERROR]:", data.error);
@@ -177,7 +186,7 @@ function load_project_permission_to_update(permission_id, project_id) {
                 const folder = document.getElementById("update_project_folder").value;
                 document.getElementById("update_project_permission_name").value = data.PERMIT_NAME;
                 document.getElementById("update_project_permission_Description").value = data.PERMIT_DESCRIPTION;
-                document.getElementById("update_file_preview").innerHTML = `<embed src="../PROJECTS/${folder}/PERMITS/${data.PERMIT_ARCHIVE}" type="application/pdf" width="100%" height="100%"/>
+                document.getElementById("update_permission_file_preview").innerHTML = `<embed src="../PROJECTS/${folder}/PERMITS/${data.PERMIT_ARCHIVE}" type="application/pdf" width="100%" height="100%"/>
 `;
             }
         })
