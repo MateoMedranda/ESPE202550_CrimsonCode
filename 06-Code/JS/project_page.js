@@ -10,6 +10,7 @@ const btn_cancel_add_project_emp = document.getElementById('btn_cancel_add_proje
 const btn_cancel_update_project_emp = document.getElementById('btn_cancel_update_project_EMP');
 const btn_add_project_monitoring = document.getElementById('add_monitoring');
 const modal_add_project_monitoring = document.getElementById('modal_add_project_monitoring');
+const modal_update_project_monitoring = document.getElementById('modal_update_project_monitoring');
 const btn_cancel_add_project_monitoring = document.getElementById('btn_cancel_add_project_monitoring');
 const input_image = document.getElementById('project_monitoring_image');
 const preview_div = document.getElementById('image_preview');
@@ -66,6 +67,10 @@ function open_update_project_permission_modal() {
 
 function open_update_project_emp_modal(){
     modal_update_project_emp.showModal();
+}
+
+function open_update_project_monitoring_modal(){
+    modal_update_project_monitoring.showModal();
 }
 
 btn_cancel_update_project_permission.addEventListener('click', () => {
@@ -295,6 +300,7 @@ function load_full_project_monitoring_list() {
         let project_monitoring_content_div = document.getElementById("project_monitoring_content_div");
         let string_divs = "";
         project_monitoring_full_list.forEach((monitoring) => {
+            const folder = document.getElementById("update_project_folder_monitoring").value;
             let new_div_emp = `
            <div class="project_monitoring_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
@@ -308,7 +314,7 @@ function load_full_project_monitoring_list() {
                                     <h2 class="mb-0"><i class="bi bi-list"></i></h2>
                                 </div>
                                 <ul class="dropdown-menu dropdown-menu-end shadow">
-                                    <li><a class="dropdown-item" onClick="update_monitoring(${monitoring.id})">Editar</a></li>
+                                    <li><a class="dropdown-item" onClick="update_project_monitoring(${monitoring.project}, ${monitoring.id})">Editar</a></li>
                                     <li><a class="dropdown-item" onClick="delete_monitoring(${monitoring.id})">Eliminar</a></li>
                                     <li><a class="dropdown-item" onClick="open_monitoring(${monitoring.id})">Ver detalles</a></li>
                                 </ul>
@@ -319,7 +325,7 @@ function load_full_project_monitoring_list() {
                         </div>
                         
                     </div>
-                    <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_monitoring(${monitoring.id})"><img src="../IMG/project1.png" width="100%"></div>
+                    <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_monitoring(${monitoring.id})"><img src="../PROJECTS/${folder}/MONITORINGS/${monitoring.folder}/imagen_monitoreo/${monitoring.image}" width="100%"></div>
                 </div>`;
 
             string_divs += new_div_emp;
@@ -364,5 +370,43 @@ function load_project_emp_to_update(project_id, ambientalplan_id) {
         console.error("Fail in the fetch request:", error);
     });
 }
+
+function update_project_monitoring(project_id, monitoring_id) {
+    open_update_project_monitoring_modal(); 
+    load_project_monitoring_to_update(project_id,monitoring_id);
+}
+
+function load_project_monitoring_to_update(project_id, monitoring_id) {
+    const formData = new FormData();
+    formData.append("project_id", project_id);
+    formData.append("monitoring_id", monitoring_id);
+
+    fetch("../PHP/project_managment/get_project_monitoring_by_id.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error("[ERROR]:", data.error);
+            return;
+        }
+
+        const folder = document.getElementById("update_project_folder_monitoring").value;
+        document.getElementById("update_monitoring_id").value = monitoring_id;
+        document.getElementById("update_project_id_monitoring").value = project_id;
+        document.getElementById("update_project_monitoring_name").value = data.MONITORING_NAME;
+        document.getElementById("update_project_monitoring_description").value = data.MONITORING_DESCRIPTION;
+        document.getElementById("update_project_monitoring_observation").value = data.MONITORING_OBSERVATIONS;
+
+        const preview = document.getElementById("update_monitoring_image_preview");
+        const imageUrl = `../PROJECTS/${folder}/MONITORINGS/${data.MONITORING_FOLDER}/imagen_monitoreo/${data.MONITORING_IMAGE}`;
+        preview.innerHTML = `<img src="${imageUrl}" style="width: 100%; height: 100%; object-fit: cover;">`;
+    })
+    .catch(error => {
+        console.error("Error en la carga del monitoreo:", error);
+    });
+}
+
 
 
