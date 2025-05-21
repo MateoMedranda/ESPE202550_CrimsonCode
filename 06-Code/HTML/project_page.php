@@ -155,14 +155,14 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                         <div class="row px-4">
                             <div class="col-12">
                                 <label>Adjuntar Archivo (pdf): *</label>
-                                <input name="project_permission_file" id="project_permission_file" type="file"
+                                <input name="project_permission_file" id="project_permission_file" type="file" onchange="load_preview_file('project_permission_file','permission_file_preview')"
                                     class="form-control mb-3 shadow">
                             </div>
                         </div>
                     </div>
                     <div class="col-4 text-center">
                         <label class="text-center">Archivo seleccionado</label>
-                        <div id="file_preview"
+                        <div id="permission_file_preview"
                             class="mx-auto bg-black d-flex justify-content-center align-items-center shadow"
                             style="width: 300px; height: 130px; overflow: hidden;">
                         </div>
@@ -201,14 +201,14 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                         <div class="row px-4">
                             <div class="col-12">
                                 <label>Adjuntar Archivo (pdf): *</label>
-                                <input name="update_project_permission_file" id="update_project_permission_file" type="file"
+                                <input name="update_project_permission_file" id="update_project_permission_file" type="file" onchange="load_preview_file('update_project_permission_file','update_permission_file_preview')"
                                     class="form-control mb-3 shadow">
                             </div>
                         </div>
                     </div>
                     <div class="col-4 text-center">
                         <label class="text-center">Archivo seleccionado</label>
-                        <div id="update_file_preview"
+                        <div id="update_permission_file_preview"
                             class="mx-auto bg-black d-flex justify-content-center align-items-center shadow"
                             style="width: 300px; height: 130px; overflow: hidden;">
                         </div>
@@ -216,7 +216,7 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                     </div>
                 </div>
                 <hr>
-                <button type="submit" onclick="" class="btn bg-success-subtle">Guardar</button>
+                <button type="submit" onclick="" class="btn bg-warning-subtle">Actualizar</button>
                 <button name="btn_cancel_update_project_permission" id="btn_cancel_update_project_permission" type="button"
                     class="btn bg-danger-subtle" onclick="">Cancelar</button>
             </fieldset>

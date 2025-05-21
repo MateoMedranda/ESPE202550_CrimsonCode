@@ -8,24 +8,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ubication = $_POST['update_project_ubication'];
     $description = $_POST['update_project_description'];
 
-    if (isset($_FILES['update_project_image']) && $_FILES['update_project_image']['error'] === UPLOAD_ERR_OK) {
-        $image_tmp = $_FILES['update_project_image']['tmp_name'];
-        $image_name = basename($_FILES['update_project_image']['name']);
-        $destination = "../../PROJECTS/" . $image_name;
+    $stmt_select = $connection->prepare("SELECT PROJECT_IMAGE, PROJECT_NAME FROM project WHERE PROJECT_ID = ?");
+    $stmt_select->bind_param("i", $project_id);
+    $stmt_select->execute();
+    $stmt_select->bind_result($old_image, $old_project_name);
+    $stmt_select->fetch();
+    $stmt_select->close();
 
-        if (move_uploaded_file($image_tmp, $destination)) {
-            $image_to_save = $image_name;
+    $old_safe_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $old_project_name);
+    $new_safe_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $name);
 
-            $query = "UPDATE project 
-                      SET PROJECT_NAME = ?, PROJECT_STARTDATE = ?, PROJECT_LOCATION = ?, PROJECT_DESCRIPTION = ?, PROJECT_IMAGE = ?
-                      WHERE PROJECT_ID = ?";
+    $old_base_dir = "../../PROJECTS/" . $old_safe_name;
+    $new_base_dir = "../../PROJECTS/" . $new_safe_name;
+    $image_dir = $new_base_dir . "/imagen_proyecto/";
 
-            $stmt = $connection->prepare($query);
-            $stmt->bind_param("sssssi", $name, $begin_date, $ubication, $description, $image_to_save, $project_id);
+    if ($old_safe_name !== $new_safe_name) {
+        if (is_dir($old_base_dir)) {
+            rename($old_base_dir, $new_base_dir);
         } else {
-            echo json_encode(["error" => "Can not upload the image"]);
+            mkdir($image_dir, 0755, true); 
+        }
+    }
+
+    if (isset($_FILES['update_project_image']) && $_FILES['update_project_image']['error'] === UPLOAD_ERR_OK) {
+        $old_image_path = $new_base_dir . "/imagen_proyecto/" . $old_image;
+        if (!empty($old_image) && file_exists($old_image_path)) {
+            unlink($old_image_path);
+        }
+
+        if (!is_dir($image_dir)) {
+            mkdir($image_dir, 0755, true);
+        }
+
+        $image_extension = pathinfo($_FILES['update_project_image']['name'], PATHINFO_EXTENSION);
+        $new_image_name = uniqid() . '.' . $image_extension;
+        $new_image_path = $image_dir . $new_image_name;
+
+        if (!move_uploaded_file($_FILES['update_project_image']['tmp_name'], $new_image_path)) {
+            echo json_encode(["error" => "Cannot upload the image"]);
             exit;
         }
+
+        $query = "UPDATE project 
+                  SET PROJECT_NAME = ?, PROJECT_STARTDATE = ?, PROJECT_LOCATION = ?, PROJECT_DESCRIPTION = ?, PROJECT_IMAGE = ?
+                  WHERE PROJECT_ID = ?";
+
+        $stmt = $connection->prepare($query);
+        $stmt->bind_param("sssssi", $name, $begin_date, $ubication, $description, $new_image_name, $project_id);
     } else {
         $query = "UPDATE project 
                   SET PROJECT_NAME = ?, PROJECT_STARTDATE = ?, PROJECT_LOCATION = ?, PROJECT_DESCRIPTION = ?
@@ -36,15 +65,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if ($stmt->execute()) {
-        header("Location: ../../HTML/project_managment.html"); 
+        header("Location: ../../HTML/project_managment.html");
         exit();
     } else {
-        echo json_encode(["error" => "ther was an error updating the project"]);
+        echo json_encode(["error" => "There was an error updating the project"]);
     }
 
     $stmt->close();
     $connection->close();
 } else {
-    echo json_encode(["error" => "Ilegal Method"]);
+    echo json_encode(["error" => "Illegal Method"]);
 }
 ?>
