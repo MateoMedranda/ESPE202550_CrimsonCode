@@ -1,3 +1,22 @@
+
+$(document).ready(function() {get_users(); });
+
+function get_users() {
+        document.getElementById("table_body").value = "";
+        $.ajax({
+        url: '../PHP/get_user_list.php',
+        method: 'POST',
+        data: {},
+        success: function(response) {
+          document.getElementById("table_body").innerHTML = response;
+        },
+            error: function(xhr, status, error) {
+            console.error("AJAX request failed: " + error);
+            alert("Error al obtener los datos.");
+            }   
+        });
+}
+
 var add_button = document.getElementById("add_user");
 if (add_button&& !add_button.dataset.addedevent) {
     add_button.addEventListener("click", function () {
