@@ -2,51 +2,60 @@
 include("../connection_db.php");
 
 $project_id = $_POST["update_project_id_permission"];
-$permit_name = $_POST["update_project_permission_name"];
-$permit_description = $_POST["update_project_permission_Description"];
-$project_folder = $_POST["update_project_folder"];
-$file = $_FILES["update_project_permission_file"];
+$folder_name = $_POST["update_project_folder"];
+$permission_id = $_POST["update_permission_id"];
+$name = $_POST["update_project_permission_name"];
+$description = $_POST["update_project_permission_Description"];
 
-$query = $connection->prepare("SELECT PERMIT_ARCHIVE FROM permit WHERE PROJECT_ID = ?");
-$query->bind_param("i", $project_id);
-$query->execute();
-$query->bind_result($previous_file);
-$query->fetch();
-$query->close();
-
-$upload_dir = "../../PROJECTS/" . $project_folder . "/PERMITS/";
-$new_filename = $previous_file; 
-
-if ($file["error"] === UPLOAD_ERR_OK) {
-    if ($file["type"] !== "application/pdf") {
-        echo json_encode(["error" => "El archivo no es un PDF"]);
-        exit;
-    }
-
-    $previous_path = $upload_dir . $previous_file;
-    if (file_exists($previous_path)) {
-        unlink($previous_path);
-    }
-
-    $new_filename = uniqid() . ".pdf";
-    $new_path = $upload_dir . $new_filename;
-
-    if (!move_uploaded_file($file["tmp_name"], $new_path)) {
-        echo json_encode(["error" => "No se pudo guardar el nuevo archivo"]);
-        exit;
-    }
+if (!$permission_id || !$project_id) {
+    die("ID de permiso o proyecto faltante.");
 }
 
-$stmt = $connection->prepare("UPDATE permit SET PERMIT_NAME = ?, PERMIT_DESCRIPTION = ?, PERMIT_ARCHIVE = ? WHERE PROJECT_ID = ?");
-$stmt->bind_param("sssi", $permit_name, $permit_description, $new_filename, $project_id);
+$verify_query = "
+    SELECT p.PERMIT_ID 
+    FROM permit p
+    INNER JOIN project o ON p.PROJECT_ID = o.PROJECT_ID 
+    WHERE p.PERMIT_ID = ? AND p.PROJECT_ID = ?
+";
+
+$verify_stmt = $connection->prepare($verify_query);
+$verify_stmt->bind_param("ii", $permission_id, $project_id);
+$verify_stmt->execute();
+$verify_result = $verify_stmt->get_result();
+
+if ($verify_result->num_rows === 0) {
+    die("Permiso no encontrado o no pertenece al proyecto.");
+}
+$verify_stmt->close();
+
+$archivo_nombre = null;
+if (isset($_FILES["update_project_permission_file"]) && $_FILES["update_project_permission_file"]["error"] === UPLOAD_ERR_OK) {
+    $nombre_archivo = basename($_FILES["update_project_permission_file"]["name"]);
+    $ruta_guardado = "../../PROJECTS/$folder_name/PERMITS/" . $nombre_archivo;
+
+    if (!move_uploaded_file($_FILES["update_project_permission_file"]["tmp_name"], $ruta_guardado)) {
+        die("Error al subir el archivo.");
+    }
+
+    $archivo_nombre = $nombre_archivo;
+}
+
+if ($archivo_nombre) {
+    $update_query = "UPDATE permit SET PERMIT_NAME = ?, PERMIT_DESCRIPTION = ?, PERMIT_ARCHIVE = ? WHERE PERMIT_ID = ?";
+    $stmt = $connection->prepare($update_query);
+    $stmt->bind_param("sssi", $name, $description, $archivo_nombre, $permission_id);
+} else {
+    $update_query = "UPDATE permit SET PERMIT_NAME = ?, PERMIT_DESCRIPTION = ? WHERE PERMIT_ID = ?";
+    $stmt = $connection->prepare($update_query);
+    $stmt->bind_param("ssi", $name, $description, $permission_id);
+}
 
 if ($stmt->execute()) {
     header("Location: ../../HTML/project_page.php?project_id=" . $project_id);
     exit();
 } else {
-    echo json_encode(["error" => "No se pudo actualizar el permiso"]);
+    die("Error al actualizar: " . $stmt->error);
 }
 
 $stmt->close();
-$connection->close();
 ?>

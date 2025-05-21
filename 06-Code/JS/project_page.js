@@ -5,7 +5,9 @@ const btn_cancel_add_project_permission = document.getElementById('btn_cancel_ad
 const btn_cancel_update_project_permission = document.getElementById('btn_cancel_update_project_permission');
 const btn_add_project_emp = document.getElementById('add_emp');
 const modal_add_project_emp = document.getElementById('modal_add_project_EMP');
+const modal_update_project_emp = document.getElementById('modal_update_project_EMP');
 const btn_cancel_add_project_emp = document.getElementById('btn_cancel_add_project_EMP');
+const btn_cancel_update_project_emp = document.getElementById('btn_cancel_update_project_EMP');
 const btn_add_project_monitoring = document.getElementById('add_monitoring');
 const modal_add_project_monitoring = document.getElementById('modal_add_project_monitoring');
 const btn_cancel_add_project_monitoring = document.getElementById('btn_cancel_add_project_monitoring');
@@ -62,12 +64,25 @@ function open_update_project_permission_modal() {
     modal_update_project_permission.showModal();
 }
 
+function open_update_project_emp_modal(){
+    modal_update_project_emp.showModal();
+}
+
 btn_cancel_update_project_permission.addEventListener('click', () => {
     modal_update_project_permission.classList.add('closing');
 
     modal_update_project_permission.addEventListener('animationend', () => {
        modal_update_project_permission.classList.remove('closing');
         modal_update_project_permission.close();
+    }, { once: true });
+});
+
+btn_cancel_update_project_emp.addEventListener('click', () => {
+    modal_update_project_emp.classList.add('closing');
+
+    modal_update_project_emp.addEventListener('animationend', () => {
+       modal_update_project_emp.classList.remove('closing');
+        modal_update_project_emp.close();
     }, { once: true });
 });
 
@@ -176,29 +191,33 @@ function load_project_permission_to_update(permission_id, project_id) {
         method: "POST",
         body: form_data
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log("permission catch:", data);
+    .then(response => response.json())
+    .then(data => {
+        console.log("permission catch:", data);
 
-            if (data.error) {
-                console.error("[ERROR]:", data.error);
-            } else {
-                const folder = document.getElementById("update_project_folder").value;
-                document.getElementById("update_project_permission_name").value = data.PERMIT_NAME;
-                document.getElementById("update_project_permission_Description").value = data.PERMIT_DESCRIPTION;
-                document.getElementById("update_permission_file_preview").innerHTML = `<embed src="../PROJECTS/${folder}/PERMITS/${data.PERMIT_ARCHIVE}" type="application/pdf" width="100%" height="100%"/>
-`;
-            }
-        })
-        .catch(error => {
-            console.error("Error en la solicitud fetch:", error);
-        });
+        if (data.error) {
+            console.error("[ERROR]:", data.error);
+        } else {
+            const folder = document.getElementById("update_project_folder").value;
+
+            document.getElementById("update_permission_id").value = permission_id;
+            document.getElementById("update_project_permission_name").value = data.PERMIT_NAME;
+            document.getElementById("update_project_permission_Description").value = data.PERMIT_DESCRIPTION;
+            document.getElementById("update_permission_file_preview").innerHTML = `
+                <embed src="../PROJECTS/${folder}/PERMITS/${data.PERMIT_ARCHIVE}" type="application/pdf" width="100%" height="100%"/>
+            `;
+        }
+    })
+    .catch(error => {
+        console.error("Error en la solicitud fetch:", error);
+    });
 }
 
 function update_project_permission(permission_id, project_id) {
     open_update_project_permission_modal();
     load_project_permission_to_update(permission_id, project_id);
 }
+
 
 function get_full_project_emp_list() {
     fetch("../PHP/project_managment/project_emp_full_list.php")
@@ -233,7 +252,7 @@ function load_full_project_emp_list() {
                                     <h2 class="mb-0"><i class="bi bi-list"></i></h2>
                                 </div>
                                 <ul class="dropdown-menu dropdown-menu-end shadow">
-                                    <li><a class="dropdown-item" onClick="update_emp(${emp.id})">Editar</a></li>
+                                    <li><a class="dropdown-item" onClick="update_project_emp(${emp.project},${emp.id})">Editar</a></li>
                                     <li><a class="dropdown-item" onClick="delete_emp(${emp.id})">Eliminar</a></li>
                                     <li><a class="dropdown-item" onClick="open_emp(${emp.id})">Ver detalles</a></li>
                                 </ul>
@@ -312,3 +331,38 @@ function load_full_project_monitoring_list() {
 function open_emp(plan_id){
     window.location.href = `../HTML/project_activities_managment.php?plan_id=${plan_id}`;
 }
+
+function update_project_emp(project_id, ambientalplan_id) {
+    open_update_project_emp_modal(); 
+    load_project_emp_to_update(project_id,ambientalplan_id);
+}
+
+
+function load_project_emp_to_update(project_id, ambientalplan_id) {
+    console.log("Loading EMP:", ambientalplan_id, "for project:", project_id);
+
+    const form_data = new FormData();
+    form_data.append("project_id", project_id);
+    form_data.append("ambientalplan_id", ambientalplan_id);
+
+    fetch("../PHP/project_managment/get_project_emp_by_id.php", {
+        method: "POST",
+        body: form_data
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error("[ERROR]:", data.error);
+        } else {
+            document.getElementById("update_project_id_emp").value = project_id
+            document.getElementById("update_project_emp_name").value = data.AMBIENTALPLAN_NAME;
+            document.getElementById("update_project_emp_description").value = data.AMBIENTALPLAN_DESCRIPTION;
+            document.getElementById("update_emp_id").value = data.AMBIENTALPLAN_ID;
+        }
+    })
+    .catch(error => {
+        console.error("Fail in the fetch request:", error);
+    });
+}
+
+
