@@ -218,6 +218,23 @@
             </fieldset>
         </form>
     </dialog>
+    <div class="modal fade" id="deleteProjectModal" tabindex="-1" aria-labelledby="deleteProjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+              <h5 class="modal-title" id="deleteProjectModalLabel">¿Eliminar Proyecto?</h5>
+              <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              ¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button id="confirmDeleteBtn" type="button" class="btn btn-danger">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </div>      
 
     <div id="container" class="container mt-4">
         <div class="d-flex">
