@@ -160,5 +160,47 @@ function open_project(project_id) {
     window.location.href = `../HTML/project_page.php?project_id=${project_id}`;
 }
 
+let selectedProjectIdToDelete = null;
 
+function delete_project(project_id) {
+    console.log("Abriendo modal para eliminar:", project_id); // DEBUG
+    selectedProjectIdToDelete = project_id;
+
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteProjectModal'));
+    deleteModal.show();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const deleteBtn = document.getElementById("confirmDeleteBtn");
+
+    if (deleteBtn) {
+        deleteBtn.addEventListener("click", () => {
+            if (selectedProjectIdToDelete !== null) {
+                const formData = new FormData();
+                formData.append("project_id", selectedProjectIdToDelete);
+
+                fetch("../PHP/project_managment/project_delete.php", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Respuesta del servidor:", data);
+                    if (data.success) {
+                        bootstrap.Modal.getInstance(document.getElementById('deleteProjectModal')).hide();
+                        get_full_project_list(); // Recarga los proyectos
+                    } else {
+                        alert("Error al eliminar: " + (data.error || "Error desconocido"));
+                    }
+                })
+                .catch(error => {
+                    console.error("Error en la solicitud:", error);
+                    alert("No se pudo eliminar el proyecto.");
+                });
+
+                selectedProjectIdToDelete = null;
+            }
+        });
+    }
+});
 
