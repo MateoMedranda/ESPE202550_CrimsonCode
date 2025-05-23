@@ -1,6 +1,60 @@
 <?php
 require 'connection_db.php';
 
+$permits_groups = [
+    "PROFILES_READPROJECTS" => "Proyectos",
+    "PROFILES_CREATEPROJECTS" => "Proyectos",
+    "PROFILES_UPDATEPROJECTS" => "Proyectos",
+    "PROFILES_DELETEPROJECTS" => "Proyectos",
+
+    "PROFILES_READAMBIENTALPLANS" => "Planes Ambientales",
+    "PROFILES_CREATEAMBIENTALPLANS" => "Planes Ambientales",
+    "PROFILES_UPDATEAMBIENTALPLANS" => "Planes Ambientales",
+    "PROFILES_DELETEAMBIENTALPLANS" => "Planes Ambientales",
+
+    "PROFILES_READMONITORINGS" => "Monitoreos",
+    "PROFILES_WRITEMONITORINGS" => "Monitoreos",
+    "PROFILES_UPDATEMONITORINGS" => "Monitoreos",
+    "PROFILES_DELETEMONITORINGS" => "Monitoreos",
+
+    "PROFILES_READACTIVITIES" => "Actividad",
+    "PROFILES_CREATEACTIVITIES" => "Actividad",
+    "PROFILES_UPDATEACTIVITIES" => "Actividad",
+    "PROFILES_DELETEACTIVITIES" => "Actividad",
+
+    "PROFILES_CREATEEVENTS" => "Evento",
+    "PROFILES_READEVENTS" => "Evento",
+    "PROFILES_UPDATEEVENTS" => "Evento",
+    "PROFILES_DELETEEVENTS" => "Evento",
+
+    "PROFILES_CREATEUSERS" => "Usuarios",
+    "PROFILES_READUSERS" => "Usuarios",
+    "PROFILES_UPDATEUSERS" => "Usuarios",
+    "PROFILES_DELETEUSERS" => "Usuarios",
+
+    "PROFILES_CREATEPROFILES" => "Perfiles",
+    "PROFILES_UPDATEPROFILES" => "Perfiles",
+    "PROFILES_READPROFILES" => "Perfiles",
+    "PROFILES_DELETEPROFILES" => "Perfiles",
+
+    "PROFILES_READACTIONS" => "Acciones",
+
+    "PROFILES_READSUPERVISIONPERIOD" => "Periodo de Supervision",
+    "PROFILES_CREATESUPERVISIONPERIOD" => "Periodo de Supervision",
+    "PROFILES_DELETESUPERVISIONPERIOD" => "Periodo de Supervision",
+    "PROFILES_UPDATESUPERVISIONPERIOD" => "Periodo de Supervision",
+
+    "PROFILES_READPERMIT" => "Permisos",
+    "PROFILES_CREATEPERMIT" => "Permisos",
+    "PROFILES_UPDATEPERMIT" => "Permisos",
+    "PROFILES_DELETEPERMIT" => "Permisos",
+
+    "PROFILES_READREMINDER" => "Recordatorio",
+    "PROFILES_CREATEREMINDER" => "Recordatorio",
+    "PROFILES_DELETEREMINDER" => "Recordatorio",
+    "PROFILES_UPDATEREMINDER" => "Recordatorio"
+];
+
 $user_friendly_permit_names = [
     "PROFILES_READPROJECTS" => "Ver Proyectos",
     "PROFILES_CREATEPROJECTS" => "Generar Proyectos",
@@ -45,6 +99,8 @@ $user_friendly_permit_names = [
     "PROFILES_UPDATEREMINDER" => "Actualizar Recordatorio"
 ];
 
+
+
 if (isset($_POST['id'])) {
     $profile_id = mysqli_real_escape_string($connection, $_POST['id']);
     
@@ -66,7 +122,8 @@ if (isset($_POST['id'])) {
 
         while ($row = mysqli_fetch_assoc($data_result)) {
             $column_name = $row['COLUMN_NAME'];
-            $permits[$column_name] = [
+            $group = $permits_groups[$column_name] ?? 'Otros';
+            $permits[$group][$column_name] = [
                 'permit_name' => $user_friendly_permit_names[$column_name] ?? $column_name,
                 'value' => isset($profile_data[$column_name]) && $profile_data[$column_name] == 1 
             ];
@@ -88,7 +145,8 @@ if (isset($_POST['id'])) {
 
             while ($row = mysqli_fetch_assoc($data_result)) {
                 $column_name = $row['COLUMN_NAME'];
-                $permits[$column_name] = [
+                $group = $permits_groups[$column_name] ?? 'Otros';
+                $permits[$group][$column_name] = [
                     'permit_name' => $user_friendly_permit_names[$column_name] ?? $column_name,
                     'value' => 0 
                 ];

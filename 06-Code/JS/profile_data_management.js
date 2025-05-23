@@ -33,18 +33,27 @@ if (add_button&& !add_button.dataset.addedevent) {
                 let container = $("#permits_container");
                     container.html('');
 
-                    Object.entries(permits).forEach(([permitKey, permitObj]) => {
-                        let permitLabel = permitObj.permit_name;
-                        let permitValue = permitObj.value;
-
-                        let checkboxHtml = `
-                            <div class="form-check">
-                            <label class="form-check-label" for="permit_${permitKey}">${permitLabel}</label>
-                                <input class="form-check-input" type="checkbox" name="permits[]" 
-                                    value="${permitKey}" id="permit_${permitKey}" ${permitValue ? "checked" : ""}>
-                            </div>`;
-                        container.append(checkboxHtml);
+                    Object.entries(permits).forEach(([groupName, groupPermits]) => {
+                        let groupContainer = $('<div class="permit-group"></div>');
+    
+                        groupContainer.append(`<h5 class="mt-3">${groupName}</h5>`);
                         
+                        let gridContainer = $('<div class="permits-grid"></div>');
+
+                        Object.entries(groupPermits).forEach(([permitKey, permitObj]) => {
+                            let permitLabel = permitObj.permit_name;
+                            let permitValue = permitObj.value;
+
+                            let checkboxHtml = `
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="permits[]"
+                                        value="${permitKey}" id="permit_${permitKey}" ${permitValue ? "checked" : ""}>
+                                    <label class="form-check-label" for="permit_${permitKey}">${permitLabel}</label>
+                                </div>`;
+                                gridContainer.append(checkboxHtml);
+                        });
+                        groupContainer.append(gridContainer);
+                        container.append(groupContainer); 
                     });
 
             } catch (e) {
@@ -80,19 +89,27 @@ $(document).on("click", ".permits_view", function () {
                     originalValues = { profile: name, permits: {} };
                     container.html('');
 
-                    Object.entries(permits).forEach(([permitKey, permitObj]) => {
-                        let permitLabel = permitObj.permit_name;
-                        let permitValue = permitObj.value;
-
-                        let checkboxHtml = `
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="permits[]" 
-                                    value="${permitKey}" id="permit_${permitKey}" ${permitValue ? "checked" : ""} disabled>
-                                <label class="form-check-label" for="permit_${permitKey}">${permitLabel}</label>
-                            </div>`;
-                        originalValues.permits[permitKey] = permitValue;
-                        container.append(checkboxHtml);
+                    Object.entries(permits).forEach(([groupName, groupPermits]) => {
+                        let groupContainer = $('<div class="permit-group"></div>');
+    
+                        groupContainer.append(`<h5 class="mt-3">${groupName}</h5>`);
                         
+                        let gridContainer = $('<div class="permits-grid"></div>');
+
+                        Object.entries(groupPermits).forEach(([permitKey, permitObj]) => {
+                            let permitLabel = permitObj.permit_name;
+                            let permitValue = permitObj.value;
+
+                            let checkboxHtml = `
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="permits[]"
+                                        value="${permitKey}" id="permit_${permitKey}" ${permitValue ? "checked" : ""} disabled>
+                                    <label class="form-check-label" for="permit_${permitKey}">${permitLabel}</label>
+                                </div>`;
+                            gridContainer.append(checkboxHtml);
+                        });
+                        groupContainer.append(gridContainer);
+                        container.append(groupContainer); 
                     });
                     $("#permits_view").modal("show");
                 } catch (error) {
@@ -159,14 +176,14 @@ if (add_button && !add_button.dataset.eventoAgregado) {
 }
 
 //Update profile data
-let originalValues;
+var originalValues;
     $(document).on("click", ".edit-profile", function () {
         let profile = $(this).data("id");
         let name = $(this).data("name");
         document.getElementById("profile_name_edit").value = name;
         document.getElementById("profile_id_edit").value = profile;
         $.ajax({
-            url: "../PHP/get_permits_UPDATE.php",
+            url: "../PHP/get_permits_update.php",
             method: "POST",
             data: { id: profile },
             success: function (response) {
@@ -176,21 +193,31 @@ let originalValues;
                     originalValues = { profile: name, permits: {} };
                     container.html('');
 
-                    Object.entries(permits).forEach(([permitKey, permitObj]) => {
-                        let permitLabel = permitObj.permit_name;
-                        let permitValue = permitObj.value;
-
-                        let checkboxHtml = `
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="permits[]" 
-                                    value="${permitKey}" id="permit_${permitKey}" ${permitValue ? "checked" : ""}>
-                                <label class="form-check-label" for="permit_${permitKey}">${permitLabel}</label>
-                            </div>`;
-                        originalValues.permits[permitKey] = permitValue;
-                        container.append(checkboxHtml);
+                     Object.entries(permits).forEach(([groupName, groupPermits]) => {
+                        let groupContainer = $('<div class="permit-group"></div>');
+    
+                        groupContainer.append(`<h5 class="mt-3">${groupName}</h5>`);
                         
+                        let gridContainer = $('<div class="permits-grid"></div>');
+
+                        Object.entries(groupPermits).forEach(([permitKey, permitObj]) => {
+                            let permitLabel = permitObj.permit_name;
+                            let permitValue = permitObj.value;
+                            let checkboxHtml = `
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="permits_edit[]"
+                                        value="${permitKey}" id="permit_${permitKey}" ${permitValue ? "checked" : ""}>
+                                    <label class="form-check-label" for="permit_${permitKey}">${permitLabel}</label>
+                                </div>`;
+                        originalValues.permits[permitKey] = permitValue;
+                                
+                                gridContainer.append(checkboxHtml);
+                        });
+                            groupContainer.append(gridContainer);
+                            container.append(groupContainer); 
                     });
                     $("#edit_modal").modal("show");
+
                 } catch (error) {
                     console.error("Error al procesar los permisos:", error);
                 }
@@ -208,7 +235,7 @@ let originalValues;
         let new_profile_name = document.getElementById("profile_name_edit").value.trim();
         let profile = document.getElementById("profile_id_edit").value;
         let selected_permits = {};
-        $("input[name='permits[]']").each(function () {
+        $("input[name='permits_edit[]']").each(function () {
         selected_permits[$(this).val()] = $(this).is(":checked") ? true : false;
         });
 
@@ -216,7 +243,6 @@ let originalValues;
         if (firstKey !== undefined) {
             delete selected_permits[firstKey];
         }
-
         const permisosSeleccionados = Object.values(selected_permits).some(value => value === true);
         if (!permisosSeleccionados) {
             message("Debe seleccionar al menos un permiso.");
@@ -233,6 +259,8 @@ let originalValues;
             message("No ha realizado cambios");
             return;
         }
+
+       
         $.ajax({
             url: "../PHP/update_profile.php",
             method: "POST",

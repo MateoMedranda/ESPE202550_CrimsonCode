@@ -1,24 +1,37 @@
 .permits-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+.permit-group {
+    margin-bottom: 24px;
+    width: 100%;
+    gap: 14px;
+    display: grid;
+    grid-template-columns:1fr;
+}
+
+#permits_container, #permits-container_edit, #permits-container_view {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 }
 
-@media (max-width: 940px) {
-    .permits-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 480px) {
+@media (max-width: 1000px) {
     .permits-grid {
         grid-template-columns: 1fr;
     }
+    #permits_container, #permits-container_edit, #permits-container_view {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    }
 }
 
 
-.form-check-input {
+.form-check {
     display: flex;
     align-items: center;
-    gap: 8px; 
+    gap: 8px;
+    min-height: 40px;
 }
