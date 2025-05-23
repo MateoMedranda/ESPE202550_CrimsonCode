@@ -224,6 +224,23 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
             </fieldset>
         </form>
     </dialog>
+    <div class="modal fade" id="delete_permit_modal" tabindex="-1" aria-labelledby="delete_permit_modal_label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="delete_permit_modal_label">¿Eliminar Permiso?</h5>
+        <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar este permiso? Esta acción no se puede deshacer.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button id="confirm_delete_permit_btn" type="button" class="btn btn-danger">Eliminar</button>
+      </div>
+    </div>
+  </div>
+    </div>
 
     <!-- Dialog to add EMP -->
     <dialog id="modal_add_project_EMP" class="container m-auto bg-light rounded shadow">
