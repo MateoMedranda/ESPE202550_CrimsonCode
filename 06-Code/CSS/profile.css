@@ -2,6 +2,8 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
+    border-left: 1px solid;
+    padding-left: 20px;
 }
 .permit-group {
     margin-bottom: 24px;
@@ -9,19 +11,21 @@
     gap: 14px;
     display: grid;
     grid-template-columns:1fr;
+    
 }
 
-#permits_container, #permits-container_edit, #permits-container_view {
+#permits_container, #permits_container_edit, #permits_container_view {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
+    
 }
 
 @media (max-width: 1000px) {
     .permits-grid {
         grid-template-columns: 1fr;
     }
-    #permits_container, #permits-container_edit, #permits-container_view {
+    #permits_container, #permits_container_edit, #permits_container_view {
     display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
