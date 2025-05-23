@@ -16,6 +16,11 @@ while ($register = mysqli_fetch_assoc($profiles)) {
             data-name="' . htmlspecialchars($register['PROFILES_NAME']) . '">
             <i class="bi bi-pencil"></i> Editar
         </button>
+        <button  class="btn btn-sm btn-info me-1 permits_view"
+            data-id="' . htmlspecialchars($register['PROFILES_ID']) . '"
+            data-name="' . htmlspecialchars($register['PROFILES_NAME']) . '">
+            <i class="bi bi-eye-fill"></i> Ver Permisos
+        </button>
         <button  class="btn btn-sm ' . ($register['PROFILES_STATE'] == 'ACTIVE' ? 'btn-danger' : 'btn-success') . ' toggle-state"
             data-id="' . htmlspecialchars($register['PROFILES_ID']) . '"
             data-state="' . htmlspecialchars($register['PROFILES_STATE']) . '">

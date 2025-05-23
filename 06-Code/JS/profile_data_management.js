@@ -24,29 +24,28 @@ if (add_button&& !add_button.dataset.addedevent) {
         modal.show();
         document.getElementById("profile_name").value = "";
         $.ajax({
-        url: '../PHP/get_permits.php',
+        url: '../PHP/get_permits_update.php',
         method: 'POST',
-        data: {},
+        data: {just_permits: true},
         success: function(response) {
             try {
                 let permits = JSON.parse(response);
                 let container = $("#permits_container");
+                    container.html('');
 
-                container.html(''); 
+                    Object.entries(permits).forEach(([permitKey, permitObj]) => {
+                        let permitLabel = permitObj.permit_name;
+                        let permitValue = permitObj.value;
 
-                 Object.entries(permits).forEach(([permitKey, permitObj]) => {
-                    let permitLabel = permitObj.permit_name;
-                    let permitvalue = permitObj.value;
-
-                    let checkboxHtml = `
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="permits[]" 
-                                value="${permitKey}" id="permit_${permitKey}" ${permitvalue ? "checked" : ""}>
+                        let checkboxHtml = `
+                            <div class="form-check">
                             <label class="form-check-label" for="permit_${permitKey}">${permitLabel}</label>
-                        </div>`;
-                    
-                    container.append(checkboxHtml);
-                });
+                                <input class="form-check-input" type="checkbox" name="permits[]" 
+                                    value="${permitKey}" id="permit_${permitKey}" ${permitValue ? "checked" : ""}>
+                            </div>`;
+                        container.append(checkboxHtml);
+                        
+                    });
 
             } catch (e) {
                 console.error("Error al procesar los permisos: " + e.message);
@@ -63,7 +62,49 @@ if (add_button&& !add_button.dataset.addedevent) {
 
     add_button.dataset.addedevent = "true";
 }
+//watch permits of a profile
+$(document).on("click", ".permits_view", function () {
 
+        var modal = new bootstrap.Modal(document.getElementById("permits_view"));
+        modal.show();
+        document.getElementById("profile_name_view").value = $(this).data("name");
+        document.getElementById("profile_id_view").value = $(this).data("id");
+        $.ajax({
+        url: '../PHP/get_permits_update.php',
+        method: 'POST',
+        data: {id: $(this).data("id")},
+        success: function(response) {
+             try {
+                    let permits = JSON.parse(response);
+                    let container = $("#permits_container_view");
+                    originalValues = { profile: name, permits: {} };
+                    container.html('');
+
+                    Object.entries(permits).forEach(([permitKey, permitObj]) => {
+                        let permitLabel = permitObj.permit_name;
+                        let permitValue = permitObj.value;
+
+                        let checkboxHtml = `
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="permits[]" 
+                                    value="${permitKey}" id="permit_${permitKey}" ${permitValue ? "checked" : ""} disabled>
+                                <label class="form-check-label" for="permit_${permitKey}">${permitLabel}</label>
+                            </div>`;
+                        originalValues.permits[permitKey] = permitValue;
+                        container.append(checkboxHtml);
+                        
+                    });
+                    $("#permits_view").modal("show");
+                } catch (error) {
+                    console.error("Error al procesar los permisos:", error);
+                }
+        },
+            error: function(xhr, status, error) {
+            console.error("AJAX request failed: " + error);
+            alert("Error al obtener los datos.");
+            }   
+        });
+});
 //Save profile data from Form
 
 if (add_button && !add_button.dataset.eventoAgregado) {

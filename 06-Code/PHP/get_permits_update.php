@@ -75,7 +75,26 @@ if (isset($_POST['id'])) {
     } else {
         echo json_encode([]);
     }
-} else {
-    echo json_encode([]);
-}
+    }else if(isset($_POST['just_permits'])) {
+            $query_permits = "SELECT COLUMN_NAME 
+                            FROM INFORMATION_SCHEMA.COLUMNS 
+                            WHERE TABLE_NAME = 'profiles' 
+                            AND TABLE_SCHEMA = 'biosigma_db'
+                            AND DATA_TYPE = 'tinyint'
+                            AND COLUMN_NAME != 'PROFILES_STATE'";
+
+            $data_result = mysqli_query($connection, $query_permits);
+            $permits = [];
+
+            while ($row = mysqli_fetch_assoc($data_result)) {
+                $column_name = $row['COLUMN_NAME'];
+                $permits[$column_name] = [
+                    'permit_name' => $user_friendly_permit_names[$column_name] ?? $column_name,
+                    'value' => 0 
+                ];
+            }
+            echo json_encode($permits);
+    }else {
+        echo json_encode([]);
+    }
 ?>
