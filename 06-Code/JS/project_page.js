@@ -515,3 +515,46 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+let selected_monitoring_id_to_delete = null;
+
+function delete_monitoring(monitoring_id) {
+    console.log("Abriendo modal para eliminar monitoreo:", monitoring_id);
+    selected_monitoring_id_to_delete = monitoring_id;
+    const modal = new bootstrap.Modal(document.getElementById('delete_monitoring_modal'));
+    modal.show();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const confirm_delete_monitoring_btn = document.getElementById("confirm_delete_monitoring_btn");
+
+    if (confirm_delete_monitoring_btn) {
+        confirm_delete_monitoring_btn.addEventListener("click", () => {
+            if (selected_monitoring_id_to_delete !== null) {
+                const form_data = new FormData();
+                form_data.append("monitoring_id", selected_monitoring_id_to_delete);
+
+                fetch("../PHP/project_managment/monitoring_delete.php", {
+                    method: "POST",
+                    body: form_data
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Respuesta al eliminar monitoreo:", data);
+                    if (data.success) {
+                        bootstrap.Modal.getInstance(document.getElementById('delete_monitoring_modal')).hide();
+                        get_full_project_monitoring_list();
+                    } else {
+                        alert("Error al eliminar el monitoreo: " + (data.error || "Intenta nuevamente."));
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al eliminar el monitoreo:", error);
+                    alert("No se pudo eliminar el monitoreo.");
+                });
+
+                selected_monitoring_id_to_delete = null;
+            }
+        });
+    }
+});
+
