@@ -17,10 +17,56 @@ function get_users() {
         });
 }
 
+ let originalValues = {};
+  $(document).on("click", ".edit-user", function() {
+      let id = $(this).data("id");
+      let name= $(this).data("name");
+      let surname = $(this).data("surname");
+      let user = $(this).data("user");
+      let profile = $(this).data("profile");
+      getprofiles(document.getElementById('user_profile_edit'),profile);
+      originalValues = {
+        id: id,
+        profile:profile
+      };
+      $("#user_id_edit").val(id);
+      $("#name_edit").val(name);
+      $("#surname_edit").val(surname);
+      $("#username_edit").val(user);
+      $("#user_edit").modal("show");
+  });
+
+  $("#update_user").click(function () {
+    let id = $("#user_id_edit").val();
+    let profile = $("#user_profile_edit").val();
+    if (profile === originalValues.profile) {
+        mensaje("No ha realizado cambios");
+        timeout();
+        return;  
+    }
+    $.ajax({
+        url: '../PHP/update_user.php',
+        method: 'POST',
+        data: {
+            id: id,
+            profile: profile,
+        },
+        success: function(response) {
+            message("Usuario Actualizado Correctamente!!!");
+            get_users();
+        },
+        error: function() {
+            message("Error en el envio de datos!!!");
+        }
+    });
+    });
+
+
+
 var add_button = document.getElementById("add_user");
 if (add_button&& !add_button.dataset.addedevent) {
     add_button.addEventListener("click", function () {
-        getprofiles();
+        getprofiles(document.getElementById('user_profile'),0);
         var modal = new bootstrap.Modal(document.getElementById("user_register"));
         document.getElementById("name").value = "";
         document.getElementById("surname").value = "";
@@ -37,14 +83,15 @@ if (add_button&& !add_button.dataset.addedevent) {
 }
 
 
-function getprofiles() {
+function getprofiles(element,seting_value) {
         $.ajax({
         url: '../PHP/get_profiles_names.php',
         method: 'POST',
         data: {},
         success: function(response) {
-           document.getElementById('user_profile').innerHTML = 
+           element.innerHTML = 
            '<option value="seleccione">Seleccione...</option>' + response;
+           element.value = seting_value;
         },
             error: function(xhr, status, error) {
             console.error("AJAX request failed: " + error);
@@ -150,6 +197,30 @@ function test_users(username){
 
     return value;
 }
+
+//logic delete user
+$(document).ready(function() {
+  $(document).on("click", ".toggle-state", function() {
+      let id_user = $(this).data("id");
+      let state = $(this).data("state");
+      let new_state = state === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+      $.ajax({
+          url: '../PHP/logic_delete_users.php',
+          method: 'POST',
+          data: {
+              id: id_user,
+              state: new_state
+          },
+          success: function(response) {
+            message("El cambio de estado ha sido realizado!!!");
+            get_users();
+        },
+        error: function() {
+            message("Error en el envio de datos!!!");
+        }
+      });
+  });
+});
 //message function
 function message(msg) {
     var modal = bootstrap.Modal.getInstance(document.getElementById("information_container"));

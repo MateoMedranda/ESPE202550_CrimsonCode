@@ -246,6 +246,63 @@
 			
 		</div>
 	</div>
+
+	<div class="modal fade" id="user_edit" tabindex="-1" aria-labelledby="user_register_label" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
+			<div class="modal-content">
+				<div class="container">
+					<div class="row">
+						<h1 class="text-center">Registrar Usuario</h1>
+					</div>
+					<div class="row border border-dark p-3 my-4 mx-4 position-relative">
+							<h3 class="position-absolute top-0 start-0 ms-3 px-2" 
+							style="margin-top: -12px; background-color: white; display: inline;">
+							Datos del Usuario
+							</h3>
+						<div class="col-md-6">
+							<input type="hidden" id="user_id_edit" name="user_id_edit">
+							<label for="name_edit" class="form-label">Nombre:
+								<input type="text" id="name_edit" name="name_edit" class="form-control border-dark" readonly>
+							</label>
+						</div>
+						<div class="col-md-4">
+							<label for="surname_edit" class="form-label">Apellido:
+								<input type="text" id="surname_edit" name="surname_edit" class="form-control border-dark" readonly>
+							</label>
+						</div>
+						
+					</div>
+					
+					<div class="row border border-dark p-3 my-4 mx-4 position-relative">
+						<h3 class="position-absolute top-0 start-0 ms-3 px-2" 
+						style="margin-top: -12px; background-color: white; display: inline;">
+						Datos de la cuenta
+						</h3>
+					<div class="col-md-6">
+						<label for="username_edit" class="form-label">Usuario:
+							<input type="text" id="username_edit" name="username_edit" class="form-control border-dark" readonly>
+						</label>
+					</div>
+					<div class="modal-footer">
+					<div class="col">
+					<label for="user_profile_edit" class="form-label">Perfil:</label>
+					<select class="form-control border-dark text-dark" id="user_profile_edit" name="user_profile_edit" required>
+					</select>
+					</div>
+
+				</div>	
+				</div>
+					<div class="modal-footer d-flex justify-content-center align-items-center">
+						<button type="button" class="btn btn-white border border-dark" data-bs-dismiss="modal">Cancelar</button>
+						<button type="button" class="btn btn-white border border-dark" id="update_user" >Actualizar</button>
+					</div>
+				</div>
+			</div>
+			</div>
+			
+		</div>
+	</div>
+
 	<div class="modal fade" id="information_container" tabindex="-1" aria-labelledby="information_container" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered modal-lg my-5">
 				<div class="modal-content my-5">

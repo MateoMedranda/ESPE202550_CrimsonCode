@@ -1,8 +1,8 @@
 <?php
 require 'connection_db.php';
 
-$query_users = "SELECT DISTINCT u.USERS_ID,u.PROFILES_ID,u.USERS_NAME,u.USERS_SURNAME,u.USERS_PERSONAL_ID,
-u.USERS_EMAIL,u.USERS_PHONENUMBER,u.USERS_STATE,p.PROFILES_NAME FROM users u JOIN profiles p
+$query_users = "SELECT DISTINCT u.USERS_ID,u.PROFILES_ID,u.USERS_NAME,u.USERS_PERSONAL_ID,u.USERS_SURNAME,u.USERS_PERSONAL_ID,
+u.USERS_EMAIL,u.USERS_PHONENUMBER,u.USERS_STATE,USERS_USERS,p.PROFILES_NAME, p.PROFILES_ID FROM users u JOIN profiles p
 on  u.PROFILES_ID = p.PROFILES_ID AND p.PROFILES_STATE = 'ACTIVE' ";
 
 $users = mysqli_query($connection, $query_users);
@@ -19,8 +19,12 @@ while ($register = mysqli_fetch_assoc($users)) {
     $tabla .= '<td>' . htmlspecialchars($register['USERS_PHONENUMBER']) . '</td>';
     $tabla .= '<td>' . htmlspecialchars($register['USERS_STATE']== 'ACTIVE' ? 'Activo' : 'Inactivo') . '</td>';
     $tabla .= '<td>
-        <button  class="btn btn-sm btn-primary me-1 edit-profile"
+        <button  class="btn btn-sm btn-primary me-1 edit-user"
             data-id="' . htmlspecialchars($register['USERS_ID']) . '"
+            data-name="' . htmlspecialchars($register['USERS_NAME']) . '"
+            data-surname="' . htmlspecialchars($register['USERS_SURNAME']) . '"
+            data-user="' . htmlspecialchars($register['USERS_USERS']) . '"
+            data-profile="' . htmlspecialchars($register['PROFILES_ID']) . '">
             <i class="bi bi-pencil"></i> Editar
         </button>
         <button  class="btn btn-sm ' . ($register['USERS_STATE'] == 'ACTIVE' ? 'btn-danger' : 'btn-success') . ' toggle-state"
