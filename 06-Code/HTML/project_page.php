@@ -184,6 +184,8 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                 <h3 class="title">Editar Permiso</h3>
                 <input type="hidden" id="update_project_id_permission" name="update_project_id_permission" value="<?php echo htmlspecialchars($data["PROJECT_ID"]); ?>">
                 <input type="hidden" id="update_project_folder" name="update_project_folder" value="<?php echo htmlspecialchars($project_folder_name); ?>">
+                <input type="hidden" id="update_permission_id" name="update_permission_id" value=".">
+
                 <hr>
                 <div class="row">
                     <div class="col-8">
@@ -222,6 +224,23 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
             </fieldset>
         </form>
     </dialog>
+    <div class="modal fade" id="delete_permit_modal" tabindex="-1" aria-labelledby="delete_permit_modal_label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="delete_permit_modal_label">¿Eliminar Permiso?</h5>
+        <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar este permiso? Esta acción no se puede deshacer.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button id="confirm_delete_permit_btn" type="button" class="btn btn-danger">Eliminar</button>
+      </div>
+    </div>
+  </div>
+    </div>
 
     <!-- Dialog to add EMP -->
     <dialog id="modal_add_project_EMP" class="container m-auto bg-light rounded shadow">
@@ -252,6 +271,55 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
             </fieldset>
         </form>
     </dialog>
+
+    <!-- Dialog to update EMP -->
+    <dialog id="modal_update_project_EMP" class="container m-auto bg-light rounded shadow">
+        <form id="update_emp_form" method="post" action="../PHP/project_managment/project_emp_update.php">
+            <input type="hidden" id="update_project_id_emp" name="update_project_id_emp" value="<?php echo htmlspecialchars($data["PROJECT_ID"]); ?>">
+            <input type="hidden" id="update_emp_id" name="update_emp_id" value=".">
+
+            <fieldset class="border p-2 bg-light border-0">
+                <h3 class="titulo">Editar Plan de Manejo Ambiental</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row px-4">
+                            <div class="col-3 px-2">
+                                <label class="mb-0">Nombre del Plan: *</label>
+                                <input id="update_project_emp_name" name="update_project_emp_name" type="text" class="form-control mb-3 shadow">
+                            </div>
+                            <div class="col-9 px-2">
+                                <label>Descripción: *</label>
+                                <input id="update_project_emp_description" name="update_project_emp_description" type="text"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <button type="submit" class="btn bg-warning-subtle">Actualizar</button>
+                <button type="button" class="btn bg-danger-subtle" id="btn_cancel_update_project_EMP">Cancelar</button>
+            </fieldset>
+        </form>
+    </dialog>
+    <div class="modal fade" id="delete_emp_modal" tabindex="-1" aria-labelledby="delete_emp_modal_label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="delete_emp_modal_label">¿Eliminar Plan de Manejo Ambiental?</h5>
+        <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar este EMP? Esta acción no se puede deshacer.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button id="confirm_delete_emp_btn" type="button" class="btn btn-danger">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <!-- Dialog to add new monitoring -->
     <dialog id="modal_add_project_monitoring" class="container m-auto bg-light rounded shadow">
@@ -312,11 +380,89 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
         </form>
     </dialog>
 
+    <!-- Dialog to update monitoring -->
+    <dialog id="modal_update_project_monitoring" class="container m-auto bg-light rounded shadow">
+        <form id="update_monitoring" method="post" action="../PHP/project_managment/project_monitoring_update.php" enctype="multipart/form-data">
+            <fieldset class="border p-2 bg-light border-0">
+                <h3 class="title">Editar Monitoreo</h3>
+                <input type="hidden" id="update_project_id_monitoring" name="update_project_id_monitoring" value="<?php echo htmlspecialchars($data["PROJECT_ID"]); ?>">
+                <input type="hidden" id="update_project_folder_monitoring" name="update_project_folder_monitoring" value="<?php echo htmlspecialchars($project_folder_name); ?>">
+                <input type="hidden" id="update_monitoring_id" name="update_monitoring_id">
+                <hr>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row px-4">
+                            <div class="col-3 px-2">
+                                <label class="mb-0">Nombre del Monitoreo: *</label>
+                                <input id="update_project_monitoring_name" name="update_project_monitoring_name" type="text" class="form-control mb-3 shadow">
+                            </div>
+                            <div class="col-9 px-2">
+                                <label>Descripción: *</label>
+                                <input id="update_project_monitoring_description" name="update_project_monitoring_description" type="text"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12 px-2">
+                                <label>Observación: *</label>
+                                <input id="update_project_monitoring_observation" name="update_project_monitoring_observation" type="text"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12">
+                                <label>Actualizar Imagen (opcional):</label>
+                                <input name="update_project_monitoring_image" id="update_project_monitoring_image" type="file"
+                                    class="form-control mb-3 shadow" onchange="load_preview_file('update_project_monitoring_image','update_monitoring_image_preview')">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12">
+                                <label>Actualizar Archivo (opcional):</label>
+                                <input name="update_project_monitoring_file" id="update_project_monitoring_file" type="file"
+                                    class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <label class="text-center">Imagen actual</label>
+                        <div id="update_monitoring_image_preview"
+                            class="m-auto bg-black d-flex justify-content-center align-items-center shadow"
+                            style="width: 360px; height: 220px; overflow: hidden;">
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <button type="submit" class="btn bg-warning-subtle">Actualizar</button>
+                <button type="button" class="btn bg-danger-subtle" onclick="document.getElementById('modal_update_project_monitoring').close();">Cancelar</button>
+            </fieldset>
+        </form>
+    </dialog>
+    <div class="modal fade" id="delete_monitoring_modal" tabindex="-1" aria-labelledby="delete_monitoring_modal_label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="delete_monitoring_modal_label">¿Eliminar Monitoreo?</h5>
+        <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar este monitoreo? Esta acción no se puede deshacer.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button id="confirm_delete_monitoring_btn" type="button" class="btn btn-danger">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
     <div id="container" class="container mt-4">
+        <div class="text-center">
+            <h1 class="title text-light"><?php echo htmlspecialchars($data["PROJECT_NAME"]); ?></h1>
+        </div>
         <fieldset class="border p-4 shadow agregar bg-light rounded">
-            <div class="text-center bg-success-subtle">
-                <h2 class="title"><b><?php echo htmlspecialchars($data["PROJECT_NAME"]); ?></b></h2>
-            </div>
+            <a href="project_managment.html"><button class="btn bg-danger-subtle border-1 border-black"><i class="bi bi-arrow-90deg-left"></i> Regresar</button></a>
             <hr>
             <div class="row">
                 <div class="col-sm-12 col-md-5">
@@ -329,8 +475,23 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                     <p>Descripción: <?php echo htmlspecialchars($data["PROJECT_DESCRIPTION"]); ?></p>
                 </div>
                 <div class="image_container col-md-7 border-black border-1">
-                    <img src="../PROJECTS/<?php echo preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME"]); ?>/imagen_proyecto/<?php echo htmlspecialchars($data["PROJECT_IMAGE"]); ?>" width="100%">
+                    <img
+                        id="thumbnail_image"
+                        src="../PROJECTS/<?php echo preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME"]); ?>/imagen_proyecto/<?php echo htmlspecialchars($data["PROJECT_IMAGE"]); ?>"
+                        width="100%"
+                        style="cursor: pointer;"
+                        alt="Imagen Proyecto">
                 </div>
+
+                <!-- Modal para imagen grande -->
+                <div id="image_modal" style="display:none;">
+                    <div class="modal_overlay"></div>
+                    <div class="modal_content">
+                        <button id="modal_close_btn" aria-label="Cerrar imagen">&times;</button>
+                        <img id="modal_image" src="" alt="Imagen ampliada">
+                    </div>
+                </div>
+
             </div>
             <hr>
             <div class="d-flex">
@@ -359,12 +520,12 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
             </div>
             <hr>
             <div id="project_emp_content_div" class="d-flex pt-4 pb-4">
-                
+
                 <div class="col-12 text-center my-1 py-1">
                     <h1><i class="bi bi-stars"></i></h1>
                     <h1><i class="bi bi-bar-chart-steps"></i> Aun no hay planes de manejo aquí</h1>
                 </div>
-                
+
             </div>
             <hr>
             <div class="d-flex">
@@ -381,7 +542,7 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                     <h1><i class="bi bi-stars"></i></h1>
                     <h1><i class="bi bi-camera2"></i> Aun no hay monitoreos aquí</h1>
                 </div>
-                
+
             </div>
             <hr>
             <div class="d-flex">

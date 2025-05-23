@@ -5,15 +5,22 @@ const btn_cancel_add_project_permission = document.getElementById('btn_cancel_ad
 const btn_cancel_update_project_permission = document.getElementById('btn_cancel_update_project_permission');
 const btn_add_project_emp = document.getElementById('add_emp');
 const modal_add_project_emp = document.getElementById('modal_add_project_EMP');
+const modal_update_project_emp = document.getElementById('modal_update_project_EMP');
 const btn_cancel_add_project_emp = document.getElementById('btn_cancel_add_project_EMP');
+const btn_cancel_update_project_emp = document.getElementById('btn_cancel_update_project_EMP');
 const btn_add_project_monitoring = document.getElementById('add_monitoring');
 const modal_add_project_monitoring = document.getElementById('modal_add_project_monitoring');
+const modal_update_project_monitoring = document.getElementById('modal_update_project_monitoring');
 const btn_cancel_add_project_monitoring = document.getElementById('btn_cancel_add_project_monitoring');
 const input_image = document.getElementById('project_monitoring_image');
 const preview_div = document.getElementById('image_preview');
 let project_permission_full_list = [];
 let project_emp_full_list = [];
 let project_monitoring_full_list = [];
+const thumbnailImage = document.getElementById('thumbnail_image');
+const modal = document.getElementById('image_modal');
+const modalImage = document.getElementById('modal_image');
+const closeBtn = document.getElementById('modal_close_btn');
 
 get_full_project_permission_list();
 get_full_project_emp_list();
@@ -62,12 +69,29 @@ function open_update_project_permission_modal() {
     modal_update_project_permission.showModal();
 }
 
+function open_update_project_emp_modal(){
+    modal_update_project_emp.showModal();
+}
+
+function open_update_project_monitoring_modal(){
+    modal_update_project_monitoring.showModal();
+}
+
 btn_cancel_update_project_permission.addEventListener('click', () => {
     modal_update_project_permission.classList.add('closing');
 
     modal_update_project_permission.addEventListener('animationend', () => {
        modal_update_project_permission.classList.remove('closing');
         modal_update_project_permission.close();
+    }, { once: true });
+});
+
+btn_cancel_update_project_emp.addEventListener('click', () => {
+    modal_update_project_emp.classList.add('closing');
+
+    modal_update_project_emp.addEventListener('animationend', () => {
+       modal_update_project_emp.classList.remove('closing');
+        modal_update_project_emp.close();
     }, { once: true });
 });
 
@@ -176,29 +200,33 @@ function load_project_permission_to_update(permission_id, project_id) {
         method: "POST",
         body: form_data
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log("permission catch:", data);
+    .then(response => response.json())
+    .then(data => {
+        console.log("permission catch:", data);
 
-            if (data.error) {
-                console.error("[ERROR]:", data.error);
-            } else {
-                const folder = document.getElementById("update_project_folder").value;
-                document.getElementById("update_project_permission_name").value = data.PERMIT_NAME;
-                document.getElementById("update_project_permission_Description").value = data.PERMIT_DESCRIPTION;
-                document.getElementById("update_permission_file_preview").innerHTML = `<embed src="../PROJECTS/${folder}/PERMITS/${data.PERMIT_ARCHIVE}" type="application/pdf" width="100%" height="100%"/>
-`;
-            }
-        })
-        .catch(error => {
-            console.error("Error en la solicitud fetch:", error);
-        });
+        if (data.error) {
+            console.error("[ERROR]:", data.error);
+        } else {
+            const folder = document.getElementById("update_project_folder").value;
+
+            document.getElementById("update_permission_id").value = permission_id;
+            document.getElementById("update_project_permission_name").value = data.PERMIT_NAME;
+            document.getElementById("update_project_permission_Description").value = data.PERMIT_DESCRIPTION;
+            document.getElementById("update_permission_file_preview").innerHTML = `
+                <embed src="../PROJECTS/${folder}/PERMITS/${data.PERMIT_ARCHIVE}" type="application/pdf" width="100%" height="100%"/>
+            `;
+        }
+    })
+    .catch(error => {
+        console.error("Error en la solicitud fetch:", error);
+    });
 }
 
 function update_project_permission(permission_id, project_id) {
     open_update_project_permission_modal();
     load_project_permission_to_update(permission_id, project_id);
 }
+
 
 function get_full_project_emp_list() {
     fetch("../PHP/project_managment/project_emp_full_list.php")
@@ -233,7 +261,7 @@ function load_full_project_emp_list() {
                                     <h2 class="mb-0"><i class="bi bi-list"></i></h2>
                                 </div>
                                 <ul class="dropdown-menu dropdown-menu-end shadow">
-                                    <li><a class="dropdown-item" onClick="update_emp(${emp.id})">Editar</a></li>
+                                    <li><a class="dropdown-item" onClick="update_project_emp(${emp.project},${emp.id})">Editar</a></li>
                                     <li><a class="dropdown-item" onClick="delete_emp(${emp.id})">Eliminar</a></li>
                                     <li><a class="dropdown-item" onClick="open_emp(${emp.id})">Ver detalles</a></li>
                                 </ul>
@@ -276,6 +304,7 @@ function load_full_project_monitoring_list() {
         let project_monitoring_content_div = document.getElementById("project_monitoring_content_div");
         let string_divs = "";
         project_monitoring_full_list.forEach((monitoring) => {
+            const folder = document.getElementById("update_project_folder_monitoring").value;
             let new_div_emp = `
            <div class="project_monitoring_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
@@ -289,7 +318,7 @@ function load_full_project_monitoring_list() {
                                     <h2 class="mb-0"><i class="bi bi-list"></i></h2>
                                 </div>
                                 <ul class="dropdown-menu dropdown-menu-end shadow">
-                                    <li><a class="dropdown-item" onClick="update_monitoring(${monitoring.id})">Editar</a></li>
+                                    <li><a class="dropdown-item" onClick="update_project_monitoring(${monitoring.project}, ${monitoring.id})">Editar</a></li>
                                     <li><a class="dropdown-item" onClick="delete_monitoring(${monitoring.id})">Eliminar</a></li>
                                     <li><a class="dropdown-item" onClick="open_monitoring(${monitoring.id})">Ver detalles</a></li>
                                 </ul>
@@ -300,7 +329,7 @@ function load_full_project_monitoring_list() {
                         </div>
                         
                     </div>
-                    <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_monitoring(${monitoring.id})"><img src="../IMG/project1.png" width="100%"></div>
+                    <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_monitoring(${monitoring.id})"><img src="../PROJECTS/${folder}/MONITORINGS/${monitoring.folder}/imagen_monitoreo/${monitoring.image}" width="100%"></div>
                 </div>`;
 
             string_divs += new_div_emp;
@@ -312,3 +341,220 @@ function load_full_project_monitoring_list() {
 function open_emp(plan_id){
     window.location.href = `../HTML/project_activities_managment.php?plan_id=${plan_id}`;
 }
+
+function update_project_emp(project_id, ambientalplan_id) {
+    open_update_project_emp_modal(); 
+    load_project_emp_to_update(project_id,ambientalplan_id);
+}
+
+
+function load_project_emp_to_update(project_id, ambientalplan_id) {
+    console.log("Loading EMP:", ambientalplan_id, "for project:", project_id);
+
+    const form_data = new FormData();
+    form_data.append("project_id", project_id);
+    form_data.append("ambientalplan_id", ambientalplan_id);
+
+    fetch("../PHP/project_managment/get_project_emp_by_id.php", {
+        method: "POST",
+        body: form_data
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error("[ERROR]:", data.error);
+        } else {
+            document.getElementById("update_project_id_emp").value = project_id
+            document.getElementById("update_project_emp_name").value = data.AMBIENTALPLAN_NAME;
+            document.getElementById("update_project_emp_description").value = data.AMBIENTALPLAN_DESCRIPTION;
+            document.getElementById("update_emp_id").value = data.AMBIENTALPLAN_ID;
+        }
+    })
+    .catch(error => {
+        console.error("Fail in the fetch request:", error);
+    });
+}
+
+function update_project_monitoring(project_id, monitoring_id) {
+    open_update_project_monitoring_modal(); 
+    load_project_monitoring_to_update(project_id,monitoring_id);
+}
+
+function load_project_monitoring_to_update(project_id, monitoring_id) {
+    const formData = new FormData();
+    formData.append("project_id", project_id);
+    formData.append("monitoring_id", monitoring_id);
+
+    fetch("../PHP/project_managment/get_project_monitoring_by_id.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error("[ERROR]:", data.error);
+            return;
+        }
+
+        const folder = document.getElementById("update_project_folder_monitoring").value;
+        document.getElementById("update_monitoring_id").value = monitoring_id;
+        document.getElementById("update_project_id_monitoring").value = project_id;
+        document.getElementById("update_project_monitoring_name").value = data.MONITORING_NAME;
+        document.getElementById("update_project_monitoring_description").value = data.MONITORING_DESCRIPTION;
+        document.getElementById("update_project_monitoring_observation").value = data.MONITORING_OBSERVATIONS;
+
+        const preview = document.getElementById("update_monitoring_image_preview");
+        const imageUrl = `../PROJECTS/${folder}/MONITORINGS/${data.MONITORING_FOLDER}/imagen_monitoreo/${data.MONITORING_IMAGE}`;
+        preview.innerHTML = `<img src="${imageUrl}" style="width: 100%; height: 100%; object-fit: cover;">`;
+    })
+    .catch(error => {
+        console.error("Error en la carga del monitoreo:", error);
+    });
+}
+
+
+thumbnailImage.addEventListener('click', () => {
+    modal.style.display = 'flex';
+    modalImage.src = thumbnailImage.src;
+    modalImage.alt = thumbnailImage.alt;
+});
+
+closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+    modalImage.src = ''; 
+});
+
+modal.querySelector('.modal_overlay').addEventListener('click', () => {
+    modal.style.display = 'none';
+    modalImage.src = '';
+});
+
+let selected_permit_id_to_delete = null;
+
+function delete_project_permission(permit_id) {
+    console.log("Abriendo modal para eliminar permiso:", permit_id);
+    selected_permit_id_to_delete = permit_id;
+    const modal = new bootstrap.Modal(document.getElementById('delete_permit_modal'));
+    modal.show();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const confirm_delete_permit_btn = document.getElementById("confirm_delete_permit_btn");
+
+    if (confirm_delete_permit_btn) {
+        confirm_delete_permit_btn.addEventListener("click", () => {
+            if (selected_permit_id_to_delete !== null) {
+                const form_data = new FormData();
+                form_data.append("permit_id", selected_permit_id_to_delete);
+
+                fetch("../PHP/project_managment/permit_delete.php", {
+                    method: "POST",
+                    body: form_data
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Respuesta al eliminar permiso:", data);
+                    if (data.success) {
+                        bootstrap.Modal.getInstance(document.getElementById('delete_permit_modal')).hide();
+                        get_full_project_permission_list(); // recarga la lista
+                    } else {
+                        alert("Error al eliminar el permiso: " + (data.error || "Intenta nuevamente."));
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al eliminar el permiso:", error);
+                    alert("No se pudo eliminar el permiso.");
+                });
+
+                selected_permit_id_to_delete = null;
+            }
+        });
+    }
+});
+
+let selected_emp_id_to_delete = null;
+
+function delete_emp(emp_id) {
+    console.log("Abriendo modal para eliminar EMP:", emp_id);
+    selected_emp_id_to_delete = emp_id;
+    const modal = new bootstrap.Modal(document.getElementById('delete_emp_modal'));
+    modal.show();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const confirm_delete_emp_btn = document.getElementById("confirm_delete_emp_btn");
+
+    if (confirm_delete_emp_btn) {
+        confirm_delete_emp_btn.addEventListener("click", () => {
+            if (selected_emp_id_to_delete !== null) {
+                const form_data = new FormData();
+                form_data.append("emp_id", selected_emp_id_to_delete);
+
+                fetch("../PHP/project_managment/emp_delete.php", {
+                    method: "POST",
+                    body: form_data
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Respuesta al eliminar EMP:", data);
+                    if (data.success) {
+                        bootstrap.Modal.getInstance(document.getElementById('delete_emp_modal')).hide();
+                        get_full_project_emp_list();
+                    } else {
+                        alert("Error al eliminar el EMP: " + (data.error || "Intenta nuevamente."));
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al eliminar el EMP:", error);
+                    alert("No se pudo eliminar el EMP.");
+                });
+
+                selected_emp_id_to_delete = null;
+            }
+        });
+    }
+});
+
+let selected_monitoring_id_to_delete = null;
+
+function delete_monitoring(monitoring_id) {
+    console.log("Abriendo modal para eliminar monitoreo:", monitoring_id);
+    selected_monitoring_id_to_delete = monitoring_id;
+    const modal = new bootstrap.Modal(document.getElementById('delete_monitoring_modal'));
+    modal.show();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const confirm_delete_monitoring_btn = document.getElementById("confirm_delete_monitoring_btn");
+
+    if (confirm_delete_monitoring_btn) {
+        confirm_delete_monitoring_btn.addEventListener("click", () => {
+            if (selected_monitoring_id_to_delete !== null) {
+                const form_data = new FormData();
+                form_data.append("monitoring_id", selected_monitoring_id_to_delete);
+
+                fetch("../PHP/project_managment/monitoring_delete.php", {
+                    method: "POST",
+                    body: form_data
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Respuesta al eliminar monitoreo:", data);
+                    if (data.success) {
+                        bootstrap.Modal.getInstance(document.getElementById('delete_monitoring_modal')).hide();
+                        get_full_project_monitoring_list();
+                    } else {
+                        alert("Error al eliminar el monitoreo: " + (data.error || "Intenta nuevamente."));
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al eliminar el monitoreo:", error);
+                    alert("No se pudo eliminar el monitoreo.");
+                });
+
+                selected_monitoring_id_to_delete = null;
+            }
+        });
+    }
+});
+

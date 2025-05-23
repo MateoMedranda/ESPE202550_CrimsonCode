@@ -3,13 +3,13 @@ include("../connection_db.php");
 
 $sql = "SELECT 
             MONITORING_ID AS 'id',
-            PROJECT_ID,
+            PROJECT_ID AS 'project',
             MONITORING_NAME AS 'name',
             MONITORING_DESCRIPTION AS 'description',
             MONITORING_EVIDENCE,
             MONITORING_OBSERVATIONS,
             MONITORING_IMAGE AS 'image',
-            MONITORING_FOLDER
+            MONITORING_FOLDER AS 'folder'
         FROM monitoring";
 
 $result = $connection->query($sql);

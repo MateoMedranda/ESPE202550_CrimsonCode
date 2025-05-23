@@ -1,6 +1,6 @@
 <?php
 include("../connection_db.php");
-    $request = 'SELECT a.AMBIENTALPLAN_ID AS "id", a.AMBIENTALPLAN_NAME AS "name" FROM ambientalplan a INNER JOIN project o ON o.PROJECT_ID = A.PROJECT_ID';
+    $request = 'SELECT a.AMBIENTALPLAN_ID AS "id", a.AMBIENTALPLAN_NAME AS "name" , a.PROJECT_ID AS "project" FROM ambientalplan a INNER JOIN project o ON o.PROJECT_ID = A.PROJECT_ID';
     $result = mysqli_query($connection,$request);
 
     if($result){
