@@ -224,6 +224,7 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
             </fieldset>
         </form>
     </dialog>
+
     <div class="modal fade" id="delete_permit_modal" tabindex="-1" aria-labelledby="delete_permit_modal_label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content border-0 shadow">
@@ -241,6 +242,44 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
     </div>
   </div>
     </div>
+
+    <dialog id="modal_view_project_permission" class="container m-auto bg-light rounded shadow">
+  <form method="dialog">
+    <fieldset class="border p-2 bg-light border-0">
+      <h3 class="title">Detalles del Permiso</h3>
+      <input type="hidden" id="view_project_folder" value="">
+      <hr>
+      <div class="row">
+        <div class="col-8">
+          <div class="row px-4">
+            <div class="col-3 px-2">
+              <label class="mb-0">Nombre del Permiso:</label>
+              <input id="view_project_permission_name" type="text" class="form-control mb-3 shadow" readonly>
+            </div>
+            <div class="col-9 px-2">
+              <label>Descripción:</label>
+              <input id="view_project_permission_description" type="text" class="form-control mb-3 shadow" readonly>
+            </div>
+          </div>
+          <div class="row px-4">
+            <div class="col-12">
+              <label>Archivo PDF adjunto:</label>
+              <div id="view_permission_file_preview" class="bg-black shadow"
+                style="width: 100%; height: 130px; overflow: hidden;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 text-center">
+          <label>Vista previa</label>
+          <div id="view_permission_embed_preview" class="bg-black shadow"
+            style="width: 100%; height: 130px; overflow: hidden;"></div>
+        </div>
+      </div>
+      <hr>
+      <button type="button" class="btn bg-secondary-subtle" onclick="close_view_permission_modal()">Cerrar</button>
+    </fieldset>
+  </form>
+</dialog>
 
     <!-- Dialog to add EMP -->
     <dialog id="modal_add_project_EMP" class="container m-auto bg-light rounded shadow">
