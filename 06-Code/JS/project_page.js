@@ -429,4 +429,89 @@ modal.querySelector('.modal_overlay').addEventListener('click', () => {
     modalImage.src = '';
 });
 
+let selected_permit_id_to_delete = null;
+
+function delete_project_permission(permit_id) {
+    console.log("Abriendo modal para eliminar permiso:", permit_id);
+    selected_permit_id_to_delete = permit_id;
+    const modal = new bootstrap.Modal(document.getElementById('delete_permit_modal'));
+    modal.show();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const confirm_delete_permit_btn = document.getElementById("confirm_delete_permit_btn");
+
+    if (confirm_delete_permit_btn) {
+        confirm_delete_permit_btn.addEventListener("click", () => {
+            if (selected_permit_id_to_delete !== null) {
+                const form_data = new FormData();
+                form_data.append("permit_id", selected_permit_id_to_delete);
+
+                fetch("../PHP/project_managment/permit_delete.php", {
+                    method: "POST",
+                    body: form_data
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Respuesta al eliminar permiso:", data);
+                    if (data.success) {
+                        bootstrap.Modal.getInstance(document.getElementById('delete_permit_modal')).hide();
+                        get_full_project_permission_list(); // recarga la lista
+                    } else {
+                        alert("Error al eliminar el permiso: " + (data.error || "Intenta nuevamente."));
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al eliminar el permiso:", error);
+                    alert("No se pudo eliminar el permiso.");
+                });
+
+                selected_permit_id_to_delete = null;
+            }
+        });
+    }
+});
+
+let selected_emp_id_to_delete = null;
+
+function delete_emp(emp_id) {
+    console.log("Abriendo modal para eliminar EMP:", emp_id);
+    selected_emp_id_to_delete = emp_id;
+    const modal = new bootstrap.Modal(document.getElementById('delete_emp_modal'));
+    modal.show();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const confirm_delete_emp_btn = document.getElementById("confirm_delete_emp_btn");
+
+    if (confirm_delete_emp_btn) {
+        confirm_delete_emp_btn.addEventListener("click", () => {
+            if (selected_emp_id_to_delete !== null) {
+                const form_data = new FormData();
+                form_data.append("emp_id", selected_emp_id_to_delete);
+
+                fetch("../PHP/project_managment/emp_delete.php", {
+                    method: "POST",
+                    body: form_data
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Respuesta al eliminar EMP:", data);
+                    if (data.success) {
+                        bootstrap.Modal.getInstance(document.getElementById('delete_emp_modal')).hide();
+                        get_full_project_emp_list();
+                    } else {
+                        alert("Error al eliminar el EMP: " + (data.error || "Intenta nuevamente."));
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al eliminar el EMP:", error);
+                    alert("No se pudo eliminar el EMP.");
+                });
+
+                selected_emp_id_to_delete = null;
+            }
+        });
+    }
+});
 
