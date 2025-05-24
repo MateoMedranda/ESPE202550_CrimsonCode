@@ -175,7 +175,7 @@ function load_full_project_permission_list() {
                             <ul class="dropdown-menu dropdown-menu-end shadow">
                                 <li><a class="dropdown-item" onClick="update_project_permission(${permission.id},${permission.project})">Editar</a></li>
                                 <li><a class="dropdown-item" onClick="delete_project_permission(${permission.id})">Eliminar</a></li>
-                                <li><a class="dropdown-item" onClick="open_project_permission(${permission.id})">Ver detalles</a></li>
+                                <li><a class="dropdown-item" onClick="open_project_permission(${permission.id},${permission.project})">Ver detalles</a></li>
                             </ul>
                         </div>
                     </div>
@@ -558,9 +558,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-function open_project_permission(permission_id) {
-    const project_id = document.getElementById("current_project_id")?.value;
+function open_project_permission(permission_id, project_id) {
     const folder = document.getElementById("update_project_folder")?.value || "default_project";
+
+    console.log(project_id);
+    console.log(folder);
+    console.log(permission_id);
 
     const formData = new FormData();
     formData.append("permission_id", permission_id);
