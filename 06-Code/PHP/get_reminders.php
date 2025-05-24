@@ -5,7 +5,7 @@ $project_id = $input['id_project'] ?? null;
 $project_id = mysqli_real_escape_string($connection, $project_id);
 
 $query_reminders = "SELECT DISTINCT r.REMINDER_ID, r.REMINDER_REGISTERDATE, r.REMINDER_TOREMEMBERDATE, r.REMINDER_CONTENT, 
-                    r.REMINDER_STATE, r.REMINDER_TITLE FROM reminder r 
+                    r.REMINDER_STATE, r.REMINDER_TITLE,r.PROJECT_ID FROM reminder r 
                     WHERE r.PROJECT_ID = '$project_id' AND REMINDER_STATE = 'ACTIVE' 
                     AND r.REMINDER_TOREMEMBERDATE >= CURDATE() 
                     ORDER BY r.REMINDER_REGISTERDATE DESC";
@@ -18,6 +18,7 @@ $counter = 0;
 while ($register = mysqli_fetch_assoc($reminders)) {
     $group[] = [
         'REMINDER_ID' => $register['REMINDER_ID'],
+        'PROJECT_ID' => $register['PROJECT_ID'],
         'REMINDER_REGISTERDATE' => $register['REMINDER_REGISTERDATE'],
         'REMINDER_TOREMEMBERDATE' => $register['REMINDER_TOREMEMBERDATE'],
         'REMINDER_CONTENT' => $register['REMINDER_CONTENT'],

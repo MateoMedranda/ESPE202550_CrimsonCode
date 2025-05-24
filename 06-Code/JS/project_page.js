@@ -636,17 +636,16 @@ function get_reminders_list() {
                                 <div class="card-body">
                                     <h4 class="card-title">${reminder.REMINDER_TITLE}</h4>
                                     <h5 class="card-title">Para el: ${reminder.REMINDER_TOREMEMBERDATE}</h5>
-                                    <input type="hidden" id="reminder_id" value="${reminder.REMINDER_ID}">
-                                    <input type="hidden" id="reminder_project_id" value="${reminder.REMINDER_PROJECT_ID}">
-                                    <input type="hidden" id="reminder_status" value="${reminder.REMINDER_STATUS}">
-                                    <input type="hidden" id="reminder_content" value="${reminder.REMINDER_CONTENT}">
-                                    <input type="hidden" id="reminder_torememberdate" value="${reminder.REMINDER_TOREMEMBERDATE}">
-                                    <input type="hidden" id="reminder_registerdate" value="${reminder.REMINDER_REGISTERDATE}">
-                                    <input type="hidden" id="reminder_tittle" value="${reminder.REMINDER_TITLE}">
+                                    <input type="hidden" id="reminder_id_${reminder.REMINDER_ID}" value="${reminder.REMINDER_ID}">
+                                    <input type="hidden" id="reminder_project_id_${reminder.REMINDER_ID}" value="${reminder.PROJECT_ID}">
+                                    <input type="hidden" id="reminder_content_${reminder.REMINDER_ID}" value="${reminder.REMINDER_CONTENT}">
+                                    <input type="hidden" id="reminder_torememberdate_${reminder.REMINDER_ID}" value="${reminder.REMINDER_TOREMEMBERDATE}">
+                                    <input type="hidden" id="reminder_registerdate_${reminder.REMINDER_ID}" value="${reminder.REMINDER_REGISTERDATE}">
+                                    <input type="hidden" id="reminder_tittle_${reminder.REMINDER_ID}" value="${reminder.REMINDER_TITLE}">
 
-                                    <button class="btn btn-info btn_size" onclick="">Ver</button>
-                                    <button class="btn btn-primary btn_size" onclick="">Modificar</button>
-                                    
+                                    <button class="btn btn-info btn_size" onclick="see(${reminder.REMINDER_ID})">Ver</button>
+                                    <button class="btn btn-primary btn_size" onclick="modify(${reminder.REMINDER_ID})">Modificar</button>
+
                                 </div>
                             </div>
                         `;
@@ -672,6 +671,11 @@ document.addEventListener("DOMContentLoaded", () => {
         dateFormat: "Y-m-d",
         minDate: "today" 
         });
+    flatpickr("#update_reminder_day", {
+        dateFormat: "Y-m-d",
+        minDate: "today" 
+        });
+    
 });
 
 document.getElementById("add_reminder").addEventListener("click", function(event) {
@@ -721,6 +725,84 @@ document.getElementById("insert_reminder").addEventListener("click", function(ev
             alert("Error al insertar el recordatorio.");
         });
     });
+
+let originalValues =[];
+//update reminder
+function modify(id) {
+    let reminder_id = id;
+    let project_id =document.getElementById(`reminder_project_id_${id}`).value;
+    let title = document.getElementById(`reminder_tittle_${id}`).value;
+    let content = document.getElementById(`reminder_content_${id}`).value;
+    let date = document.getElementById(`reminder_torememberdate_${id}`).value;
+    
+    document.getElementById("update_reminder_id").value = reminder_id;
+    document.getElementById("update_reminder_project_id").value = project_id;
+    document.getElementById("update_reminder_title").value = title;
+    document.getElementById("update_reminder_content").value = content;
+    document.getElementById("update_reminder_day").value = date;
+
+    let modal = new bootstrap.Modal(document.getElementById("update_reminder_modal"));
+    modal.show();
+}
+
+document.getElementById("update_reminder").addEventListener("click",function(){
+    event.preventDefault();
+    let reminder_id = document.getElementById("update_reminder_id").value;
+    let project_id = document.getElementById("update_reminder_project_id").value;
+    let reminder_title = document.getElementById("update_reminder_title").value;
+    let reminder_content = document.getElementById("update_reminder_content").value;
+    let reminder_date = document.getElementById("update_reminder_day").value;
+    if (reminder_title === "" ) {
+            message("Por favor el campo del titulo no puede estar vacio");
+            return;
+        }
+        if (reminder_content === "" ) {
+            message("Por favor el campo descripcion no puede estar vacio");
+            return;
+        }
+        if (reminder_date === "" ) {
+            message("Por favor el campo fecha no puede estar vacio");
+            return;
+        }
+
+
+    fetch("../PHP/reminder_data_update.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+            reminder_id:reminder_id,
+            project_id:project_id,
+            reminder_title:reminder_title,
+            reminder_content:reminder_content,
+            reminder_date:reminder_date
+         })
+    })  
+                 .then(response => response.json())
+    .then(data => {
+            message(data)
+            })
+        .catch(error => {
+            console.error("Error al recuperar recordatorios:", error);
+            alert("Error al recuperar recordatorios.");
+        });
+})
+//see reminder
+function see(id) {
+    let title = document.getElementById(`reminder_tittle_${id}`).value;
+    let content = document.getElementById(`reminder_content_${id}`).value;
+    let date = document.getElementById(`reminder_torememberdate_${id}`).value;
+
+    document.getElementById("see_reminder_title").value = title;
+    document.getElementById("see_reminder_content").value = content;
+    document.getElementById("see_reminder_day").value = date;
+
+    document.getElementById("see_reminder_title").readOnly = true;
+    document.getElementById("see_reminder_content").readOnly = true;
+    document.getElementById("see_reminder_day").readOnly = true;
+
+    let modal = new bootstrap.Modal(document.getElementById("see_reminder_modal"));
+    modal.show();
+}
 //message function
     function message(msg) {
     var modal = bootstrap.Modal.getInstance(document.getElementById("information_container"));

@@ -624,13 +624,9 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
 
         </fieldset>
         </div>
-        <div class="modal fade modal_reminder_insert" id="insert_reminder_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="insert_reminder_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-            <form id="update_emp_form" method="post" action="../PHP/project_managment/project_emp_update.php">
-                <input type="hidden" id="update_project_id_emp" name="update_project_id_emp" value="<?php echo htmlspecialchars($data["PROJECT_ID"]); ?>">
-                <input type="hidden" id="update_emp_id" name="update_emp_id" value=".">
-
                 <fieldset class="border p-2 bg-light border-0">
                 <h3 class="titulo">Agregar un recordatorio</h3>
                 <hr>
@@ -666,6 +662,87 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
         </div>
     </div>
 
+
+        <div class="modal fade" id="update_reminder_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+            <form id="update_emp_form" method="post" action="../PHP/project_managment/project_emp_update.php">
+                <input type="hidden" id="update_reminder_id" name="update_reminder_id" >
+                <input type="hidden" id="update_reminder_project_id" name="update_project_id">
+                
+
+                <fieldset class="border p-2 bg-light border-0">
+                <h3 class="titulo">Modificar un recordatorio</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row px-4">
+                            <div class="col-6 px-2">
+                                <label class="mb-0">Titulo del recordatorio: *</label>
+                                <input id="update_reminder_title" name="update_reminder_title" type="text" class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-6 px-2">
+                                <label>Descripción: *</label>
+                                <textarea id="update_reminder_content" name="update_reminder_content" class="form-control mb-3 shadow" rows="4"></textarea>
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                        <div class="col-6 px-2">
+                        <label>Dia para el recordatorio: *</label>
+                        <input id="update_reminder_day" name="update_reminder_day" type="date"
+                            class="form-control mb-3 shadow">
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <hr>
+                <button type="submit" class="btn bg-warning-subtle" id="update_reminder" >Modificar</button>
+                <button type="button" class="btn bg-danger-subtle" id="btn_cancel_reminder_update" data-bs-dismiss="modal">Cancelar</button>
+                </fieldset>
+            </form>
+            </div>
+        </div>
+    </div>
+
+
+            <div class="modal fade" id="see_reminder_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <fieldset class="border p-2 bg-light border-0">
+                <h3 class="titulo">Información del recordatorio</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row px-4">
+                            <div class="col-6 px-2">
+                                <label class="mb-0">Titulo del recordatorio: *</label>
+                                <input id="see_reminder_title" name="see_reminder_title" type="text" class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-6 px-2">
+                                <label>Descripción: *</label>
+                                <textarea id="see_reminder_content" name="see_reminder_content" class="form-control mb-3 shadow" rows="4"></textarea>
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                        <div class="col-6 px-2">
+                        <label>Dia para el recordatorio: *</label>
+                        <input id="see_reminder_day" name="see_reminder_day" type="date"
+                            class="form-control mb-3 shadow">
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <hr>
+                <button type="button" class="btn bg-danger-subtle" id="btn_cancel_reminder_see" data-bs-dismiss="modal">Cerrar</button>
+                </fieldset>
+            </form>
+            </div>
+        </div>
+    </div>
 
 
     <div class="modal fade" id="information_container" tabindex="-1" aria-labelledby="information_container" aria-hidden="true">
