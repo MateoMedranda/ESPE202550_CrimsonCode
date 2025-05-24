@@ -40,7 +40,24 @@
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   background: linear-gradient(to bottom, #bdbdbd, #ffffff);
+  min-width: 220px;
+  height: 60px;
 }
+
+.permission-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 15px;
+  padding: 10px 0;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.empty-permission {
+  min-width: 100%;
+}
+
 
 .project_permission_card:hover {
   transform: translateY(-8px);
@@ -48,6 +65,9 @@
   cursor: pointer;
 }
 
+.permission-slider::-webkit-scrollbar {
+  display: none;
+}
 
 .project_plan_card {
   border: 1px solid rgba(65, 65, 65, 0.384);
@@ -63,142 +83,199 @@
   cursor: pointer;
 }
 
-.project_monitoring_card{
+.project_monitoring_card {
   border: 1px solid rgba(65, 65, 65, 0.384);
   box-shadow: 0px 6px 5px rgb(85, 85, 85);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   background: linear-gradient(to bottom, #ffffff, hsl(123, 100%, 92%));
-  
+  min-width: 220px;
+  height: 250px;
 }
 
-.project_monitoring_card:hover{
+
+.monitoring-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 15px;
+  padding: 10px 0;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.empty-monitoring {
+  min-width: 100%;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px 10px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 50%;
+  background-color: #ffffff4d;
+}
+
+.carousel-arrow.left {
+  left: -10px;
+}
+
+.carousel-arrow.right {
+  right: -10px;
+}
+
+.monitoring-slider::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.project_monitoring_card:hover {
   transform: translateY(-8px);
   box-shadow: 0 8px 20px rgb(85, 85, 85);
   cursor: pointer;
 }
 
-dialog{
-    border:0;
+dialog {
+  border: 0;
 }
 
 dialog[open] {
-    animation: slide_down_fade 0.5s ease-out forwards;
+  animation: slide_down_fade 0.5s ease-out forwards;
 }
 
 dialog::backdrop {
-    background: rgba(0, 0, 0, 0.4);
-    transition: background 0.4s ease;
+  background: rgba(0, 0, 0, 0.4);
+  transition: background 0.4s ease;
 }
 
 @keyframes slide_down_fade {
-    from {
-        opacity: 0;
-        transform: translateY(-50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 dialog.closing {
-    animation: slide_up_fade 0.4s ease-in forwards;
+  animation: slide_up_fade 0.4s ease-in forwards;
 }
 
 @keyframes slide_up_fade {
-    from {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    to {
-        opacity: 0;
-        transform: translateY(-50px);
-    }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
 }
 
 .project_permission_card {
-    overflow: visible !important;
+  overflow: visible !important;
 }
 
 .project_plan_card {
-    overflow: visible !important;
+  overflow: visible !important;
 }
 
 .dropdown-menu {
-    z-index: 1055; 
-    top: 100% !important;
-    left: auto !important;
-    right: 0; 
-    margin-top: 0.3rem;
-    transform: none !important; 
-    background-color: #fff !important; 
+  z-index: 1055;
+  top: 100% !important;
+  left: auto !important;
+  right: 0;
+  margin-top: 0.3rem;
+  transform: none !important;
+  background-color: #fff !important;
 }
 
-.div_project_permission:hover,.div_project_emp:hover, .div_project_monitoring:hover{
-    cursor: pointer;
-    color:blue;
+.div_project_permission:hover,
+.div_project_emp:hover,
+.div_project_monitoring:hover {
+  cursor: pointer;
+  color: blue;
 }
 
-.div_project_image:hover{
-    cursor: pointer;
+.div_project_image:hover {
+  cursor: pointer;
 }
 
 #image_modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
 .modal_overlay {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.6); 
-    backdrop-filter: blur(2px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
 }
 
 .modal_content {
-    position: relative;
-    max-width: 90vw;
-    max-height: 90vh;
-    z-index: 10;
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  z-index: 10;
 }
 
 .modal_content img {
-    max-width: 70vw;  
-    max-height: 70vh; 
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
-    object-fit: contain; 
+  max-width: 70vw;
+  max-height: 70vh;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  object-fit: contain;
 }
 
 #modal_close_btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(255,255,255,0.8);
-    border: none;
-    font-size: 2rem;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    line-height: 30px;
-    text-align: center;
-    padding: 0;
-    user-select: none;
-    transition: background 0.2s ease;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  line-height: 30px;
+  text-align: center;
+  padding: 0;
+  user-select: none;
+  transition: background 0.2s ease;
 }
 
 #modal_close_btn:hover {
-    background: rgba(255,255,255,1);
+  background: rgba(255, 255, 255, 1);
 }

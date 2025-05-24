@@ -475,7 +475,7 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
         </form>
     </dialog>
 
-     <dialog id="monitoring_view_modal" style="width: 70%; max-height: 90vh; overflow-y: auto; border: 2px solid #ccc; border-radius: 10px; padding: 20px;">
+    <dialog id="monitoring_view_modal" style="width: 70%; max-height: 90vh; overflow-y: auto; border: 2px solid #ccc; border-radius: 10px; padding: 20px;">
         <h2><span id="view_monitoring_title">-</span></h2>
         <hr>
         <input type="hidden" id="view_project_folder_monitoring" value="<?php echo htmlspecialchars($project_folder_name); ?>" />
@@ -560,19 +560,32 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
 
             </div>
             <hr>
-            <div class="d-flex">
+            <div class="d-flex justify-content-between align-items-center">
                 <div class="col">
                     <h3 class="title inter-title">Permisos</h3>
                 </div>
-                <div class="col text-end"><button id="add_permission" class="btn_add btn bg-info-subtle border-black"
-                        onclick=""><i class="bi bi-plus-circle"></i> Agregar Permiso</button></div>
-            </div>
-            <hr>
-            <div id="project_permission_content_div" class="d-flex pt-4 pb-4">
-                <div class="col-12 text-center my-1 py-1">
-                    <h1><i class="bi bi-stars"></i></h1>
-                    <h1><i class="bi bi-shield-exclamation"></i> Aun no hay permisos aquí</h1>
+                <div class="col text-end">
+                    <button id="add_permission" class="btn_add btn bg-info-subtle border-black">
+                        <i class="bi bi-plus-circle"></i> Agregar Permiso
+                    </button>
                 </div>
+            </div>
+
+            <hr>
+            <div class="position-relative">
+
+                <button class="carousel-arrow left btn" onclick="scrollPermissions(-1)">
+                    <i class="bi bi-caret-left-fill small-icon black"></i>
+                </button>
+                <div id="project_permission_content_div" class="permission-slider">
+                    <div class="text-center empty-permission">
+                        <h1><i class="bi bi-stars"></i></h1>
+                        <h1><i class="bi bi-shield-exclamation"></i> Aún no hay permisos aquí</h1>
+                    </div>
+                </div>
+                <button class="carousel-arrow right btn" onclick="scrollPermissions(1)">
+                    <i class="bi bi-caret-right-fill small-icon black"></i>
+                </button>
             </div>
             <hr>
             <div class="d-flex">
@@ -594,21 +607,33 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
 
             </div>
             <hr>
-            <div class="d-flex">
+            <!-- Título + Botón -->
+            <div class="d-flex justify-content-between align-items-center">
                 <div class="col">
                     <h3 class="title inter-title">Monitoreos</h3>
                 </div>
-                <div class="col text-end"><button id="add_monitoring" class="btn_add btn bg-info-subtle border-black"
-                        onclick=""><i class="bi bi-plus-circle"></i> Agregar Monitoreo</button>
+                <div class="col text-end">
+                    <button id="add_monitoring" class="btn_add btn bg-info-subtle border-black">
+                        <i class="bi bi-plus-circle"></i> Agregar Monitoreo
+                    </button>
                 </div>
             </div>
-            <hr>
-            <div id="project_monitoring_content_div" class="d-flex pt-4 pb-4">
-                <div class="col-12 text-center my-1 py-1">
-                    <h1><i class="bi bi-stars"></i></h1>
-                    <h1><i class="bi bi-camera2"></i> Aun no hay monitoreos aquí</h1>
-                </div>
 
+            <hr>
+
+            <div class="position-relative">
+                <button class="carousel-arrow left btn" onclick="scrollMonitorings(-1)">
+                    <i class="bi bi-caret-left-fill small-icon black"></i>
+                </button>
+                <div id="project_monitoring_content_div" class="monitoring-slider">
+                    <div class="text-center empty-monitoring">
+                        <h1><i class="bi bi-stars"></i></h1>
+                        <h1><i class="bi bi-camera2"></i> Aún no hay monitoreos aquí</h1>
+                    </div>
+                </div>
+                <button class="carousel-arrow right btn" onclick="scrollMonitorings(1)">
+                    <i class="bi bi-caret-right-fill small-icon black"></i>
+                </button>
             </div>
             <hr>
             <div class="d-flex">

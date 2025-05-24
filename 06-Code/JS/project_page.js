@@ -173,10 +173,10 @@ function load_full_project_permission_list() {
         let string_divs = "";
         project_permission_full_list.forEach((permission) => {
             let new_div_permission = `
-            <div class="project_permission_card col-3 m-auto bg-dark-subtle rounded">
+            <div class="project_permission_card col-3 m-auto bg-dark-subtle rounded mx-4">
                 <div class="px-2">
                     <div class="d-flex justify-content-between align-items-center py-2 position-relative">
-                        <div class="div_project_permission" onClick="open_project_permission(${permission.id})">
+                        <div class="div_project_permission" onClick="open_project_permission(${permission.id},${permission.project})">
                             <h5 class="mb-0 title_project fw-bold">${permission.name}</h5>
                         </div>
 
@@ -199,6 +199,12 @@ function load_full_project_permission_list() {
         });
         project_permission_content_div.innerHTML = string_divs;
     }
+}
+
+function scrollPermissions(direction) {
+    const slider = document.getElementById("project_permission_content_div");
+    const scrollAmount = 250;
+    slider.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
 }
 
 
@@ -356,7 +362,7 @@ function load_full_project_monitoring_list() {
         project_monitoring_full_list.forEach((monitoring) => {
             const folder = document.getElementById("update_project_folder_monitoring").value;
             let new_div_emp = `
-           <div class="project_monitoring_card col-3 m-auto rounded">
+           <div class="project_monitoring_card col-3 m-auto rounded mx-4">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="div_project_monitoring" onClick="open_monitoring_view(${monitoring.project}, ${monitoring.id})">
@@ -386,6 +392,12 @@ function load_full_project_monitoring_list() {
         });
         project_monitoring_content_div.innerHTML = string_divs;
     }
+}
+
+function scrollMonitorings(direction) {
+    const slider = document.getElementById("project_monitoring_content_div");
+    const scrollAmount = 250;
+    slider.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
 }
 
 function open_emp(plan_id){
