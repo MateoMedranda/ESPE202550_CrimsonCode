@@ -175,7 +175,7 @@ function load_full_project_permission_list() {
                             <ul class="dropdown-menu dropdown-menu-end shadow">
                                 <li><a class="dropdown-item" onClick="update_project_permission(${permission.id},${permission.project})">Editar</a></li>
                                 <li><a class="dropdown-item" onClick="delete_project_permission(${permission.id})">Eliminar</a></li>
-                                <li><a class="dropdown-item" onClick="open_project_permission(${permission.id})">Ver detalles</a></li>
+                                <li><a class="dropdown-item" onClick="open_project_permission(${permission.id},${permission.project})">Ver detalles</a></li>
                             </ul>
                         </div>
                     </div>
@@ -558,6 +558,51 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+function open_project_permission(permission_id, project_id) {
+    const folder = document.getElementById("update_project_folder")?.value || "default_project";
+
+    console.log(project_id);
+    console.log(folder);
+    console.log(permission_id);
+
+    const formData = new FormData();
+    formData.append("permission_id", permission_id);
+    formData.append("project_id", project_id);
+
+    fetch("../PHP/project_managment/get_project_permission_by_id.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error("[ERROR]:", data.error);
+            return;
+        }
+
+        document.getElementById("view_project_permission_name").value = data.PERMIT_NAME;
+        document.getElementById("view_project_permission_description").value = data.PERMIT_DESCRIPTION;
+
+        const pdf_url = `../PROJECTS/${folder}/PERMITS/${data.PERMIT_ARCHIVE}`;
+        document.getElementById("view_permission_file_preview").innerHTML = `<embed src="${pdf_url}" type="application/pdf" width="100%" height="100%">`;
+        document.getElementById("view_permission_embed_preview").innerHTML = `<embed src="${pdf_url}" type="application/pdf" width="100%" height="100%">`;
+
+        document.getElementById("modal_view_project_permission").showModal();
+    })
+    .catch(error => {
+        console.error("Error al cargar detalles del permiso:", error);
+    });
+}
+
+function close_view_permission_modal() {
+    const dialog = document.getElementById("modal_view_project_permission");
+    dialog.classList.add("closing");
+    dialog.addEventListener("animationend", () => {
+        dialog.classList.remove("closing");
+        dialog.close();
+    }, { once: true });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     get_reminders_list();
