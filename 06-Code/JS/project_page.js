@@ -604,9 +604,7 @@ function close_view_permission_modal() {
     }, { once: true });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    get_reminders_list();
-});
+
 //Get reminders list
 function get_reminders_list() {
     const id = document.getElementById("project_id_reminders").value;
@@ -665,4 +663,71 @@ function get_reminders_list() {
             alert("Error al recuperar recordatorios.");
         });
 
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    get_reminders_list();
+    
+    flatpickr("#reminder_day", {
+        dateFormat: "Y-m-d",
+        minDate: "today" 
+        });
+});
+
+document.getElementById("add_reminder").addEventListener("click", function(event) {
+    var modal = new bootstrap.Modal(document.getElementById("insert_reminder_modal"));
+
+    modal.show();
+});
+
+document.getElementById("insert_reminder").addEventListener("click", function(event) {
+        event.preventDefault(); 
+        
+        let reminder_name = document.getElementById("reminder_title").value;
+        let reminder_description = document.getElementById("reminder_content").value;
+        let reminder_date = document.getElementById("reminder_day").value;
+        let id = document.getElementById("project_id_reminders").value;
+
+        if (reminder_name === "" ) {
+            message("Por favor el campo del titulo no puede estar vacio");
+            return;
+        }
+        if (reminder_description === "" ) {
+            message("Por favor el campo descripcion no puede estar vacio");
+            return;
+        }
+        if (reminder_date === "" ) {
+            message("Por favor el campo fecha no puede estar vacio");
+            return;
+        }
+        
+        fetch("../PHP/reminder_data_register.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+        id_project: id,
+        reminder_name : reminder_name,
+        reminder_description : reminder_description,
+        reminder_date : reminder_date
+        })
+    })  
+        .then(response => response.json())
+            .then(data => {
+                message(data)
+                get_reminders_list();
+            })
+        .catch(error => {
+            console.error("Error al insertar el recordatorio:", error);
+            alert("Error al insertar el recordatorio.");
+        });
+    });
+//message function
+    function message(msg) {
+    var modal = bootstrap.Modal.getInstance(document.getElementById("information_container"));
+    document.getElementById("message").innerHTML = msg;
+    var modal = new bootstrap.Modal(document.getElementById("information_container"));
+    modal.show();
+    setTimeout(function() {
+        modal.hide();
+    }, 1000);
 }

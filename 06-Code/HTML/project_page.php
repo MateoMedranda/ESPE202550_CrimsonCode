@@ -27,16 +27,18 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="../CSS/project_page.css" rel="stylesheet">
-    <link href="../CSS/menu.css" rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Quicksand:wght@300..700&display=swap"
         rel="stylesheet">
+    <link href="../CSS/project_page.css" rel="stylesheet">
+    <link href="../CSS/menu.css" rel="stylesheet">
     <link rel="icon" href="../IMG/Logo.png" type="image/png">
 
     <title>SIMA | <?php echo htmlspecialchars($data["PROJECT_NAME"]); ?></title>
@@ -588,7 +590,7 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                 <div class="col">
                     <h3 class="title inter-title">Recordatorios</h3>
                 </div>
-                <div class="col text-end"><button id="addProject" class="btn_add btn bg-info-subtle border-black"
+                <div class="col text-end"><button id="add_reminder" class="btn_add btn bg-info-subtle border-black"
                         onclick=""><i class="bi bi-plus-circle"></i> Agregar Recordatorio</button>
                 </div>
                 
@@ -621,12 +623,69 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
 
 
         </fieldset>
+        </div>
+        <div class="modal fade modal_reminder_insert" id="insert_reminder_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+            <form id="update_emp_form" method="post" action="../PHP/project_managment/project_emp_update.php">
+                <input type="hidden" id="update_project_id_emp" name="update_project_id_emp" value="<?php echo htmlspecialchars($data["PROJECT_ID"]); ?>">
+                <input type="hidden" id="update_emp_id" name="update_emp_id" value=".">
+
+                <fieldset class="border p-2 bg-light border-0">
+                <h3 class="titulo">Agregar un recordatorio</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row px-4">
+                            <div class="col-6 px-2">
+                                <label class="mb-0">Titulo del recordatorio: *</label>
+                                <input id="reminder_title" name="reminder_title" type="text" class="form-control mb-3 shadow">
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-6 px-2">
+                                <label>Descripción: *</label>
+                                <textarea id="reminder_content" name="reminder_content" class="form-control mb-3 shadow" rows="4"></textarea>
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                        <div class="col-6 px-2">
+                        <label>Dia para el recordatorio: *</label>
+                        <input id="reminder_day" name="reminder_day" type="date"
+                            class="form-control mb-3 shadow">
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <hr>
+                <button type="submit" class="btn bg-warning-subtle" id="insert_reminder" >Generar</button>
+                <button type="button" class="btn bg-danger-subtle" id="btn_cancel_reminder_insert" data-bs-dismiss="modal">Cancelar</button>
+                </fieldset>
+            </form>
+            </div>
+        </div>
     </div>
+
+
+
+    <div class="modal fade" id="information_container" tabindex="-1" aria-labelledby="information_container" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg my-5">
+			<div class="modal-content my-5">
+				<div class="container my-5">
+					<div class="row">
+						<h1 class="text-center" id="message"></h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
     crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="../JS/project_page.js"></script>
 <script src="../JS/menu.js"></script>
 
