@@ -228,60 +228,55 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
     </dialog>
 
     <div class="modal fade" id="delete_permit_modal" tabindex="-1" aria-labelledby="delete_permit_modal_label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content border-0 shadow">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="delete_permit_modal_label">¿Eliminar Permiso?</h5>
-        <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        ¿Estás seguro de que deseas eliminar este permiso? Esta acción no se puede deshacer.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button id="confirm_delete_permit_btn" type="button" class="btn btn-danger">Eliminar</button>
-      </div>
-    </div>
-  </div>
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="delete_permit_modal_label">¿Eliminar Permiso?</h5>
+                    <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar este permiso? Esta acción no se puede deshacer.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="confirm_delete_permit_btn" type="button" class="btn btn-danger">Eliminar</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <dialog id="modal_view_project_permission" class="container m-auto bg-light rounded shadow">
-  <form method="dialog">
-    <fieldset class="border p-2 bg-light border-0">
-      <h3 class="title">Detalles del Permiso</h3>
-      <input type="hidden" id="view_project_folder" value="">
-      <hr>
-      <div class="row">
-        <div class="col-8">
-          <div class="row px-4">
-            <div class="col-3 px-2">
-              <label class="mb-0">Nombre del Permiso:</label>
-              <input id="view_project_permission_name" type="text" class="form-control mb-3 shadow" readonly>
-            </div>
-            <div class="col-9 px-2">
-              <label>Descripción:</label>
-              <input id="view_project_permission_description" type="text" class="form-control mb-3 shadow" readonly>
-            </div>
-          </div>
-          <div class="row px-4">
-            <div class="col-12">
-              <label>Archivo PDF adjunto:</label>
-              <div id="view_permission_file_preview" class="bg-black shadow"
-                style="width: 100%; height: 130px; overflow: hidden;"></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-4 text-center">
-          <label>Vista previa</label>
-          <div id="view_permission_embed_preview" class="bg-black shadow"
-            style="width: 100%; height: 130px; overflow: hidden;"></div>
-        </div>
-      </div>
-      <hr>
-      <button type="button" class="btn bg-secondary-subtle" onclick="close_view_permission_modal()">Cerrar</button>
-    </fieldset>
-  </form>
-</dialog>
+        <form method="dialog">
+            <fieldset class="border p-2 bg-light border-0">
+                <h3 class="title">Detalles del Permiso</h3>
+                <input type="hidden" id="view_project_folder" value="">
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row px-4">
+                            <div class="col-3 px-2">
+                                <label class="mb-0">Nombre del Permiso:</label>
+                                <input id="view_project_permission_name" type="text" class="form-control mb-3 shadow" readonly>
+                            </div>
+                            <div class="col-9 px-2">
+                                <label>Descripción:</label>
+                                <input id="view_project_permission_description" type="text" class="form-control mb-3 shadow" readonly>
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <div class="col-12">
+                                <label>Archivo PDF adjunto:</label>
+                                <div id="view_permission_file_preview" class="bg-black shadow"
+                                    style="width: 100%; height: 930px; overflow: hidden;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <button type="button" class="btn bg-secondary-subtle" onclick="close_view_permission_modal()">Cerrar</button>
+            </fieldset>
+        </form>
+    </dialog>
 
     <!-- Dialog to add EMP -->
     <dialog id="modal_add_project_EMP" class="container m-auto bg-light rounded shadow">
@@ -344,22 +339,22 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
         </form>
     </dialog>
     <div class="modal fade" id="delete_emp_modal" tabindex="-1" aria-labelledby="delete_emp_modal_label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content border-0 shadow">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="delete_emp_modal_label">¿Eliminar Plan de Manejo Ambiental?</h5>
-        <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        ¿Estás seguro de que deseas eliminar este EMP? Esta acción no se puede deshacer.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button id="confirm_delete_emp_btn" type="button" class="btn btn-danger">Eliminar</button>
-      </div>
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="delete_emp_modal_label">¿Eliminar Plan de Manejo Ambiental?</h5>
+                    <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar este EMP? Esta acción no se puede deshacer.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="confirm_delete_emp_btn" type="button" class="btn btn-danger">Eliminar</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 
     <!-- Dialog to add new monitoring -->
@@ -479,23 +474,53 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
             </fieldset>
         </form>
     </dialog>
+
+     <dialog id="monitoring_view_modal" style="width: 70%; max-height: 90vh; overflow-y: auto; border: 2px solid #ccc; border-radius: 10px; padding: 20px;">
+        <h2><span id="view_monitoring_title">-</span></h2>
+        <hr>
+        <input type="hidden" id="view_project_folder_monitoring" value="<?php echo htmlspecialchars($project_folder_name); ?>" />
+
+        <div style="display: flex; justify-content: space-between; gap: 10px;">
+            <div class="col-8" style="flex: 1;">
+                <p><strong>Descripción:</strong> </p>
+                <p><span id="view_monitoring_description"></span></p>
+                <p><strong>Observación:</strong></p>
+                <p><span id="view_monitoring_observation"></span></p>
+            </div>
+            <div class="col-4">
+                <img id="view_monitoring_image" src="" alt="Monitoring image" width="100%" style="object-fit: cover; border: 1px solid #ccc;" />
+            </div>
+        </div>
+
+        <hr>
+
+        <div style="margin-top: 20px;">
+            <label><strong>PDF Viewer</strong></label>
+            <iframe id="view_monitoring_pdf_viewer" width="100%" height="600px" style="border: 1px solid #000; border-radius: 4px;"></iframe>
+        </div>
+
+        <div style="text-align: right; margin-top: 15px;">
+            <button id="btn_close_monitoring" style="background-color: #e88; padding: 5px 15px; border: none; border-radius: 5px;">Close</button>
+        </div>
+    </dialog>
+
     <div class="modal fade" id="delete_monitoring_modal" tabindex="-1" aria-labelledby="delete_monitoring_modal_label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content border-0 shadow">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="delete_monitoring_modal_label">¿Eliminar Monitoreo?</h5>
-        <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        ¿Estás seguro de que deseas eliminar este monitoreo? Esta acción no se puede deshacer.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button id="confirm_delete_monitoring_btn" type="button" class="btn btn-danger">Eliminar</button>
-      </div>
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="delete_monitoring_modal_label">¿Eliminar Monitoreo?</h5>
+                    <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar este monitoreo? Esta acción no se puede deshacer.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="confirm_delete_monitoring_btn" type="button" class="btn btn-danger">Eliminar</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 
     <div id="container" class="container mt-4">
@@ -593,169 +618,169 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                 <div class="col text-end"><button id="add_reminder" class="btn_add btn bg-info-subtle border-black"
                         onclick=""><i class="bi bi-plus-circle"></i> Agregar Recordatorio</button>
                 </div>
-                
+
             </div>
-            
+
             <hr>
-        <div class="col-12 text-center my-1 py-1">
-        <input type="hidden" id="project_id_reminders" name="project_id_reminders" value="<?php echo htmlspecialchars($data["PROJECT_ID"]); ?>">
+            <div class="col-12 text-center my-1 py-1">
+                <input type="hidden" id="project_id_reminders" name="project_id_reminders" value="<?php echo htmlspecialchars($data["PROJECT_ID"]); ?>">
 
-            <div id="carousel_slide" class="carousel slide position-relative" data-bs-ride="carousel">
-                
-                <div id="padded_slider" class="px-5"> 
-                    <div class="carousel-inner" id="reminders_carousel">
-                        <h1><i class="bi bi-stars"></i></h1>
-                        <h1><i class="bi bi-exclamation-circle"></i> Aun no hay recordatorios pendientes</h1>
+                <div id="carousel_slide" class="carousel slide position-relative" data-bs-ride="carousel">
+
+                    <div id="padded_slider" class="px-5">
+                        <div class="carousel-inner" id="reminders_carousel">
+                            <h1><i class="bi bi-stars"></i></h1>
+                            <h1><i class="bi bi-exclamation-circle"></i> Aun no hay recordatorios pendientes</h1>
+                        </div>
                     </div>
+
+                    <button class="carousel-control-prev custom-carousel-btn crl-btn" type="button" data-bs-target="#carousel_slide" data-bs-slide="prev">
+                        <span class="bi bi-caret-left-fill small-icon black" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+
+                    <button class="carousel-control-next custom-carousel-btn crl-btn" type="button" data-bs-target="#carousel_slide" data-bs-slide="next">
+                        <span class="bi bi-caret-right-fill small-icon black" aria-hidden="true"></span>
+                        <span class="visually-hidden">Siguiente</span>
+                    </button>
                 </div>
-
-                <button class="carousel-control-prev custom-carousel-btn crl-btn" type="button" data-bs-target="#carousel_slide" data-bs-slide="prev">
-                    <span class="bi bi-caret-left-fill small-icon black" aria-hidden="true"></span>
-                    <span class="visually-hidden">Anterior</span>
-                </button>
-
-                <button class="carousel-control-next custom-carousel-btn crl-btn" type="button" data-bs-target="#carousel_slide" data-bs-slide="next">
-                    <span class="bi bi-caret-right-fill small-icon black" aria-hidden="true"></span>
-                    <span class="visually-hidden">Siguiente</span>
-                </button>
             </div>
-        </div>
 
 
         </fieldset>
-        </div>
-        <div class="modal fade" id="insert_reminder_modal" tabindex="-1" aria-hidden="true">
+    </div>
+    <div class="modal fade" id="insert_reminder_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <fieldset class="border p-2 bg-light border-0">
-                <h3 class="titulo">Agregar un recordatorio</h3>
-                <hr>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="row px-4">
-                            <div class="col-6 px-2">
-                                <label class="mb-0">Titulo del recordatorio: *</label>
-                                <input id="reminder_title" name="reminder_title" type="text" class="form-control mb-3 shadow">
+                    <h3 class="titulo">Agregar un recordatorio</h3>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row px-4">
+                                <div class="col-6 px-2">
+                                    <label class="mb-0">Titulo del recordatorio: *</label>
+                                    <input id="reminder_title" name="reminder_title" type="text" class="form-control mb-3 shadow">
+                                </div>
+                            </div>
+                            <div class="row px-4">
+                                <div class="col-6 px-2">
+                                    <label>Descripción: *</label>
+                                    <textarea id="reminder_content" name="reminder_content" class="form-control mb-3 shadow" rows="4"></textarea>
+                                </div>
+                            </div>
+                            <div class="row px-4">
+                                <div class="col-6 px-2">
+                                    <label>Dia para el recordatorio: *</label>
+                                    <input id="reminder_day" name="reminder_day" type="date"
+                                        class="form-control mb-3 shadow">
+                                </div>
                             </div>
                         </div>
-                        <div class="row px-4">
-                            <div class="col-6 px-2">
-                                <label>Descripción: *</label>
-                                <textarea id="reminder_content" name="reminder_content" class="form-control mb-3 shadow" rows="4"></textarea>
-                            </div>
-                        </div>
-                        <div class="row px-4">
-                        <div class="col-6 px-2">
-                        <label>Dia para el recordatorio: *</label>
-                        <input id="reminder_day" name="reminder_day" type="date"
-                            class="form-control mb-3 shadow">
-                        </div>
                     </div>
-                    </div>
-                </div>
-                <hr>
-                <button type="submit" class="btn bg-warning-subtle" id="insert_reminder" >Generar</button>
-                <button type="button" class="btn bg-danger-subtle" id="btn_cancel_reminder_insert" data-bs-dismiss="modal">Cancelar</button>
+                    <hr>
+                    <button type="submit" class="btn bg-warning-subtle" id="insert_reminder">Generar</button>
+                    <button type="button" class="btn bg-danger-subtle" id="btn_cancel_reminder_insert" data-bs-dismiss="modal">Cancelar</button>
                 </fieldset>
-            </form>
+                </form>
             </div>
         </div>
     </div>
 
 
-        <div class="modal fade" id="update_reminder_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="update_reminder_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-            <form id="update_emp_form" method="post" action="../PHP/project_managment/project_emp_update.php">
-                <input type="hidden" id="update_reminder_id" name="update_reminder_id" >
-                <input type="hidden" id="update_reminder_project_id" name="update_project_id">
-                
+                <form id="update_emp_form" method="post" action="../PHP/project_managment/project_emp_update.php">
+                    <input type="hidden" id="update_reminder_id" name="update_reminder_id">
+                    <input type="hidden" id="update_reminder_project_id" name="update_project_id">
 
-                <fieldset class="border p-2 bg-light border-0">
-                <h3 class="titulo">Modificar un recordatorio</h3>
-                <hr>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="row px-4">
-                            <div class="col-6 px-2">
-                                <label class="mb-0">Titulo del recordatorio: *</label>
-                                <input id="update_reminder_title" name="update_reminder_title" type="text" class="form-control mb-3 shadow">
+
+                    <fieldset class="border p-2 bg-light border-0">
+                        <h3 class="titulo">Modificar un recordatorio</h3>
+                        <hr>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row px-4">
+                                    <div class="col-6 px-2">
+                                        <label class="mb-0">Titulo del recordatorio: *</label>
+                                        <input id="update_reminder_title" name="update_reminder_title" type="text" class="form-control mb-3 shadow">
+                                    </div>
+                                </div>
+                                <div class="row px-4">
+                                    <div class="col-6 px-2">
+                                        <label>Descripción: *</label>
+                                        <textarea id="update_reminder_content" name="update_reminder_content" class="form-control mb-3 shadow" rows="4"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row px-4">
+                                    <div class="col-6 px-2">
+                                        <label>Dia para el recordatorio: *</label>
+                                        <input id="update_reminder_day" name="update_reminder_day" type="date"
+                                            class="form-control mb-3 shadow">
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row px-4">
-                            <div class="col-6 px-2">
-                                <label>Descripción: *</label>
-                                <textarea id="update_reminder_content" name="update_reminder_content" class="form-control mb-3 shadow" rows="4"></textarea>
-                            </div>
-                        </div>
-                        <div class="row px-4">
-                        <div class="col-6 px-2">
-                        <label>Dia para el recordatorio: *</label>
-                        <input id="update_reminder_day" name="update_reminder_day" type="date"
-                            class="form-control mb-3 shadow">
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <hr>
-                <button type="submit" class="btn bg-warning-subtle" id="update_reminder" >Modificar</button>
-                <button type="button" class="btn bg-danger-subtle" id="btn_cancel_reminder_update" data-bs-dismiss="modal">Cancelar</button>
-                </fieldset>
-            </form>
+                        <hr>
+                        <button type="submit" class="btn bg-warning-subtle" id="update_reminder">Modificar</button>
+                        <button type="button" class="btn bg-danger-subtle" id="btn_cancel_reminder_update" data-bs-dismiss="modal">Cancelar</button>
+                    </fieldset>
+                </form>
             </div>
         </div>
     </div>
 
 
-            <div class="modal fade" id="see_reminder_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="see_reminder_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <fieldset class="border p-2 bg-light border-0">
-                <h3 class="titulo">Información del recordatorio</h3>
-                <hr>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="row px-4">
-                            <div class="col-6 px-2">
-                                <label class="mb-0">Titulo del recordatorio: *</label>
-                                <input id="see_reminder_title" name="see_reminder_title" type="text" class="form-control mb-3 shadow">
+                    <h3 class="titulo">Información del recordatorio</h3>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row px-4">
+                                <div class="col-6 px-2">
+                                    <label class="mb-0">Titulo del recordatorio: *</label>
+                                    <input id="see_reminder_title" name="see_reminder_title" type="text" class="form-control mb-3 shadow">
+                                </div>
+                            </div>
+                            <div class="row px-4">
+                                <div class="col-6 px-2">
+                                    <label>Descripción: *</label>
+                                    <textarea id="see_reminder_content" name="see_reminder_content" class="form-control mb-3 shadow" rows="4"></textarea>
+                                </div>
+                            </div>
+                            <div class="row px-4">
+                                <div class="col-6 px-2">
+                                    <label>Dia para el recordatorio: *</label>
+                                    <input id="see_reminder_day" name="see_reminder_day" type="date"
+                                        class="form-control mb-3 shadow">
+                                </div>
                             </div>
                         </div>
-                        <div class="row px-4">
-                            <div class="col-6 px-2">
-                                <label>Descripción: *</label>
-                                <textarea id="see_reminder_content" name="see_reminder_content" class="form-control mb-3 shadow" rows="4"></textarea>
-                            </div>
-                        </div>
-                        <div class="row px-4">
-                        <div class="col-6 px-2">
-                        <label>Dia para el recordatorio: *</label>
-                        <input id="see_reminder_day" name="see_reminder_day" type="date"
-                            class="form-control mb-3 shadow">
-                        </div>
                     </div>
-                    </div>
-                </div>
-                <hr>
-                <button type="button" class="btn bg-danger-subtle" id="btn_cancel_reminder_see" data-bs-dismiss="modal">Cerrar</button>
+                    <hr>
+                    <button type="button" class="btn bg-danger-subtle" id="btn_cancel_reminder_see" data-bs-dismiss="modal">Cerrar</button>
                 </fieldset>
-            </form>
+                </form>
             </div>
         </div>
     </div>
 
 
     <div class="modal fade" id="information_container" tabindex="-1" aria-labelledby="information_container" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-lg my-5">
-			<div class="modal-content my-5">
-				<div class="container my-5">
-					<div class="row">
-						<h1 class="text-center" id="message"></h1>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+        <div class="modal-dialog modal-dialog-centered modal-lg my-5">
+            <div class="modal-content my-5">
+                <div class="container my-5">
+                    <div class="row">
+                        <h1 class="text-center" id="message"></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </body>

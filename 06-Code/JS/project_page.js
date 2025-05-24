@@ -22,6 +22,9 @@ const modal = document.getElementById('image_modal');
 const modalImage = document.getElementById('modal_image');
 const closeBtn = document.getElementById('modal_close_btn');
 
+const btn_close_monitoring = document.getElementById("btn_close_monitoring");
+const monitoring_view_modal = document.getElementById("monitoring_view_modal");
+
 get_full_project_permission_list();
 get_full_project_emp_list();
 get_full_project_monitoring_list();
@@ -38,6 +41,16 @@ btn_cancel_add_project_permission.addEventListener('click', () => {
         modal_add_project_permission.close();
     }, { once: true });
 });
+
+btn_close_monitoring.addEventListener('click', () => {
+    monitoring_view_modal.classList.add('closing');
+
+    monitoring_view_modal.addEventListener('animationend', () => {
+        monitoring_view_modal.classList.remove('closing');
+        monitoring_view_modal.close();
+    }, { once: true });
+});
+
 
 btn_add_project_emp.addEventListener('click', () => {
     modal_add_project_emp.showModal();
@@ -281,7 +294,44 @@ function load_full_project_emp_list() {
 }
 
 
+function open_monitoring_view(project_id,monitoring_id) {
+    monitoring_view_modal.showModal();
+    load_project_monitoring_view(project_id, monitoring_id);
+}
 
+function load_project_monitoring_view(project_id, monitoring_id) {
+    const form_data = new FormData();
+    form_data.append("project_id", project_id);
+    form_data.append("monitoring_id", monitoring_id);
+
+    fetch("../PHP/project_managment/get_project_monitoring_by_id.php", {
+        method: "POST",
+        body: form_data
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error("[ERROR]:", data.error);
+                return;
+            }
+
+            const folder = document.getElementById("view_project_folder_monitoring").value;
+
+            document.getElementById("view_monitoring_title").textContent = data.MONITORING_NAME || "-";
+            document.getElementById("view_monitoring_description").textContent = data.MONITORING_DESCRIPTION || "-";
+            document.getElementById("view_monitoring_observation").textContent = data.MONITORING_OBSERVATIONS || "-";
+
+            const image_url = `../PROJECTS/${folder}/MONITORINGS/${data.MONITORING_FOLDER}/imagen_monitoreo/${data.MONITORING_IMAGE}`;
+            document.getElementById("view_monitoring_image").src = image_url;
+
+            const pdf_url = `../PROJECTS/${folder}/MONITORINGS/${data.MONITORING_FOLDER}/archivo_monitoreo/${data.MONITORING_EVIDENCE}`;
+            document.getElementById("view_monitoring_pdf_viewer").src = pdf_url;
+
+        })
+        .catch(error => {
+            console.error("Error loading monitoring view:", error);
+        });
+}
 
 function get_full_project_monitoring_list() {
     fetch("../PHP/project_managment/project_monitoring_full_list.php")
@@ -309,7 +359,7 @@ function load_full_project_monitoring_list() {
            <div class="project_monitoring_card col-3 m-auto rounded">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="div_project_monitoring" onClick="open_monitoring(${monitoring.id})">
+                            <div class="div_project_monitoring" onClick="open_monitoring_view(${monitoring.project}, ${monitoring.id})">
                                 <h5 class="mb-0 title_project fw-bold">${monitoring.name}</h5>
                             </div>
                             <div class="dropdown">
@@ -320,7 +370,7 @@ function load_full_project_monitoring_list() {
                                 <ul class="dropdown-menu dropdown-menu-end shadow">
                                     <li><a class="dropdown-item" onClick="update_project_monitoring(${monitoring.project}, ${monitoring.id})">Editar</a></li>
                                     <li><a class="dropdown-item" onClick="delete_monitoring(${monitoring.id})">Eliminar</a></li>
-                                    <li><a class="dropdown-item" onClick="open_monitoring(${monitoring.id})">Ver detalles</a></li>
+                                    <li><a class="dropdown-item" onClick="open_monitoring_view(${monitoring.project}, ${monitoring.id})">Ver detalles</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -329,7 +379,7 @@ function load_full_project_monitoring_list() {
                         </div>
                         
                     </div>
-                    <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_monitoring(${monitoring.id})"><img src="../PROJECTS/${folder}/MONITORINGS/${monitoring.folder}/imagen_monitoreo/${monitoring.image}" width="100%"></div>
+                    <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_monitoring_view(${monitoring.project}, ${monitoring.id})"><img src="../PROJECTS/${folder}/MONITORINGS/${monitoring.folder}/imagen_monitoreo/${monitoring.image}" width="100%"></div>
                 </div>`;
 
             string_divs += new_div_emp;
@@ -586,7 +636,6 @@ function open_project_permission(permission_id, project_id) {
 
         const pdf_url = `../PROJECTS/${folder}/PERMITS/${data.PERMIT_ARCHIVE}`;
         document.getElementById("view_permission_file_preview").innerHTML = `<embed src="${pdf_url}" type="application/pdf" width="100%" height="100%">`;
-        document.getElementById("view_permission_embed_preview").innerHTML = `<embed src="${pdf_url}" type="application/pdf" width="100%" height="100%">`;
 
         document.getElementById("modal_view_project_permission").showModal();
     })
