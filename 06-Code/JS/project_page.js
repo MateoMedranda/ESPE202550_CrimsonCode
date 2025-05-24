@@ -525,6 +525,7 @@ function delete_monitoring(monitoring_id) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+
     const confirm_delete_monitoring_btn = document.getElementById("confirm_delete_monitoring_btn");
 
     if (confirm_delete_monitoring_btn) {
@@ -558,3 +559,65 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    get_reminders_list();
+});
+//Get reminders list
+function get_reminders_list() {
+    const id = document.getElementById("project_id_reminders").value;
+    fetch("../PHP/get_reminders.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_project: id })
+    })  
+                 .then(response => response.json())
+    .then(data => {
+
+        let container =document.getElementById("reminders_carousel");
+        container.innerHTML = ''; 
+ 
+                   data.forEach((group, index) => {
+                    const isActive = index === 0 ? ' active' : '';
+                    const groupContainer = document.createElement("div");
+                    groupContainer.className = `carousel-item${isActive}`;
+
+                        const row = document.createElement("div");
+                        row.className = "row justify-content-center align-items-center text-white p-4";
+                        row.style.minHeight = "210px";
+
+                    group.forEach(reminder => {
+                        const col = document.createElement("div");
+                        col.className = "col-md-4";
+                        col.innerHTML = `
+                            <div class="card bg-light text-black slide_card">
+                                <div class="card-body">
+                                    <h4 class="card-title">${reminder.REMINDER_TITLE}</h4>
+                                    <h5 class="card-title">Para el: ${reminder.REMINDER_TOREMEMBERDATE}</h5>
+                                    <input type="hidden" id="reminder_id" value="${reminder.REMINDER_ID}">
+                                    <input type="hidden" id="reminder_project_id" value="${reminder.REMINDER_PROJECT_ID}">
+                                    <input type="hidden" id="reminder_status" value="${reminder.REMINDER_STATUS}">
+                                    <input type="hidden" id="reminder_content" value="${reminder.REMINDER_CONTENT}">
+                                    <input type="hidden" id="reminder_torememberdate" value="${reminder.REMINDER_TOREMEMBERDATE}">
+                                    <input type="hidden" id="reminder_registerdate" value="${reminder.REMINDER_REGISTERDATE}">
+                                    <input type="hidden" id="reminder_tittle" value="${reminder.REMINDER_TITLE}">
+
+                                    <button class="btn btn-info btn_size" onclick="">Ver</button>
+                                    <button class="btn btn-primary btn_size" onclick="">Modificar</button>
+                                    
+                                </div>
+                            </div>
+                        `;
+
+                        row.appendChild(col);
+                    });
+
+                    groupContainer.appendChild(row);
+                    container.appendChild(groupContainer);
+                });
+            })
+        .catch(error => {
+            console.error("Error al recuperar recordatorios:", error);
+            alert("Error al recuperar recordatorios.");
+        });
+
+}

@@ -55,3 +55,45 @@ body{
   opacity: 0;
   transition: opacity 0.5s ease;
 }
+
+.slide_card{
+    min-height: 200px;
+    overflow: hidden;
+    min-width: 33%;
+}
+
+
+.carousel-inner{
+    text-align: center;
+    position: relative;
+}
+
+.small-icon {
+    font-size: 1.5rem; 
+    color: black !important;
+    opacity: 0.7;
+}
+
+.small-icon:hover {
+    opacity: 1;
+}
+
+.btn_size{
+    width: 100px;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 30px !important; 
+}
+
+.carousel-control-prev .small-icon,
+.carousel-control-next .small-icon {
+    margin: 0 auto;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    background: transparent !important;
+    border: none;
+}

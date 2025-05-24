@@ -240,10 +240,12 @@ CREATE TABLE `project_customer` (
 
 CREATE TABLE `reminder` (
   `REMINDER_ID` int(11) NOT NULL,
-  `USERS_ID` int(11) NOT NULL,
-  `REMINDER_REGISTERDATE` date DEFAULT NULL,
+  `PROJECT_ID` int(11) NOT NULL,
+  `REMINDER_REGISTERDATE` date NOT NULL,
   `REMINDER_TOREMEMBERDATE` date NOT NULL,
-  `REMINDER_CONTENT` varchar(128) NOT NULL
+  `REMINDER_TITLE` varchar(32) NOT NULL,
+  `REMINDER_CONTENT` varchar(128) NOT NULL,
+  `REMINDER_STATE` varchar(32) DEFAULT 'ACTIVE'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -364,7 +366,7 @@ ALTER TABLE `project_customer`
 --
 ALTER TABLE `reminder`
   ADD PRIMARY KEY (`REMINDER_ID`),
-  ADD KEY `FK_CREATES` (`USERS_ID`);
+  ADD KEY `FK_CREATES` (`PROJECT_ID`);
 
 --
 -- Indices de la tabla `supervisitonperiod`
@@ -526,7 +528,7 @@ ALTER TABLE `project_customer`
 -- Filtros para la tabla `reminder`
 --
 ALTER TABLE `reminder`
-  ADD CONSTRAINT `FK_CREATES` FOREIGN KEY (`USERS_ID`) REFERENCES `users` (`USERS_ID`);
+  ADD CONSTRAINT `FK_CREATES` FOREIGN KEY (`PROJECT_ID`) REFERENCES `project` (`PROJECT_ID`);
 
 --
 -- Filtros para la tabla `supervisitonperiod`
@@ -570,3 +572,4 @@ INSERT INTO `users`( `PROFILES_ID`, `USERS_NAME`, `USERS_SURNAME`, `USERS_PERSON
   'admin',      -- este será el username que escribes en el login
   '1234'        -- y esta la contraseña
 );
+

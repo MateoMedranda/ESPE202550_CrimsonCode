@@ -552,12 +552,34 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                 <div class="col text-end"><button id="addProject" class="btn_add btn bg-info-subtle border-black"
                         onclick=""><i class="bi bi-plus-circle"></i> Agregar Recordatorio</button>
                 </div>
+                
             </div>
+            
             <hr>
+        <div class="col-12 text-center my-1 py-1">
+        <input type="hidden" id="project_id_reminders" name="project_id_reminders" value="<?php echo htmlspecialchars($data["PROJECT_ID"]); ?>">
 
-            <br>
-            <br>
-            <br>
+            <div id="carousel_slide" class="carousel slide position-relative" data-bs-ride="carousel">
+                
+                <div id="padded_slider" class="px-5"> 
+                    <div class="carousel-inner" id="reminders_carousel">
+                        <h1><i class="bi bi-stars"></i></h1>
+                        <h1><i class="bi bi-exclamation-circle"></i> Aun no hay recordatorios pendientes</h1>
+                    </div>
+                </div>
+
+                <button class="carousel-control-prev custom-carousel-btn crl-btn" type="button" data-bs-target="#carousel_slide" data-bs-slide="prev">
+                    <span class="bi bi-caret-left-fill small-icon black" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+
+                <button class="carousel-control-next custom-carousel-btn crl-btn" type="button" data-bs-target="#carousel_slide" data-bs-slide="next">
+                    <span class="bi bi-caret-right-fill small-icon black" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
+        </div>
+
 
         </fieldset>
     </div>
