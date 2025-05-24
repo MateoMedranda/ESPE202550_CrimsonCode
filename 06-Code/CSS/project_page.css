@@ -75,12 +75,35 @@
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   background: linear-gradient(to bottom, #ffffff, hsl(189, 100%, 92%));
+  min-width: 220px;
+  height: 150px;
 }
+
+
+.emp-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 15px;
+  padding: 10px 0;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.empty-emp {
+    min-width: 100%;
+}
+
+
 
 .project_plan_card:hover {
   transform: translateY(-8px);
   box-shadow: 0 8px 20px rgb(85, 85, 85);
   cursor: pointer;
+}
+
+.emp-slider::-webkit-scrollbar {
+    display: none;
 }
 
 .project_monitoring_card {

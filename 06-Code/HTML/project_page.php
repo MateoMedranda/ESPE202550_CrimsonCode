@@ -588,26 +588,32 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                 </button>
             </div>
             <hr>
-            <div class="d-flex">
+            <div class="d-flex justify-content-between align-items-center">
                 <div class="col">
                     <h3 class="title inter-title">Plan De Manejo Ambiental</h3>
                 </div>
-                <div class="col text-end"><button id="add_emp" class="btn_add btn bg-info-subtle border-black"
-                        onclick=""><i class="bi bi-plus-circle"></i> Agregar Plan</button>
+                <div class="col text-end">
+                    <button id="add_emp" class="btn_add btn bg-info-subtle border-black">
+                        <i class="bi bi-plus-circle"></i> Agregar Plan
+                    </button>
                 </div>
-
             </div>
             <hr>
-            <div id="project_emp_content_div" class="d-flex pt-4 pb-4">
-
-                <div class="col-12 text-center my-1 py-1">
-                    <h1><i class="bi bi-stars"></i></h1>
-                    <h1><i class="bi bi-bar-chart-steps"></i> Aun no hay planes de manejo aquí</h1>
+            <div class="position-relative">
+                <button class="carousel-arrow left btn" onclick="scrollEmp(-1)">
+                    <i class="bi bi-caret-left-fill small-icon black"></i>
+                </button>
+                <div id="project_emp_content_div" class="emp-slider">
+                    <div class="text-center empty-emp">
+                        <h1><i class="bi bi-stars"></i></h1>
+                        <h1><i class="bi bi-bar-chart-steps"></i> Aún no hay planes de manejo aquí</h1>
+                    </div>
                 </div>
-
+                <button class="carousel-arrow right btn" onclick="scrollEmp(1)">
+                    <i class="bi bi-caret-right-fill small-icon black"></i>
+                </button>
             </div>
             <hr>
-            <!-- Título + Botón -->
             <div class="d-flex justify-content-between align-items-center">
                 <div class="col">
                     <h3 class="title inter-title">Monitoreos</h3>

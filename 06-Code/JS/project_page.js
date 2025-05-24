@@ -268,7 +268,7 @@ function load_full_project_emp_list() {
         let string_divs = "";
         project_emp_full_list.forEach((emp) => {
             let new_div_emp = `
-            <div class="project_plan_card col-3 m-auto rounded">
+            <div class="project_plan_card col-3 m-auto rounded mx-4">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
                             <div onClick="open_emp(${emp.id})" class="div_project_emp">
@@ -297,6 +297,12 @@ function load_full_project_emp_list() {
         });
         project_emp_content_div.innerHTML = string_divs;
     }
+}
+
+function scrollEmp(direction) {
+    const slider = document.getElementById("project_emp_content_div");
+    const scrollAmount = 250;
+    slider.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
 }
 
 
