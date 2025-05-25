@@ -99,21 +99,21 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                         </a>
                     </li>
 
-                    <!-- Opción de reportes visible según permisos -->
+                    
                     <li class="nav-item opcion fw-bold mx-2">
                         <a id="reportes" class="nav-link" href="#" onclick="">
                             <i class="bi bi-info-square"></i> REPORTES
                         </a>
                     </li>
 
-                    <!-- Opción de categorias visible según permisos -->
+                    
                     <li class="nav-item opcion fw-bold mx-2">
                         <a id="categorias" class="nav-link" href="#" onclick="">
                             <i class="bi bi-calendar"></i> CALENDARIO
                         </a>
                     </li>
 
-                    <!-- Dropdown de usuarios visible solo para admin -->
+                  
                     <li class="nav-item dropdown opcion fw-bold menuNav mx-2">
                         <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -549,7 +549,7 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
                         alt="Imagen Proyecto">
                 </div>
 
-                <!-- Modal para imagen grande -->
+                
                 <div id="image_modal" style="display:none;">
                     <div class="modal_overlay"></div>
                     <div class="modal_content">
