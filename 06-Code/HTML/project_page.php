@@ -560,86 +560,55 @@ $project_folder_name = preg_replace('/[^A-Za-z0-9\-]/', '_', $data["PROJECT_NAME
 
             </div>
             <hr>
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex">
                 <div class="col">
                     <h3 class="title inter-title">Permisos</h3>
                 </div>
-                <div class="col text-end">
-                    <button id="add_permission" class="btn_add btn bg-info-subtle border-black">
-                        <i class="bi bi-plus-circle"></i> Agregar Permiso
-                    </button>
-                </div>
-            </div>
-
-            <hr>
-            <div class="position-relative">
-
-                <button class="carousel-arrow left btn" onclick="scrollPermissions(-1)">
-                    <i class="bi bi-caret-left-fill small-icon black"></i>
-                </button>
-                <div id="project_permission_content_div" class="permission-slider">
-                    <div class="text-center empty-permission">
-                        <h1><i class="bi bi-stars"></i></h1>
-                        <h1><i class="bi bi-shield-exclamation"></i> Aún no hay permisos aquí</h1>
-                    </div>
-                </div>
-                <button class="carousel-arrow right btn" onclick="scrollPermissions(1)">
-                    <i class="bi bi-caret-right-fill small-icon black"></i>
-                </button>
+                <div class="col text-end"><button id="add_permission" class="btn_add btn bg-info-subtle border-black"
+                        onclick=""><i class="bi bi-plus-circle"></i> Agregar Permiso</button></div>
             </div>
             <hr>
-            <div class="d-flex justify-content-between align-items-center">
+            <div id="project_permission_content_div" class="row pt-4 pb-4">
+                <div class="col-12 text-center my-1 py-1">
+                    <h1><i class="bi bi-stars"></i></h1>
+                    <h1><i class="bi bi-shield-exclamation"></i> Aun no hay permisos aquí</h1>
+                </div>
+            </div>
+            <hr>
+            <div class="d-flex">
                 <div class="col">
                     <h3 class="title inter-title">Plan De Manejo Ambiental</h3>
                 </div>
-                <div class="col text-end">
-                    <button id="add_emp" class="btn_add btn bg-info-subtle border-black">
-                        <i class="bi bi-plus-circle"></i> Agregar Plan
-                    </button>
+                <div class="col text-end"><button id="add_emp" class="btn_add btn bg-info-subtle border-black"
+                        onclick=""><i class="bi bi-plus-circle"></i> Agregar Plan</button>
                 </div>
+
             </div>
             <hr>
-            <div class="position-relative">
-                <button class="carousel-arrow left btn" onclick="scrollEmp(-1)">
-                    <i class="bi bi-caret-left-fill small-icon black"></i>
-                </button>
-                <div id="project_emp_content_div" class="emp-slider">
-                    <div class="text-center empty-emp">
-                        <h1><i class="bi bi-stars"></i></h1>
-                        <h1><i class="bi bi-bar-chart-steps"></i> Aún no hay planes de manejo aquí</h1>
-                    </div>
+            <div id="project_emp_content_div" class="row  pt-4 pb-4">
+
+                <div class="col-12 text-center my-1 py-1">
+                    <h1><i class="bi bi-stars"></i></h1>
+                    <h1><i class="bi bi-bar-chart-steps"></i> Aun no hay planes de manejo aquí</h1>
                 </div>
-                <button class="carousel-arrow right btn" onclick="scrollEmp(1)">
-                    <i class="bi bi-caret-right-fill small-icon black"></i>
-                </button>
+
             </div>
             <hr>
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex">
                 <div class="col">
                     <h3 class="title inter-title">Monitoreos</h3>
                 </div>
-                <div class="col text-end">
-                    <button id="add_monitoring" class="btn_add btn bg-info-subtle border-black">
-                        <i class="bi bi-plus-circle"></i> Agregar Monitoreo
-                    </button>
+                <div class="col text-end"><button id="add_monitoring" class="btn_add btn bg-info-subtle border-black"
+                        onclick=""><i class="bi bi-plus-circle"></i> Agregar Monitoreo</button>
                 </div>
             </div>
-
             <hr>
-
-            <div class="position-relative">
-                <button class="carousel-arrow left btn" onclick="scrollMonitorings(-1)">
-                    <i class="bi bi-caret-left-fill small-icon black"></i>
-                </button>
-                <div id="project_monitoring_content_div" class="monitoring-slider">
-                    <div class="text-center empty-monitoring">
-                        <h1><i class="bi bi-stars"></i></h1>
-                        <h1><i class="bi bi-camera2"></i> Aún no hay monitoreos aquí</h1>
-                    </div>
+            <div id="project_monitoring_content_div" class="row  pt-4 pb-4">
+                <div class="col-12 text-center my-1 py-1">
+                    <h1><i class="bi bi-stars"></i></h1>
+                    <h1><i class="bi bi-camera2"></i> Aun no hay monitoreos aquí</h1>
                 </div>
-                <button class="carousel-arrow right btn" onclick="scrollMonitorings(1)">
-                    <i class="bi bi-caret-right-fill small-icon black"></i>
-                </button>
+
             </div>
             <hr>
             <div class="d-flex">
