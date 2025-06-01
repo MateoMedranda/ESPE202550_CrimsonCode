@@ -173,14 +173,14 @@ function load_full_project_permission_list() {
         let string_divs = "";
         project_permission_full_list.forEach((permission) => {
             let new_div_permission = `
-            <div class="project_permission_card col-3 m-auto bg-dark-subtle rounded mx-4">
+            <div class="project_permission_card col-3 bg-dark-subtle rounded m-4">
                 <div class="px-2">
                     <div class="d-flex justify-content-between align-items-center py-2 position-relative">
                         <div class="div_project_permission" onClick="open_project_permission(${permission.id},${permission.project})">
                             <h5 class="mb-0 title_project fw-bold">${permission.name}</h5>
                         </div>
 
-                        <div class="dropdown">
+                        <div class="dropdown" style="z-index: 9999;">
                             <div class="project_options rounded" data-bs-toggle="dropdown" aria-expanded="false"
                                 role="button">
                                 <h2 class="mb-0"><i class="bi bi-list"></i></h2>
@@ -268,7 +268,7 @@ function load_full_project_emp_list() {
         let string_divs = "";
         project_emp_full_list.forEach((emp) => {
             let new_div_emp = `
-            <div class="project_plan_card col-3 m-auto rounded mx-4">
+            <div class="project_plan_card col-3 rounded m-4">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
                             <div onClick="open_emp(${emp.id})" class="div_project_emp">
@@ -368,7 +368,7 @@ function load_full_project_monitoring_list() {
         project_monitoring_full_list.forEach((monitoring) => {
             const folder = document.getElementById("update_project_folder_monitoring").value;
             let new_div_emp = `
-           <div class="project_monitoring_card col-3 m-auto rounded mx-4">
+           <div class="project_monitoring_card col-3 rounded m-4 px-0">
                     <div class="px-2 pt-2">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="div_project_monitoring" onClick="open_monitoring_view(${monitoring.project}, ${monitoring.id})">
@@ -391,7 +391,7 @@ function load_full_project_monitoring_list() {
                         </div>
                         
                     </div>
-                    <div class="div_project_image w-100 d-sm-none d-md-block" onclick="open_monitoring_view(${monitoring.project}, ${monitoring.id})"><img src="../PROJECTS/${folder}/MONITORINGS/${monitoring.folder}/imagen_monitoreo/${monitoring.image}" width="100%"></div>
+                    <div class="div_project_image w-100 d-sm-none d-md-block p-0" onclick="open_monitoring_view(${monitoring.project}, ${monitoring.id})"><img src="../PROJECTS/${folder}/MONITORINGS/${monitoring.folder}/imagen_monitoreo/${monitoring.image}" width="100%"></div>
                 </div>`;
 
             string_divs += new_div_emp;

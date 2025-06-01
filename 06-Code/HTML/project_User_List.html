@@ -3,7 +3,9 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Lista de Usuarios</title>
+  <link rel="icon" href="../IMG/Logo.png" type="image/png">
+
+    <title>SIMA | Usuarios</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="../CSS/menu.css" rel="stylesheet">
   <link href="../CSS/project_user_managment.css" rel="stylesheet">
@@ -13,47 +15,86 @@
 
 <body>
 
-  <!-- Encabezado -->
   <header class="navbar bg-whitenavbar-expand-lg header_sistem">
-    <div class="container">
-      <div class="d-flex justify-content-between align-items-center w-100">
-        <div class="d-flex align-items-center">
-          <img class="mx-3 d-none d-md-flex" src="../IMG/Logo.png" alt="Logo" width="80">
-          <h1 class="fs-3 my-2">SIMA</h1>
-        </div>
-        <div class="dropdown ms-auto d-flex align-items-center text-center">
-          <i class="bi bi-bell"></i>
-          <a class="d-flex align-items-center text-black text-decoration-none nav-link dropdown-toggle"
-            id="PerfilDropdown" role="button" data-bs-toggle="dropdown">
-            <span class="me-2 d-none d-md-flex">Nombre Apellido</span>
-            <i class="bi bi-person-circle"></i>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end conf_user">
-            <li><a class="dropdown-item" href="#"><i class="bi bi-person-fill"></i> Mi Perfil</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" href="#">Cerrar Sesión</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </header>
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="d-flex align-items-center">
+                    <img class="mx-3 d-none d-md-flex" src="../IMG/Logo.png" alt="Logo" width="80">
+                    <h1 class="fs-3 my-2">SIMA</h1>
+                </div>
 
-  <!-- Menú -->
-  <nav class="navbar navbar-expand-lg navbar-light sticky-top shadow menu">
-    <div class="container-fluid">
-      <div class="collapse navbar-collapse" id="menuNav">
-        <ul class="navbar-nav mx-auto">
-          <li class="nav-item opcion fw-bold mx-2"><a class="nav-link" href="#"><i class="bi bi-speedometer2"></i> INICIO</a></li>
-          <li class="nav-item opcion fw-bold mx-2"><a class="nav-link" href="#"><i class="bi bi-folder"></i> PROYECTOS</a></li>
-          <li class="nav-item opcion fw-bold mx-2"><a class="nav-link" href="#"><i class="bi bi-calendar"></i> CALENDARIO</a></li>
-          <li class="nav-item opcion fw-bold mx-2"><a class="nav-link active" href="#"><i class="bi bi-people-fill"></i> USUARIOS</a></li>
-          <li class="nav-item opcion fw-bold mx-2"><a class="nav-link" href="#"><i class="bi bi-person-check-fill"></i> ROLES</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+                <div class="dropdown ms-auto d-flex align-items-center text-center">
+                    <i class="bi bi-bell"></i>
+                    <i>&nbsp;&nbsp;&nbsp;</i>
+                    <a class="d-flex align-items-center text-center text-black text-decoration-none nav-link dropdown-toggle"
+                        id="PerfilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span id="username" class="me-2 d-none d-md-flex">Nombre Apellido</span>
+                        <i class="bi bi-person-circle"></i>
+                    </a>
 
-  <!-- Lista de Usuarios -->
+                    <ul class="dropdown-menu dropdown-menu-end conf_user" aria-labelledby="PerfilDropdown">
+                        <li><a class="dropdown-item" href=""><i class="bi bi-person-fill"></i>Mi Perfil</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="project_login.html">Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+
+    </header>
+
+    <div class="navbar navbar-expand-lg navbar-light sticky-top menu">
+        <div class="container-fluid">
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item opcion fw-bold mx-2">
+                        <a id="home" class="nav-link" href="project_home.html" onclick="">
+                            <i class="bi bi-speedometer2"></i> INICIO
+                        </a>
+                    </li>
+
+                    <li class="nav-item opcion fw-bold mx-2">
+                        <a id="projects" class="nav-link active" href="project_managment.html" onclick="">
+                            <i class="bi bi-folder"></i> PROYECTOS
+                        </a>
+                    </li>
+
+                    <li class="nav-item opcion fw-bold mx-2">
+                        <a id="reportes" class="nav-link" href="#" onclick="">
+                            <i class="bi bi-info-square"></i> REPORTES
+                        </a>
+                    </li>
+
+                    <li class="nav-item opcion fw-bold mx-2">
+                        <a id="categorias" class="nav-link" href="#" onclick="">
+                            <i class="bi bi-calendar"></i> CALENDARIO
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown opcion fw-bold menuNav mx-2">
+                        <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-people-fill"></i> USUARIOS
+                        </a>
+                        <ul class="dropdown-menu menu subNav-menu" aria-labelledby="usersDropdown">
+                            <li><a class="dropdown-item" href="project_Profiles_Management.html" onclick="">
+                                    <i class="bi bi-person-lines-fill"></i> Lista de usuarios</a></li>
+
+                            <li><a class="dropdown-item" href="project_User_Management.html" onclick="">
+                                    <i class="bi bi-person-check-fill"></i> Gestionar Roles</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
   <div class="container mt-4 bg-white p-4 rounded shadow">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h3>Lista de Usuarios</h3>
@@ -62,7 +103,6 @@
       </button>
     </div>
 
-    <!-- Filtros -->
     <div class="row mb-3">
       <div class="col-md-3">
         <label>Filtrar por Rol:</label>
@@ -91,7 +131,6 @@
       </div>
     </div>
 
-    <!-- Tabla -->
     <table class="table table-bordered table-hover">
       <thead class="table-light">
         <tr>
@@ -133,7 +172,6 @@
     </table>
   </div>
 
-  <!-- Modal Agregar Usuario -->
   <div class="modal fade" id="modalAgregarUsuario" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -182,7 +220,6 @@
     </div>
   </div>
 
-  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
