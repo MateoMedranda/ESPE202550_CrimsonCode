@@ -1,284 +1,247 @@
 //get profile table
-$(document).ready(function() {cargarTabla(); });
+get_profiles_table();
 
-function cargarTabla() {
-        document.getElementById("profile_name").value = "";
-        $.ajax({
-        url: '../PHP/get_profiles.php',
-        method: 'POST',
-        data: {},
-        success: function(response) {
-          document.getElementById("table_body").innerHTML = response;
-        },
-            error: function(xhr, status, error) {
-            console.error("AJAX request failed: " + error);
-            alert("Error al obtener los datos.");
-            }   
-        });
+
+function get_profiles_table() {
+    document.getElementById("profile_name").value = "";
+    fetch('http://localhost:3001/api/profiles/get', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({})
+    })
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById("table_body").innerHTML = html;
+    })
+    .catch(error => {
+        console.error("Error al obtener los datos:", error);
+        alert("Error al obtener los datos.");
+    });
 }
+
 //get permits from database to show in modal
-var add_button = document.getElementById("add_profile");
-if (add_button&& !add_button.dataset.addedevent) {
-    add_button.addEventListener("click", function () {
-        var modal = new bootstrap.Modal(document.getElementById("register_profile"));
+const add_button = document.getElementById("add_profile");
+if (add_button && !add_button.dataset.addedevent) {
+    add_button.addEventListener("click", () => {
+        const modal = new bootstrap.Modal(document.getElementById("register_profile"));
         modal.show();
         document.getElementById("profile_name").value = "";
-        $.ajax({
-        url: '../PHP/get_permits_update.php',
-        method: 'POST',
-        data: {just_permits: true},
-        success: function(response) {
-            try {
-                let permits = JSON.parse(response);
-                let container = $("#permits_container");
-                    container.html('');
 
-                    Object.entries(permits).forEach(([groupName, groupPermits]) => {
-                        let groupContainer = $('<div class="permit-group"></div>');
-    
-                        groupContainer.append(`<h5 class="mt-3">${groupName}</h5>`);
-                        
-                        let gridContainer = $('<div class="permits-grid"></div>');
+        fetch('http://localhost:3001/api/profiles/permits', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ just_permits: true })
+            })
+        .then(res => res.json())
+        .then(permits => {
+            const container = document.getElementById("permits_container");
+            container.innerHTML = '';
 
-                        Object.entries(groupPermits).forEach(([permitKey, permitObj]) => {
-                            let permitLabel = permitObj.permit_name;
-                            let permitValue = permitObj.value;
+            Object.entries(permits).forEach(([groupName, groupPermits]) => {
+                const groupContainer = document.createElement("div");
+                groupContainer.classList.add("permit-group");
 
-                            let checkboxHtml = `
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="permits[]"
-                                        value="${permitKey}" id="permit_${permitKey}" ${permitValue ? "checked" : ""}>
-                                    <label class="form-check-label" for="permit_${permitKey}">${permitLabel}</label>
-                                </div>`;
-                                gridContainer.append(checkboxHtml);
-                        });
-                        groupContainer.append(gridContainer);
-                        container.append(groupContainer); 
-                    });
+                groupContainer.innerHTML += `<h5 class="mt-3">${groupName}</h5>`;
+                const gridContainer = document.createElement("div");
+                gridContainer.classList.add("permits-grid");
 
-            } catch (e) {
-                console.error("Error al procesar los permisos: " + e.message);
-                alert("Error al procesar los permisos.");
-            }
-        },
-            error: function(xhr, status, error) {
-            console.error("AJAX request failed: " + error);
-            alert("Error al obtener los datos.");
-            }   
+                Object.entries(groupPermits).forEach(([permitKey, permitObj]) => {
+                    const checkboxHtml = `
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="permits[]"
+                                value="${permitKey}" id="permit_${permitKey}" ${permitObj.value ? "checked" : ""}>
+                            <label class="form-check-label" for="permit_${permitKey}">${permitObj.permit_name}</label>
+                        </div>`;
+                    gridContainer.innerHTML += checkboxHtml;
+                });
+
+                groupContainer.appendChild(gridContainer);
+                container.appendChild(groupContainer);
+            });
+        })
+        .catch(error => {
+            console.error("Error al procesar los permisos:", error);
+            alert("Error al procesar los permisos.");
         });
-
     });
 
     add_button.dataset.addedevent = "true";
 }
+
 //watch permits of a profile
-$(document).on("click", ".permits_view", function () {
-
-        var modal = new bootstrap.Modal(document.getElementById("permits_view"));
+document.addEventListener("click", function (event) {
+    if (event.target.classList.contains("permits_view")) {
+        const modal = new bootstrap.Modal(document.getElementById("permits_view"));
         modal.show();
-        document.getElementById("profile_name_view").value = $(this).data("name");
-        document.getElementById("profile_id_view").value = $(this).data("id");
-        $.ajax({
-        url: '../PHP/get_permits_update.php',
+
+        const id = event.target.dataset.id;
+        const name = event.target.dataset.name;
+
+        document.getElementById("profile_name_view").value = name;
+        document.getElementById("profile_id_view").value = id;
+
+        fetch('http://localhost:3001/api/profiles/permits', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id })
+            })
+        .then(res => res.json())
+        .then(permits => {
+            const container = document.getElementById("permits_container_view");
+            container.innerHTML = '';
+
+            Object.entries(permits).forEach(([groupName, groupPermits]) => {
+                const groupContainer = document.createElement("div");
+                groupContainer.classList.add("permit-group");
+
+                groupContainer.innerHTML += `<h5 class="mt-3">${groupName}</h5>`;
+                const gridContainer = document.createElement("div");
+                gridContainer.classList.add("permits-grid");
+
+                Object.entries(groupPermits).forEach(([permitKey, permitObj]) => {
+                    const checkboxHtml = `
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" disabled name="permits[]"
+                                value="${permitKey}" id="permit_${permitKey}" ${permitObj.value ? "checked" : ""}>
+                            <label class="form-check-label" for="permit_${permitKey}">${permitObj.permit_name}</label>
+                        </div>`;
+                    gridContainer.innerHTML += checkboxHtml;
+                });
+
+                groupContainer.appendChild(gridContainer);
+                container.appendChild(groupContainer);
+            });
+        })
+        .catch(err => console.error("Error al obtener permisos:", err));
+    }
+});
+
+//Save profile data from Form
+document.getElementById("insert").addEventListener("click", (event) => {
+    event.preventDefault();
+
+    const profile_name = document.getElementById("profile_name").value.trim();
+    const regex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
+
+    if (!profile_name) return message("Ingrese un nombre para el perfil");
+    if (!regex.test(profile_name)) return message("El Nombre del perfil solo debe contener letras y espacios");
+
+    const selected_permits = [...document.querySelectorAll("input[name='permits[]']:checked")].map(cb => cb.value);
+    if (selected_permits.length === 0) return message("Debe seleccionar al menos un permiso");
+
+    const formData = new URLSearchParams();
+    formData.append("profile_name", profile_name);
+    selected_permits.forEach(p => formData.append("selected_permits", p));
+
+    fetch('http://localhost:3001/api/profiles/create', {
         method: 'POST',
-        data: {id: $(this).data("id")},
-        success: function(response) {
-             try {
-                    let permits = JSON.parse(response);
-                    let container = $("#permits_container_view");
-                    originalValues = { profile: name, permits: {} };
-                    container.html('');
-
-                    Object.entries(permits).forEach(([groupName, groupPermits]) => {
-                        let groupContainer = $('<div class="permit-group"></div>');
-    
-                        groupContainer.append(`<h5 class="mt-3">${groupName}</h5>`);
-                        
-                        let gridContainer = $('<div class="permits-grid"></div>');
-
-                        Object.entries(groupPermits).forEach(([permitKey, permitObj]) => {
-                            let permitLabel = permitObj.permit_name;
-                            let permitValue = permitObj.value;
-
-                            let checkboxHtml = `
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="permits[]"
-                                        value="${permitKey}" id="permit_${permitKey}" ${permitValue ? "checked" : ""} disabled>
-                                    <label class="form-check-label" for="permit_${permitKey}">${permitLabel}</label>
-                                </div>`;
-                            gridContainer.append(checkboxHtml);
-                        });
-                        groupContainer.append(gridContainer);
-                        container.append(groupContainer); 
-                    });
-                    $("#permits_view").modal("show");
-                } catch (error) {
-                    console.error("Error al procesar los permisos:", error);
-                }
-        },
-            error: function(xhr, status, error) {
-            console.error("AJAX request failed: " + error);
-            alert("Error al obtener los datos.");
-            }   
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: formData.toString()
+    })
+    .then(response => response.text())
+    .then(response => {
+        if (response.trim() === "existing_user") {
+            message("Un perfil con ese nombre ya existe");
+        } else {
+            message("Perfil generado correctamente!!!");
+            get_profiles_table();
+        }
+        })
+        .catch(() => {
+            message("Error en el envio de datos!!!");
         });
 });
-//Save profile data from Form
 
-if (add_button && !add_button.dataset.eventoAgregado) {
-    document.getElementById("insert").addEventListener("click", function(event) {
-        event.preventDefault(); 
-        
-        let profile_name = document.getElementById("profile_name").value;
-        let letters_only = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
-
-        if (profile_name === "") {
-            message("Ingrese un nombre para el perfil");
-            return;
-        }
-
-        if (!letters_only.test(profile_name)) {
-            message("El Nombre del perfil solo debe contener letras y espacios");
-            return;
-        }
-
-        let selected_permits= [];
-        document.querySelectorAll("input[name='permits[]']:checked").forEach((checkbox) => {
-            selected_permits.push(checkbox.value);
-        });
-        
-        if (selected_permits.length === 0) {
-            message("Debe seleccionar al menos un permiso para el perfil");
-            return;
-        }
-        $.ajax({
-            url: '../PHP/profile_data_register.php',
-            method: 'POST',
-            data: {
-                profile_name: profile_name, 
-                "selected_permits[]": selected_permits, 
-            },
-            success: function(response) {
-                if (response.trim() == "existing_user") {
-                    message("Un perfil con ese nombre ya existe");
-                } else {
-                    message("Perfil generado correctamente!!!");
-                    cargarTabla();
-                }
-
-            },
-            error: function() {
-                message("Error en el envio de datos!!!");
-            }
-        });
-    });
-
-    add_button.dataset.eventoAgregado = "true";
-}
-
+var originalValues = {};
 //Update profile data
-var originalValues;
-    $(document).on("click", ".edit-profile", function () {
-        let profile = $(this).data("id");
-        let name = $(this).data("name");
-        document.getElementById("profile_name_edit").value = name;
-        document.getElementById("profile_id_edit").value = profile;
-        $.ajax({
-            url: "../PHP/get_permits_update.php",
-            method: "POST",
-            data: { id: profile },
-            success: function (response) {
-                try {
-                    let permits = JSON.parse(response);
-                    let container = $("#permits_container_edit");
-                    originalValues = { profile: name, permits: {} };
-                    container.html('');
-
-                     Object.entries(permits).forEach(([groupName, groupPermits]) => {
-                        let groupContainer = $('<div class="permit-group"></div>');
+document.addEventListener("click", function (event) {
     
-                        groupContainer.append(`<h5 class="mt-3">${groupName}</h5>`);
-                        
-                        let gridContainer = $('<div class="permits-grid"></div>');
+    if (event.target.classList.contains("edit-profile")) {
+        const id = event.target.dataset.id;
+        const name = event.target.dataset.name;
 
-                        Object.entries(groupPermits).forEach(([permitKey, permitObj]) => {
-                            let permitLabel = permitObj.permit_name;
-                            let permitValue = permitObj.value;
-                            let checkboxHtml = `
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="permits_edit[]"
-                                        value="${permitKey}" id="permit_${permitKey}" ${permitValue ? "checked" : ""}>
-                                    <label class="form-check-label" for="permit_${permitKey}">${permitLabel}</label>
-                                </div>`;
-                        originalValues.permits[permitKey] = permitValue;
-                                
-                                gridContainer.append(checkboxHtml);
-                        });
-                            groupContainer.append(gridContainer);
-                            container.append(groupContainer); 
-                    });
-                    $("#edit_modal").modal("show");
+        document.getElementById("profile_name_edit").value = name;
+        document.getElementById("profile_id_edit").value = id;
 
-                } catch (error) {
-                    console.error("Error al procesar los permisos:", error);
-                }
+        fetch('http://localhost:3001/api/profiles/permits', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id })
+            })
+        .then(res => res.json())
+        .then(permits => {
+            const container = document.getElementById("permits_container_edit");
+            container.innerHTML = '';
+            originalValues = { profile: name, permits: {} };
 
-            },
-            error: function () {
-                alert("Error al obtener permisos desde el servidor");
-            },
-        });
-        
+            Object.entries(permits).forEach(([groupName, groupPermits]) => {
+                const groupContainer = document.createElement("div");
+                groupContainer.classList.add("permit-group");
 
+                groupContainer.innerHTML += `<h5 class="mt-3">${groupName}</h5>`;
+                const gridContainer = document.createElement("div");
+                gridContainer.classList.add("permits-grid");
+
+                Object.entries(groupPermits).forEach(([permitKey, permitObj]) => {
+                    originalValues.permits[permitKey] = permitObj.value;
+
+                    const checkboxHtml = `
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="permits_edit[]"
+                                value="${permitKey}" id="permit_${permitKey}" ${permitObj.value ? "checked" : ""}>
+                            <label class="form-check-label" for="permit_${permitKey}">${permitObj.permit_name}</label>
+                        </div>`;
+                    gridContainer.innerHTML += checkboxHtml;
+                });
+
+                groupContainer.appendChild(gridContainer);
+                container.appendChild(groupContainer);
+            });
+
+            const modal = new bootstrap.Modal(document.getElementById("edit_modal"));
+            modal.show();
+        })
+        .catch(error => console.error("Error al procesar permisos:", error));
+    }
+});
+
+document.getElementById("update_profile").addEventListener("click", () => {
+    const newName = document.getElementById("profile_name_edit").value.trim();
+    const profile = document.getElementById("profile_id_edit").value;
+
+    const selected_permits = {};
+    document.querySelectorAll("input[name='permits_edit[]']").forEach(cb => {
+        selected_permits[cb.value] = cb.checked;
     });
 
-    $("#update_profile").click(function () {
-        let new_profile_name = document.getElementById("profile_name_edit").value.trim();
-        let profile = document.getElementById("profile_id_edit").value;
-        let selected_permits = {};
-        $("input[name='permits_edit[]']").each(function () {
-        selected_permits[$(this).val()] = $(this).is(":checked") ? true : false;
-        });
+    const atLeastOne = Object.values(selected_permits).some(v => v);
+    if (!atLeastOne) return message("Debe seleccionar al menos un permiso.");
+    if (!newName) return message("El nombre del perfil no puede estar vacío.");
 
-        const firstKey = Object.keys(selected_permits)[0];
-        if (firstKey !== undefined) {
-            delete selected_permits[firstKey];
-        }
-        const permisosSeleccionados = Object.values(selected_permits).some(value => value === true);
-        if (!permisosSeleccionados) {
-            message("Debe seleccionar al menos un permiso.");
-            return;
-        }
+    const changed = newName !== originalValues.profile ||
+        Object.keys(originalValues.permits).some(k => originalValues.permits[k] !== selected_permits[k]);
 
-        if (new_profile_name === "") {
-            message("El nombre del perfil no puede estar vacío.");
-            return;
-        }
+    if (!changed) return message("No ha realizado cambios");
 
-        if (new_profile_name === originalValues.profile &&
-            !permisosCambiaron(originalValues.permits, selected_permits)) {
-            message("No ha realizado cambios");
-            return;
-        }
+    fetch('http://localhost:3001/api/profiles/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            profile_id: profile,
+            name: newName,
+            permits: selected_permits
+        })
+    })
+    .then(res => res.text())
+    .then(msg => {
+        message("Perfil Acutalizado Correctamente");
+        get_profiles_table();
+    })
+    .catch(() => message("Error en el envío de datos."));
+});
 
-       
-        $.ajax({
-            url: "../PHP/update_profile.php",
-            method: "POST",
-            data: {
-                profile_id: profile,
-                name: new_profile_name,
-                permits: JSON.stringify(selected_permits),
-            },
-            success: function (response) {
-                message(response)
-                cargarTabla();
-            },
-            error: function () {
-                message("Error en el envío de datos.");
-            },
-        });
-
-    });
 
 
 function permisosCambiaron(original, actual) {
@@ -297,31 +260,30 @@ function permisosCambiaron(original, actual) {
     }
 }
 //logic elimination
+document.addEventListener("click", function (event) {
+    if (event.target.classList.contains("toggle-state")) {
+        const profile = event.target.dataset.id;
+        const currentState = event.target.dataset.state;
+        const newState = currentState === "ACTIVE" ? "INACTIVE" : "ACTIVE";
 
-  $(document).on("click", ".toggle-state", function() {
-      let profile = $(this).data("id");
-      let state = $(this).data("state");
-      let new_state = state === "ACTIVE" ? "INACTIVE" : "ACTIVE";
-      $.ajax({
-          url: '../PHP/profile_logic_delete.php',
-          method: 'POST',
-          data: {
-              profile: profile,
-              state: new_state
-          },
-          success: function(response) {
-            if(response=="success"){
-            message("El cambio de estado ha sido realizado!!!");
-            cargarTabla();
-            }else{
-            message("El perfil esta asignado a un usuario, es imposible desactivar");
+        fetch('http://localhost:3001/api/profiles/toggle', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ profile, state: newState })
+        })
+        .then(res => res.text())
+        .then(response => {
+            if (response === "success") {
+                message("El cambio de estado ha sido realizado!!!");
+                get_profiles_table();
+            } else {
+                message("El perfil está asignado a un usuario, no se puede desactivar.");
             }
-        },
-        error: function() {
-            message("Error en el envio de datos!!!");
-        }
-      });
-  });
+        }).catch(() => message("Error en el envío de datos!!!"));
+        
+    }
+});
+
 
 
 //message function
