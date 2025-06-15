@@ -1,12 +1,13 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "CrimsonCode",
   "license": "ISC",
   "description": "",
   "dependencies": {
@@ -15,5 +16,8 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mysql2": "^3.14.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
