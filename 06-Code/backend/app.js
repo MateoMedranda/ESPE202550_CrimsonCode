@@ -9,10 +9,10 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, '../06-Code')));
+app.use(express.static(path.join(__dirname, '..')));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../06-Code/index.php')); 
+  res.sendFile(path.join(__dirname, '../index.php'));
 });
 
 app.use('/api/profiles', profileRoutes);
