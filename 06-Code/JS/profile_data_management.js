@@ -147,6 +147,9 @@ document.getElementById("insert").addEventListener("click", (event) => {
         } else {
             message("Perfil generado correctamente!!!");
             get_profiles_table();
+            const registerProfileModalEl = document.getElementById('register_profile');
+            const registerProfileModal = bootstrap.Modal.getInstance(registerProfileModalEl) || new bootstrap.Modal(registerProfileModalEl);
+            registerProfileModal.hide();
         }
         })
         .catch(() => {
@@ -236,7 +239,7 @@ document.getElementById("update_profile").addEventListener("click", () => {
     })
     .then(res => res.text())
     .then(msg => {
-        message("Perfil Acutalizado Correctamente");
+        message("Perfil Actualizado Correctamente");
         get_profiles_table();
     })
     .catch(() => message("Error en el envío de datos."));

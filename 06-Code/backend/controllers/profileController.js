@@ -1,23 +1,20 @@
-const db = require('../models/db');
+const pool = require('../models/db');
 
 exports.getProfiles = async (req, res) => {
   const query = `
-    SELECT DISTINCT PROFILES_NAME, PROFILES_STATE, PROFILES_ID
+    SELECT DISTINCT "profiles_name", "profiles_state", "profiles_id"
     FROM profiles
   `;
 
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error('Error al obtener perfiles:', err);
-      return res.status(500).send('Error');
-    }
+  try {
+    const { rows } = await pool.query(query);
 
     let tabla = '';
 
-    results.forEach(register => {
-      const name = sanitize(register.PROFILES_NAME);
-      const state = sanitize(register.PROFILES_STATE);
-      const id = sanitize(register.PROFILES_ID);
+    rows.forEach(register => {
+      const name = sanitize(register.profiles_name);
+      const state = sanitize(register.profiles_state);
+      const id = sanitize(register.profiles_id);
       const estadoTexto = state === 'ACTIVE' ? 'Activo' : 'Inactivo';
       const btnEstado = state === 'ACTIVE' ? 'btn-danger' : 'btn-success';
       const iconoEstado = state === 'ACTIVE' ? 'bi-check-circle' : 'bi-x-circle';
@@ -29,18 +26,15 @@ exports.getProfiles = async (req, res) => {
           <td>${estadoTexto}</td>
           <td>
             <button class="btn btn-sm btn-primary me-1 edit-profile"
-              data-id="${id}"
-              data-name="${name}">
+              data-id="${id}" data-name="${name}">
               <i class="bi bi-pencil"></i> Editar
             </button>
             <button class="btn btn-sm btn-info me-1 permits_view"
-              data-id="${id}"
-              data-name="${name}">
+              data-id="${id}" data-name="${name}">
               <i class="bi bi-eye-fill"></i> Ver Permisos
             </button>
             <button class="btn btn-sm ${btnEstado} toggle-state"
-              data-id="${id}"
-              data-state="${state}">
+              data-id="${id}" data-state="${state}">
               <i class="bi ${iconoEstado}"></i> ${accion}
             </button>
           </td>
@@ -49,7 +43,10 @@ exports.getProfiles = async (req, res) => {
     });
 
     res.send(tabla);
-  });
+  } catch (err) {
+    console.error('Error al obtener perfiles:', err);
+    res.status(500).send('Error');
+  }
 };
 
 function sanitize(str) {
@@ -62,92 +59,92 @@ function sanitize(str) {
 }
 
 const permitsGroups = {
-  "PROFILES_READPROJECTS": "Proyectos",
-  "PROFILES_CREATEPROJECTS": "Proyectos",
-  "PROFILES_UPDATEPROJECTS": "Proyectos",
-  "PROFILES_DELETEPROJECTS": "Proyectos",
-  "PROFILES_READAMBIENTALPLANS": "Planes Ambientales",
-  "PROFILES_CREATEAMBIENTALPLANS": "Planes Ambientales",
-  "PROFILES_UPDATEAMBIENTALPLANS": "Planes Ambientales",
-  "PROFILES_DELETEAMBIENTALPLANS": "Planes Ambientales",
-  "PROFILES_READMONITORINGS": "Monitoreos",
-  "PROFILES_WRITEMONITORINGS": "Monitoreos",
-  "PROFILES_UPDATEMONITORINGS": "Monitoreos",
-  "PROFILES_DELETEMONITORINGS": "Monitoreos",
-  "PROFILES_READACTIVITIES": "Actividad",
-  "PROFILES_CREATEACTIVITIES": "Actividad",
-  "PROFILES_UPDATEACTIVITIES": "Actividad",
-  "PROFILES_DELETEACTIVITIES": "Actividad",
-  "PROFILES_CREATEEVENTS": "Evento",
-  "PROFILES_READEVENTS": "Evento",
-  "PROFILES_UPDATEEVENTS": "Evento",
-  "PROFILES_DELETEEVENTS": "Evento",
-  "PROFILES_CREATEUSERS": "Usuarios",
-  "PROFILES_READUSERS": "Usuarios",
-  "PROFILES_UPDATEUSERS": "Usuarios",
-  "PROFILES_DELETEUSERS": "Usuarios",
-  "PROFILES_CREATEPROFILES": "Perfiles",
-  "PROFILES_UPDATEPROFILES": "Perfiles",
-  "PROFILES_READPROFILES": "Perfiles",
-  "PROFILES_DELETEPROFILES": "Perfiles",
-  "PROFILES_READACTIONS": "Acciones",
-  "PROFILES_READSUPERVISIONPERIOD": "Periodo de Supervision",
-  "PROFILES_CREATESUPERVISIONPERIOD": "Periodo de Supervision",
-  "PROFILES_DELETESUPERVISIONPERIOD": "Periodo de Supervision",
-  "PROFILES_UPDATESUPERVISIONPERIOD": "Periodo de Supervision",
-  "PROFILES_READPERMIT": "Permisos",
-  "PROFILES_CREATEPERMIT": "Permisos",
-  "PROFILES_UPDATEPERMIT": "Permisos",
-  "PROFILES_DELETEPERMIT": "Permisos",
-  "PROFILES_READREMINDER": "Recordatorio",
-  "PROFILES_CREATEREMINDER": "Recordatorio",
-  "PROFILES_DELETEREMINDER": "Recordatorio",
-  "PROFILES_UPDATEREMINDER": "Recordatorio"
+  "profiles_readprojects": "Proyectos",
+  "profiles_createprojects": "Proyectos",
+  "profiles_updateprojects": "Proyectos",
+  "profiles_deleteprojects": "Proyectos",
+  "profiles_readambientalplans": "Planes Ambientales",
+  "profiles_createambientalplans": "Planes Ambientales",
+  "profiles_updateambientalplans": "Planes Ambientales",
+  "profiles_deleteambientalplans": "Planes Ambientales",
+  "profiles_readmonitorings": "Monitoreos",
+  "profiles_writemonitorings": "Monitoreos",
+  "profiles_updatemonitorings": "Monitoreos",
+  "profiles_deletemonitorings": "Monitoreos",
+  "profiles_readactivities": "Actividad",
+  "profiles_createactivities": "Actividad",
+  "profiles_updateactivities": "Actividad",
+  "profiles_deleteactivities": "Actividad",
+  "profiles_createevents": "Evento",
+  "profiles_readevents": "Evento",
+  "profiles_updateevents": "Evento",
+  "profiles_deleteevents": "Evento",
+  "profiles_createusers": "Usuarios",
+  "profiles_readusers": "Usuarios",
+  "profiles_updateusers": "Usuarios",
+  "profiles_deleteusers": "Usuarios",
+  "profiles_createprofiles": "Perfiles",
+  "profiles_updateprofiles": "Perfiles",
+  "profiles_readprofiles": "Perfiles",
+  "profiles_deleteprofiles": "Perfiles",
+  "profiles_readactions": "Acciones",
+  "profiles_readsupervisionperiod": "Periodo de Supervision",
+  "profiles_createsupervisionperiod": "Periodo de Supervision",
+  "profiles_deletesupervisionperiod": "Periodo de Supervision",
+  "profiles_updatesupervisionperiod": "Periodo de Supervision",
+  "profiles_readpermit": "Permisos",
+  "profiles_createpermit": "Permisos",
+  "profiles_updatepermit": "Permisos",
+  "profiles_deletepermit": "Permisos",
+  "profiles_readreminder": "Recordatorio",
+  "profiles_createreminder": "Recordatorio",
+  "profiles_deletereminder": "Recordatorio",
+  "profiles_updatereminder": "Recordatorio"
 };
 
 
 const user_friendly_permit_names = {
-    "PROFILES_READPROJECTS" :"Ver Proyectos",
-    "PROFILES_CREATEPROJECTS" :"Generar Proyectos",
-    "PROFILES_UPDATEPROJECTS" :"Actualizar Proyectos",
-    "PROFILES_DELETEPROJECTS" :"Eliminar Proyectos",
-    "PROFILES_READAMBIENTALPLANS" :"Ver Planes Ambientales",
-    "PROFILES_CREATEAMBIENTALPLANS" :"Generar Planes Ambientales",
-    "PROFILES_UPDATEAMBIENTALPLANS" :"Actualizar Planes Ambientales",
-    "PROFILES_DELETEAMBIENTALPLANS" :"Eliminar Planes Ambientales",
-    "PROFILES_READMONITORINGS" :"Ver Monitoreos",
-    "PROFILES_WRITEMONITORINGS" :"Generar Monitoreos",
-    "PROFILES_UPDATEMONITORINGS" :"Actualizar Monitoreos",
-    "PROFILES_DELETEMONITORINGS" :"Eliminar Monitoreos",
-    "PROFILES_READACTIVITIES" :"Ver Actividad",
-    "PROFILES_CREATEACTIVITIES" :"Generar Actividad",
-    "PROFILES_UPDATEACTIVITIES" :"Actualizar Actividad",
-    "PROFILES_DELETEACTIVITIES" :"Eliminar Actividad",
-    "PROFILES_CREATEEVENTS" :"Generar Evento",
-    "PROFILES_READEVENTS" :"Ver Evento",
-    "PROFILES_UPDATEEVENTS" :"Actualizar Evento",
-    "PROFILES_DELETEEVENTS" :"Eliminar Evento",
-    "PROFILES_CREATEUSERS" :"Generar Usuarios",
-    "PROFILES_READUSERS" :"Ver Usuarios",
-    "PROFILES_UPDATEUSERS" :"Actualizar Usuarios",
-    "PROFILES_DELETEUSERS" :"Eliminar Usuarios",
-    "PROFILES_CREATEPROFILES" :"Generar Perfiles",
-    "PROFILES_UPDATEPROFILES" :"Actualizar Perfiles",
-    "PROFILES_READPROFILES" :"Ver Perfiles",
-    "PROFILES_DELETEPROFILES" :"Eliminar Perfiles",
-    "PROFILES_READACTIONS" :"Ver Acciones",
-    "PROFILES_READSUPERVISIONPERIOD" :"Ver Periodo de Supervision",
-    "PROFILES_CREATESUPERVISIONPERIOD" :"Generar Periodo de Supervision",
-    "PROFILES_DELETESUPERVISIONPERIOD" :"Eliminar Periodo de Supervision",
-    "PROFILES_UPDATESUPERVISIONPERIOD" :"Actualizar Periodo de Supervision",
-    "PROFILES_READPERMIT" :"Ver Permiso",
-    "PROFILES_CREATEPERMIT" :"Generar Permiso",
-    "PROFILES_UPDATEPERMIT" :"Actualizar Permiso",
-    "PROFILES_DELETEPERMIT" :"Eliminar Permiso",
-    "PROFILES_READREMINDER" :"Ver Recordatorio",
-    "PROFILES_CREATEREMINDER" :"Generar Recordatorio",
-    "PROFILES_DELETEREMINDER" :"Eliminar Recordatorio",
-    "PROFILES_UPDATEREMINDER" :"Actualizar Recordatorio"
+    "profiles_readprojects" :"Ver Proyectos",
+    "profiles_createprojects" :"Generar Proyectos",
+    "profiles_updateprojects" :"Actualizar Proyectos",
+    "profiles_deleteprojects" :"Eliminar Proyectos",
+    "profiles_readambientalplans" :"Ver Planes Ambientales",
+    "profiles_createambientalplans" :"Generar Planes Ambientales",
+    "profiles_updateambientalplans" :"Actualizar Planes Ambientales",
+    "profiles_deleteambientalplans" :"Eliminar Planes Ambientales",
+    "profiles_readmonitorings" :"Ver Monitoreos",
+    "profiles_writemonitorings" :"Generar Monitoreos",
+    "profiles_updatemonitorings" :"Actualizar Monitoreos",
+    "profiles_deletemonitorings" :"Eliminar Monitoreos",
+    "profiles_readactivities" :"Ver Actividad",
+    "profiles_createactivities" :"Generar Actividad",
+    "profiles_updateactivities" :"Actualizar Actividad",
+    "profiles_deleteactivities" :"Eliminar Actividad",
+    "profiles_createevents" :"Generar Evento",
+    "profiles_readevents" :"Ver Evento",
+    "profiles_updateevents" :"Actualizar Evento",
+    "profiles_deleteevents" :"Eliminar Evento",
+    "profiles_createusers" :"Generar Usuarios",
+    "profiles_readusers" :"Ver Usuarios",
+    "profiles_updateusers" :"Actualizar Usuarios",
+    "profiles_deleteusers" :"Eliminar Usuarios",
+    "profiles_createprofiles" :"Generar Perfiles",
+    "profiles_updateprofiles" :"Actualizar Perfiles",
+    "profiles_readprofiles" :"Ver Perfiles",
+    "profiles_deleteprofiles" :"Eliminar Perfiles",
+    "profiles_readactions" :"Ver Acciones",
+    "profiles_readsupervisionperiod" :"Ver Periodo de Supervision",
+    "profiles_createsupervisionperiod" :"Generar Periodo de Supervision",
+    "profiles_deletesupervisionperiod" :"Eliminar Periodo de Supervision",
+    "profiles_updatesupervisionperiod" :"Actualizar Periodo de Supervision",
+    "profiles_readpermit" :"Ver Permiso",
+    "profiles_createpermit" :"Generar Permiso",
+    "profiles_updatepermit" :"Actualizar Permiso",
+    "profiles_deletepermit" :"Eliminar Permiso",
+    "profiles_readreminder" :"Ver Recordatorio",
+    "profiles_createreminder" :"Generar Recordatorio",
+    "profiles_deletereminder" :"Eliminar Recordatorio",
+    "profiles_updatereminder" :"Actualizar Recordatorio"
 };
 
 const userFriendlyPermitNames = {};
@@ -159,44 +156,42 @@ exports.getPermits = async (req, res) => {
   const { id, just_permits } = req.body;
 
   const queryColumns = `
-    SELECT COLUMN_NAME 
-    FROM INFORMATION_SCHEMA.COLUMNS 
-    WHERE TABLE_NAME = 'profiles' 
-      AND TABLE_SCHEMA = 'biosigma_db' 
-      AND DATA_TYPE = 'tinyint' 
-      AND COLUMN_NAME != 'PROFILES_STATE'
+    SELECT column_name
+    FROM information_schema.columns
+    WHERE table_name = 'profiles'
+      AND table_schema = 'public' 
+      AND data_type IN ('boolean', 'smallint') 
+      AND column_name != 'profiles_state'; -- en PostgreSQL todo lowercase
   `;
 
-  db.query(queryColumns, async (err, columnResults) => {
-    if (err) return res.status(500).send('Error al obtener columnas');
-
+  try {
+    const { rows: columnResults } = await pool.query(queryColumns);
     const permits = {};
-    sanitize(id);
+
     if (id) {
-      db.query('SELECT * FROM profiles WHERE PROFILES_ID = ?', [id], (err, profileResults) => {
-        if (err || profileResults.length === 0) return res.json({});
+      const { rows: profileResults } = await pool.query('SELECT * FROM profiles WHERE profiles_id = $1', [id]);
+      if (profileResults.length === 0) return res.json({});
 
-        const profile = profileResults[0];
+      const profile = profileResults[0];
 
-        columnResults.forEach(row => {
-          const columnName = row.COLUMN_NAME;
-          const group = permitsGroups[columnName] || 'Otros';
-          const value = profile[columnName] === 1;
+      columnResults.forEach(row => {
+        const columnName = row.column_name;
+        const group = permitsGroups[columnName] || 'Otros';
+        const value = profile[columnName] === true || profile[columnName] === 1;
 
-          if (!permits[group]) permits[group] = {};
-          permits[group][columnName] = {
-            permit_name: userFriendlyPermitNames[columnName] || columnName,
-            value
-          };
-        });
-
-        res.json(permits);
+        if (!permits[group]) permits[group] = {};
+        permits[group][columnName] = {
+          permit_name: userFriendlyPermitNames[columnName] || columnName,
+          value
+        };
       });
 
+      res.json(permits);
     } else if (just_permits) {
       columnResults.forEach(row => {
-        const columnName = row.COLUMN_NAME;
+        const columnName = row.column_name;
         const group = permitsGroups[columnName] || 'Otros';
+
         if (!permits[group]) permits[group] = {};
         permits[group][columnName] = {
           permit_name: userFriendlyPermitNames[columnName] || columnName,
@@ -208,97 +203,100 @@ exports.getPermits = async (req, res) => {
     } else {
       res.json({});
     }
-  });
+
+  } catch (err) {
+    console.error('Error:', err);
+    res.status(500).send('Error al obtener permisos');
+  }
 };
 
+
 const Allpermits = [
-  "PROFILES_READPROJECTS", "PROFILES_CREATEPROJECTS", "PROFILES_UPDATEPROJECTS", "PROFILES_DELETEPROJECTS",
-  "PROFILES_READAMBIENTALPLANS", "PROFILES_CREATEAMBIENTALPLANS", "PROFILES_UPDATEAMBIENTALPLANS", "PROFILES_DELETEAMBIENTALPLANS",
-  "PROFILES_READMONITORINGS", "PROFILES_WRITEMONITORINGS", "PROFILES_UPDATEMONITORINGS", "PROFILES_DELETEMONITORINGS",
-  "PROFILES_CREATEACTIVITIES", "PROFILES_READACTIVITIES", "PROFILES_UPDATEACTIVITIES", "PROFILES_DELETEACTIVITIES",
-  "PROFILES_CREATEEVENTS", "PROFILES_READEVENTS", "PROFILES_UPDATEEVENTS", "PROFILES_DELETEEVENTS",
-  "PROFILES_CREATEUSERS", "PROFILES_READUSERS", "PROFILES_UPDATEUSERS", "PROFILES_DELETEUSERS",
-  "PROFILES_CREATEPROFILES", "PROFILES_UPDATEPROFILES", "PROFILES_READPROFILES", "PROFILES_DELETEPROFILES",
-  "PROFILES_READACTIONS",
-  "PROFILES_READSUPERVISIONPERIOD", "PROFILES_CREATESUPERVISIONPERIOD", "PROFILES_DELETESUPERVISIONPERIOD", "PROFILES_UPDATESUPERVISIONPERIOD",
-  "PROFILES_READPERMIT", "PROFILES_CREATEPERMIT", "PROFILES_UPDATEPERMIT", "PROFILES_DELETEPERMIT",
-  "PROFILES_READREMINDER", "PROFILES_CREATEREMINDER", "PROFILES_DELETEREMINDER", "PROFILES_UPDATEREMINDER"
+  "profiles_readprojects", "profiles_createprojects", "profiles_updateprojects", "profiles_deleteprojects",
+  "profiles_readambientalplans", "profiles_createambientalplans", "profiles_updateambientalplans", "profiles_deleteambientalplans",
+  "profiles_readmonitorings", "profiles_writemonitorings", "profiles_updatemonitorings", "profiles_deletemonitorings",
+  "profiles_createactivities", "profiles_readactivities", "profiles_updateactivities", "profiles_deleteactivities",
+  "profiles_createevents", "profiles_readevents", "profiles_updateevents", "profiles_deleteevents",
+  "profiles_createusers", "profiles_readusers", "profiles_updateusers", "profiles_deleteusers",
+  "profiles_createprofiles", "profiles_updateprofiles", "profiles_readprofiles", "profiles_deleteprofiles",
+  "profiles_readactions",
+  "profiles_readsupervisionperiod", "profiles_createsupervisionperiod", "profiles_deletesupervisionperiod", "profiles_updatesupervisionperiod",
+  "profiles_readpermit", "profiles_createpermit", "profiles_updatepermit", "profiles_deletepermit",
+  "profiles_readreminder", "profiles_createreminder", "profiles_deletereminder", "profiles_updatereminder"
 ];
 
-exports.createProfile =  async (req, res) => {
+exports.createProfile = async (req, res) => {
   const profile_name = req.body.profile_name;
   let selected_permits = req.body.selected_permits || [];
-
 
   if (!Array.isArray(selected_permits)) {
     selected_permits = [selected_permits];
   }
 
-  const checkQuery = 'SELECT PROFILES_NAME FROM profiles WHERE PROFILES_NAME = ?';
-  db.query(checkQuery, [profile_name], (err, results) => {
-    if (err) return res.status(500).send('Error al verificar perfil');
-    if (results.length > 0) return res.send('existing_user');
+  try {
+    const checkQuery = 'SELECT profiles_name FROM profiles WHERE profiles_name = $1';
+    const { rows } = await pool.query(checkQuery, [profile_name]);
 
-    const permitValues = Allpermits.map(p => selected_permits.includes(p) ? 1 : 0);
-    const allValues = [profile_name, ...permitValues];
-    const columns = ['PROFILES_NAME', ...permits];
-    const placeholders = columns.map(() => '?');
+    if (rows.length > 0) {
+      return res.send('existing_user');
+    }
+
+    const columns = ['profiles_name', ...Allpermits];
+    const placeholders = columns.map((_, idx) => `$${idx + 1}`).join(', ');
+    const values = [profile_name, ...Allpermits.map(p => selected_permits.includes(p) ? 1 : 0)];
 
     const insertQuery = `
       INSERT INTO profiles (${columns.join(', ')})
-      VALUES (${placeholders.join(', ')})
+      VALUES (${placeholders})
     `;
 
-    db.query(insertQuery, allValues, (err) => {
-      if (err) {
-        console.error("Error al insertar perfil:", err);
-        return res.status(500).send("Error al crear el perfil");
-      }
-      res.status(200).json({ status: "ok" });
-    });
-  });
-};
+    await pool.query(insertQuery, values);
+    res.status(200).json({ status: "ok" });
 
+  } catch (err) {
+    console.error('Error al crear perfil:', err);
+    res.status(500).json({ error: 'Error interno al crear el perfil', details: err.message });
+  }
+};
 
 exports.updateProfile = async (req, res) => {
   const { profile_id, name, permits } = req.body;
 
   if (!profile_id || !name || !permits) {
-    return res.status(400).json({ message: 'Profile ID, name, and permits are required.' });
+    return res.status(400).json({ message: 'Profile id, name, and permits are required.' });
   }
 
   try {
-    const [existingProfiles] = await db.promise().execute(
-            'SELECT PROFILES_NAME FROM profiles WHERE PROFILES_NAME = ? AND PROFILES_ID != ?',
-            [name, profile_id]
-        );
+    const { rows: existingProfiles } = await pool.query(
+      'SELECT profiles_name FROM profiles WHERE profiles_name = $1 AND profiles_id != $2',
+      [name, profile_id]
+    );
 
     if (existingProfiles.length > 0) {
-            return res.status(400).json({ message: 'Profile name already exists.' });
-        }
-      
-      await db.promise().execute(
-            'UPDATE profiles SET PROFILES_NAME = ? WHERE PROFILES_ID = ?',
-            [name, profile_id]
-        );
-
-      const setClause = Allpermits.map(permit => `${permit} = ?`).join(', ');
-        const params = Allpermits.map(permit => permits[permit] ? 1 : 0);
-        params.push(profile_id);
-
-        await db.promise().execute(
-            `UPDATE profiles SET ${setClause} WHERE PROFILES_ID = ?`,
-            params
-        );
-
-        res.status(200).json({ message: 'Profile updated successfully.' });
-    } catch (error) {
-        console.error('Error updating profile:', error);
-        res.status(500).json({ message: 'Error updating profile: ' + error.message });
+      return res.status(400).json({ message: 'Profile name already exists.' });
     }
+
+    await pool.query(
+      'UPDATE profiles SET profiles_name = $1 WHERE profiles_id = $2',
+      [name, profile_id]
+    );
+
+    const setClause = Allpermits.map((permit, i) => `${permit} = $${i + 1}`).join(', ');
+    const permitValues = Allpermits.map(p => permits[p] ? 1 : 0);
+
+    await pool.query(
+      `UPDATE profiles SET ${setClause} WHERE profiles_id = $${Allpermits.length + 1}`,
+      [...permitValues, profile_id]
+    );
+
+    res.status(200).json({ message: 'Profile updated successfully.' });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ message: 'Error updating profile: ' + error.message });
+  }
 };
 
-exports.toggleProfile =async (req, res) => {
+exports.toggleProfile = async (req, res) => {
   const { profile, state } = req.body;
 
   if (!profile || !state) {
@@ -307,18 +305,18 @@ exports.toggleProfile =async (req, res) => {
 
   try {
     if (state === 'INACTIVE') {
-      const [rows] = await db.promise().execute(
-        'SELECT COUNT(*) AS count FROM users WHERE PROFILES_ID = ?',
+      const { rows } = await pool.query(
+        'SELECT COUNT(*) AS count FROM users WHERE profiles_id = $1',
         [profile]
       );
 
-      if (rows[0].count > 0) {
-        return res.send("El usuario esta asignado"); 
+      if (parseInt(rows[0].count) > 0) {
+        return res.send("El usuario esta asignado");
       }
     }
 
-    await db.execute(
-      'UPDATE profiles SET PROFILES_STATE = ? WHERE PROFILES_ID = ?',
+    await pool.query(
+      'UPDATE profiles SET profiles_state = $1 WHERE profiles_id = $2',
       [state, profile]
     );
 
@@ -327,4 +325,4 @@ exports.toggleProfile =async (req, res) => {
     console.error('Error toggling profile state:', error);
     res.status(500).send('error');
   }
-}
+};
