@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '..')));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../index.php'));
+  res.sendFile(path.join(__dirname, '../HTML/main_menu_page.html'));
 });
 
 app.use('/api/profiles', profileRoutes);
