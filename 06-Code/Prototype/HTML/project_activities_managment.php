@@ -131,10 +131,12 @@ if ($result) {
         </div>
     </div>
 
-    <!-- Dialog to add new environmental activity -->
-    <!-- Dialog to add new environmental activity -->
+   <!-- Dialog to add new environmental activity -->
 <dialog id="modal_add_environmental_activity" class="container m-auto bg-light rounded shadow">
     <form id="register_environmental_activity" method="post">
+        <!-- Hidden inputs for plan and project IDs -->
+        <input type="hidden" name="environmental_plan_id" id="environmental_plan_id">
+
         <fieldset class="border p-2 bg-light border-0">
             <h3 class="title">Nueva Actividad Ambiental</h3>
             <hr>
