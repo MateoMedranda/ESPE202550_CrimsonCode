@@ -1,43 +1,28 @@
-class Project {
-    constructor(id, name, description, location, startDate, endDate, status, createdAt, updatedAt) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.location = location;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.status = status;
-        this.createdAt = createdAt || new Date();
-        this.updatedAt = updatedAt || new Date();
-    }
+const mongoose = require("mongoose");
 
-    addParticipant(person) {
-        this.participants.push(person);
-        this.updatedAt = new Date();
-    }
+const projectSchema = new mongoose.Schema(
+    {
+        id:{type:Number},
+        name:{type:String},
+        description:{type:String},
+        client:{type:String},
+        location:{  
+            type:{
+                type: String,
+                enum: ['Point'],
+                required: true
+            },
+            coordinates: {
+                type: [Number],
+                required: true
+            }
+        },
+        startDate:{type:Date},
+        endDate:{type:Date},
+        status:{type:String},
+        imageURL:{type:String},
+    },
+    {collection:"Project"}
+);
 
-    removeParticipant(personId) {
-        this.participants = this.participants.filter(p => p.id !== personId);
-        this.updatedAt = new Date();
-    }
-
-    getParticipants() {
-        return this.participants;
-    }
-
-    summary() {
-        return {
-            id: this.id,
-            name: this.name,
-            description: this.description,
-            location: this.location,
-            status: this.status,
-            startDate: this.startDate,
-            endDate: this.endDate,
-            activityCount: this.activities.length,
-            participantCount: this.participants.length
-        };
-    }
-}
-
-module.exports = Project;
+module.exports = mongoose.model("Project",projectSchema);
