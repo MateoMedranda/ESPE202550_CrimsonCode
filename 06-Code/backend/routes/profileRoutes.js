@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/profileController');
 
-router.post('/get', controller.getProfiles);
-router.post('/permits', controller.getPermits);
-router.post('/create', controller.createProfile);
-router.post('/update', controller.updateProfile);
-router.post('/toggle', controller.toggleProfile);
+router.get('/profiles', controller.getProfiles);
+router.get('/permits', controller.getPermits);
+router.post('/profiles', controller.createProfile);
+router.put('/profiles/:id', controller.updateProfile);
+router.patch('/profiles/:id/state', controller.toggleProfile);
 
 module.exports = router;

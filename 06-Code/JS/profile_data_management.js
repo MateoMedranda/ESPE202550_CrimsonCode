@@ -4,8 +4,8 @@ get_profiles_table();
 
 function get_profiles_table() {
     document.getElementById("profile_name").value = "";
-    fetch('http://localhost:3001/api/profiles/get', {
-    method: 'POST',
+    fetch('http://localhost:3001/api/profile/profiles', {
+    method: 'GET',
     headers: {
         'Content-Type': 'application/json'
     },
@@ -29,7 +29,7 @@ if (add_button && !add_button.dataset.addedevent) {
         modal.show();
         document.getElementById("profile_name").value = "";
 
-        fetch('http://localhost:3001/api/profiles/permits', {
+        fetch('http://localhost:3001/api/profile/permits', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ just_permits: true })
@@ -82,7 +82,7 @@ document.addEventListener("click", function (event) {
         document.getElementById("profile_name_view").value = name;
         document.getElementById("profile_id_view").value = id;
 
-        fetch('http://localhost:3001/api/profiles/permits', {
+        fetch('http://localhost:3001/api/profile/permits', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id })
@@ -135,7 +135,7 @@ document.getElementById("insert").addEventListener("click", (event) => {
     formData.append("profile_name", profile_name);
     selected_permits.forEach(p => formData.append("selected_permits", p));
 
-    fetch('http://localhost:3001/api/profiles/create', {
+    fetch('http://localhost:3001/api/profile/profiles', {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: formData.toString()
@@ -228,11 +228,10 @@ document.getElementById("update_profile").addEventListener("click", () => {
 
     if (!changed) return message("No ha realizado cambios");
 
-    fetch('http://localhost:3001/api/profiles/update', {
-        method: 'POST',
+    fetch('http://localhost:3001/api/profile/profiles/${profileId}', {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            profile_id: profile,
             name: newName,
             permits: selected_permits
         })
@@ -269,10 +268,10 @@ document.addEventListener("click", function (event) {
         const currentState = event.target.dataset.state;
         const newState = currentState === "ACTIVE" ? "INACTIVE" : "ACTIVE";
 
-        fetch('http://localhost:3001/api/profiles/toggle', {
-            method: 'POST',
+        fetch('http://localhost:3001/api/profile/profiles/${profile}/state', {
+            method: 'PATCH',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({ profile, state: newState })
+            body: new URLSearchParams({ state: newState })
         })
         .then(res => res.text())
         .then(response => {

@@ -260,7 +260,8 @@ exports.createProfile = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-  const { profile_id, name, permits } = req.body;
+   const profile_id = req.params.id;
+  const { name, permits } = req.body;
 
   if (!profile_id || !name || !permits) {
     return res.status(400).json({ message: 'Profile id, name, and permits are required.' });
@@ -297,7 +298,8 @@ exports.updateProfile = async (req, res) => {
 };
 
 exports.toggleProfile = async (req, res) => {
-  const { profile, state } = req.body;
+    const profile = req.params.id; 
+  const {  state } = req.body;
 
   if (!profile || !state) {
     return res.status(400).send('Missing parameters');
