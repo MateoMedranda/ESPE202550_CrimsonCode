@@ -4,9 +4,9 @@ const controller = require('../controllers/userController');
 
 router.get('/users', controller.getUsers);
 router.get('/profileslist',controller.getProfiles);
-router.get('/users',controller.SearchUser);
+router.get('/users/:id',controller.SearchUser);
 router.post('/users', controller.createUser);
 router.put('/users/:id', controller.updateUser);
-router.patch('/users/:id/state', controller.toggleUser);
+router.patch('/users/:id', controller.toggleUser);
 
 module.exports = router;
