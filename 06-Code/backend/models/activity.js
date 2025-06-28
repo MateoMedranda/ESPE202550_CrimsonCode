@@ -1,16 +1,47 @@
-const mongoose = require("mongoose");
+const { DataTypes } = require("sequelize");
+const sequelize = require('../database/sequelize');
 
-const activitySchema = new mongoose.Schema(
-    {
-        id:{type:Number},
-        planId:{type:Number},
-        aspect:{type:String},
-        impact:{type:String},
-        measure:{type:String},
-        verification:{type:String},
-        frecuency:{type:String},
+const Activity = sequelize.define('activity', {
+    activity_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
     },
-    {collection:"Activity"}
-);
+    environmentalplan_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    activity_aspect: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+    activity_impact: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+    activity_measure: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+    activity_verification: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+    activity_frecuency: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+    createdat: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    },
+    updatedat: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    }
+}, {
+  tableName: 'activity',
+  timestamps: false,  
+});
 
-module.exports = mongoose.model("Activity",activitySchema);
+module.exports = Activity;

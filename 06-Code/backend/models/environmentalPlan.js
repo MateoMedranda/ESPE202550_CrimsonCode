@@ -1,31 +1,31 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/sequelize'); 
 
-const EnvironmentalPlan = sequelize.define('EnvironmentalPlan', {
-  id: {
+const EnvironmentalPlan = sequelize.define('environmentalplan', {
+  environmentalplan_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,  
   },
-  projectid: {
+  project_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  name: {
+  environmentalplan_name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  description: {
+  environmentalplan_description: {
     type: DataTypes.TEXT,  
-    allowNull: true,
+    allowNull: false,
   },
-  stage: {
+  environmentalplan_stage: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
-  process: {
+  environmentalplan_process: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   createdat: {
     type: DataTypes.DATE,
@@ -36,7 +36,7 @@ const EnvironmentalPlan = sequelize.define('EnvironmentalPlan', {
     defaultValue: DataTypes.NOW,
   }
 }, {
-  tableName: 'EnvironmentalPlan',
+  tableName: 'environmentalplan',
   timestamps: false,  
 });
 

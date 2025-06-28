@@ -1,17 +1,47 @@
-const mongoose = require("mongoose");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../database/sequelize');
 
-const controlSchema = new mongoose.Schema(
-    {
-        id:{type:Number},
-        criterion:{type:String},
-        observation:{type:String},
-        evidence:{type:String},
-        date:{type:Date},
-        createdBy:{type:String},
-        verificaction:{type:String},
-        status:{type:String}
+const Control = sequelize.define('Control', {
+    control_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
     },
-    {collection:"Control"}
-);
+    activity_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    control_createdby: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    control_criterion: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    control_observation: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    control_evidence: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    control_verificaction: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    createdat: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    },
+    updatedat: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    }
+}, {
+    tableName: 'Control',
+    timestamps: false,
+});
 
-module.exports = mongoose.model("Control", controlSchema);
+module.exports = Control;
