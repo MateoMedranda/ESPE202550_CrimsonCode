@@ -234,11 +234,11 @@ exports.createProfile = async (req, res) => {
   }
 
   try {
-    const checkQuery = 'SELECT profiles_name FROM profiles WHERE profiles_name = $1';
+    const checkQuery = 'SELECT profiles_name FROM profiles WHERE LOWER(profiles_name) = LOWER($1)';
     const { rows } = await pool.query(checkQuery, [profile_name]);
 
     if (rows.length > 0) {
-      return res.send('existing_user');
+      return res.send('Nombre de perfil ya existe');
     }
 
     const columns = ['profiles_name', ...Allpermits];

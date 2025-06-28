@@ -17,13 +17,10 @@ exports.getUsers = async (req,res) =>
       const name = sanitize(register.users_name);
       const surname = sanitize(register.users_surname);
       const personal_id = sanitize(register.users_personal_id);
-      const borndate = sanitize(register.users_borndate);
       const email = sanitize(register.users_email);
       const phone_number = sanitize(register.users_phonenumber)
-      const user = sanitize(register.users_users);
       const state = sanitize(register.users_state);
       const user_id = sanitize(register.users_id);
-      const profile_id = sanitize(register.profiles_id);
       const profile_name = sanitize(register.profiles_name)
       const textState = state === 'ACTIVE' ? 'Activo' : 'Inactivo';
       const btnEstado = state === 'ACTIVE' ? 'btn-danger' : 'btn-success';
@@ -40,18 +37,14 @@ exports.getUsers = async (req,res) =>
         <td>${phone_number}</td>
         <td>${textState}</td>
           <td>
-            <button class="btn btn-sm btn-primary me-1 edit-profile"
+            <button class="btn btn-sm btn-primary me-1 edit-user"
               data-id="${user_id}" data-name="${name}"
               data-surname="${surname}" data-personalId="${personal_id}"
               >
               <i class="bi bi-pencil"></i> Editar
             </button>
-            <button class="btn btn-sm btn-info me-1 permits_view"
-              data-id="${id}" data-name="${name}">
-              <i class="bi bi-eye-fill"></i> Ver Permisos
-            </button>
             <button class="btn btn-sm ${btnEstado} toggle-state"
-              data-id="${id}" data-state="${state}">
+              data-id="${user_id}" data-state="${state}">
               <i class="bi ${iconoEstado}"></i> ${accion}
             </button>
           </td>
@@ -96,7 +89,7 @@ exports.getProfiles = async (req,res) =>
       `;
     });
 
-    res.send(tabla);
+    res.send(select);
   } catch (err) {
     console.error('Error al obtener perfiles:', err);
     res.status(500).send('Error');
@@ -170,19 +163,23 @@ exports.createUser = async (req,res) =>
       
     } = req.body;
 
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!born_date || !dateRegex.test(born_date)) {
-      return res.status(400).json({ error: "Fecha born_date no enviada" });
-    }
-    const dateObj = new Date(born_date);
-
-    if (isNaN(dateObj.getTime())) {
-      return res.status(400).json({ error: "Fecha born_date inválida" });
-    }
-
     const bornDateISO = born_date;
 
-    const hashPassword = await bcrypt.hash(password, 10);
+    const checkQuery = 'SELECT users_id FROM users WHERE users_personal_id = $1';
+    const { rows } = await pool.query(checkQuery, [personal_id]);
+
+    if (rows.length > 0) {
+      return res.status(409).json({ error: 'Ya existe un usuario con esa cédula' });
+    }
+
+    const checkUserQuery = 'SELECT users_id FROM users WHERE users_users = $1';
+    const result = await pool.query(checkUserQuery, [username]);
+
+    if (result.rows.length > 0) {
+      return res.status(409).json({ error: 'Ya existe un usuario con ese nombre' });
+    }
+
+  const hashPassword = await bcrypt.hash(password, 10);
 
     const query = `
       INSERT INTO users (
@@ -213,11 +210,14 @@ exports.createUser = async (req,res) =>
 
     await pool.query(query, values);
 
+
     res.status(201).json({ message: 'Usuario registrado exitosamente' });
   } catch (error) {
     console.error('Error al registrar usuario:', error);
     res.status(500).json({ error: 'Error en el servidor' });
+    
   }
+    
 }
 
 exports.updateUser = async (req,res) =>
