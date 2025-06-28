@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/sequelize');
 
-const Control = sequelize.define('Control', {
+const Control = sequelize.define('control', {
     control_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -21,15 +21,15 @@ const Control = sequelize.define('Control', {
     },
     control_observation: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
     control_evidence: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
-    control_verificaction: {
+    control_verification: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
     createdat: {
         type: DataTypes.DATE,
@@ -40,7 +40,7 @@ const Control = sequelize.define('Control', {
         defaultValue: DataTypes.NOW,
     }
 }, {
-    tableName: 'Control',
+    tableName: 'control',
     timestamps: false,
 });
 
