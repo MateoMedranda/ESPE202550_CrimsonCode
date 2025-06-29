@@ -1,5 +1,6 @@
 const port = 3001;
 const express = require("express");
+const cors = require('cors');
 const app = express();
 require('dotenv').config();
 
@@ -17,13 +18,24 @@ const sequelize = require('./database/sequelize');
 })();
 
 app.use(express.json());
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 const EnvironmentalPlanRouter = require("./routes/environmentalPlanRoutes");
 const activityRouter = require("./routes/activityRoutes");
 const controlRouter = require("./routes/controlRoutes");
+const profileRoutes = require('./routes/profileRoutes');
+const userRoutes = require('./routes/userRoutes');
+const actionRoutes = require('./routes/actionRoutes');
+const reminderRoutes = require('./routes/remindersRoutes');
 
 app.use("/projects/:projectId",EnvironmentalPlanRouter);
 app.use("/environmental-plans/:planId",activityRouter);
 app.use("/activities/:activityId",controlRouter);
+app.use('/api/profile', profileRoutes);
+app.use('/api/user',userRoutes)
+app.use('/api/action', actionRoutes);
+app.use('/api/reminder', reminderRoutes);
 
 app.listen(port,() => console.log("MY Computer Store Server is running on port --> "+port));
