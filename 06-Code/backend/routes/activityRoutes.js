@@ -173,6 +173,8 @@ router.get("/pending/", async (req, res) => {
                 order: [['createdat', 'DESC']]
             });
 
+            console.log(controls);
+
             const lastControlDate = controls.length > 0 ? new Date(controls[0].createdat) : null;
             const diffDays = calculateDaysSinceLastControl(controls[0].createdat);
             let limit = calculatelimitFrecuency(activityr.activity_frecuency);
