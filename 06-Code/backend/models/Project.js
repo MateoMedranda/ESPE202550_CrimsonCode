@@ -36,8 +36,4 @@ const Project = sequelize.define('Project', {
   timestamps: false,
 });
 
-// Define relationships
-Project.hasMany(sequelize.models.Monitoring, { foreignKey: 'project_id' });
-Project.hasMany(sequelize.models.Permit, { foreignKey: 'project_id' });
-
 module.exports = Project;

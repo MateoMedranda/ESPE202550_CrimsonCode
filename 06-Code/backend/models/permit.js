@@ -32,7 +32,4 @@ const Permit = sequelize.define('Permit', {
   timestamps: false,
 });
 
-// Define relationship
-Permit.belongsTo(sequelize.models.Project, { foreignKey: 'project_id' });
-
 module.exports = Permit;

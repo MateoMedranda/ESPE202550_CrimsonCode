@@ -54,7 +54,4 @@ const Monitoring = sequelize.define('Monitoring', {
   updatedAt: 'updatedat',
 });
 
-// Define relationship
-Monitoring.belongsTo(sequelize.models.Project, { foreignKey: 'project_id' });
-  
 module.exports = Monitoring;
