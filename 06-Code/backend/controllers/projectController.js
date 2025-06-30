@@ -1,4 +1,7 @@
 const { Project, Monitoring } = require('../models');
+const { Permit } = require('../models');
+const { EnvironmentalPlan } = require('../models');
+
 const { Op } = require('sequelize');
 
 exports.getAllProjects = async (req, res) => {
@@ -53,17 +56,25 @@ exports.updateProject = async (req, res) => {
 };
 
 exports.deleteProject = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await Monitoring.destroy({ where: { project_id: id } });
-    await Permit.destroy({ where: { project_id: id } });
-    const deleted = await Project.destroy({ where: { project_id: id } });
-    if (deleted === 0) return res.status(404).json({ error: 'Project not found' });
-    res.status(200).json({ message: 'Project deleted' });
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
-};
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) return res.status(400).json({ error: 'Invalid project ID' });
+  
+      await EnvironmentalPlan.destroy({ where: { project_id: id } });
+      await Monitoring.destroy({ where: { project_id: id } });
+      await Permit.destroy({ where: { project_id: id } });
+  
+      const deleted = await Project.destroy({ where: { project_id: id } });
+      if (deleted === 0) return res.status(404).json({ error: 'Project not found' });
+  
+      res.status(200).json({ message: 'Project deleted' });
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+  
+  
 
 exports.getProjectMonitorings = async (req, res) => {
   try {
@@ -101,3 +112,12 @@ exports.getLastMonitoring = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
+exports.getProjectPermits = async (req, res) => {
+    try {
+      const { projectId } = req.params;
+      const permits = await Permit.findAll({ where: { project_id: projectId } });
+      res.status(200).json(permits);
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  };

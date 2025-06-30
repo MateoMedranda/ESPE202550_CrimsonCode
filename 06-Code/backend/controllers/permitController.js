@@ -57,12 +57,3 @@ exports.deletePermit = async (req, res) => {
   }
 };
 
-exports.getProjectPermits = async (req, res) => {
-  try {
-    const { projectId } = req.params;
-    const permits = await Permit.findAll({ where: { project_id: projectId } });
-    res.status(200).json(permits);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
-};
