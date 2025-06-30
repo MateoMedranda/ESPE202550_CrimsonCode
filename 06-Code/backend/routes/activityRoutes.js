@@ -166,19 +166,22 @@ router.get("/pending/", async (req, res) => {
 
         for (const activityr of activities) {
             const controls = await control.findAll({
-                where: { 
+                where: {
                     activity_id: activityr.activity_id,
                     control_verification: { [Op.ne]: 'Anulado' }
-                 },
+                },
                 order: [['createdat', 'DESC']]
             });
 
-            console.log(controls);
+            let lastControlDate = null;
+            let diffDays = null;
 
-            const lastControlDate = controls.length > 0 ? new Date(controls[0].createdat) : null;
-            const diffDays = calculateDaysSinceLastControl(controls[0].createdat);
-            let limit = calculatelimitFrecuency(activityr.activity_frecuency);
+            if (controls.length > 0) {
+                lastControlDate = new Date(controls[0].createdat);
+                diffDays = calculateDaysSinceLastControl(controls[0].createdat);
+            }
 
+            const limit = calculatelimitFrecuency(activityr.activity_frecuency);
             const shouldBeControlled = !lastControlDate || diffDays > limit;
 
             if (shouldBeControlled) {
@@ -199,9 +202,11 @@ router.get("/pending/", async (req, res) => {
         });
 
     } catch (err) {
+        console.error("Error en /pending/:", err);
         res.status(500).json({ message: err.message });
     }
 });
+
 
 router.get('/reports/controls', async (req, res) => {
   try {
