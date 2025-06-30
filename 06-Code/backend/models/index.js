@@ -1,7 +1,7 @@
 const Project = require('./project');
 const Monitoring = require('./monitoring');
 const Permit = require('./permit');
-const EnvironmentalPlan = require('./enviromentalPlan') 
+const EnvironmentalPlan = require('./environmentalPlan') 
 
 Project.hasMany(Monitoring, { foreignKey: 'project_id' });
 Project.hasMany(Permit, { foreignKey: 'project_id' });
