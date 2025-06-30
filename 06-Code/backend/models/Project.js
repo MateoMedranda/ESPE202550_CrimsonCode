@@ -1,28 +1,43 @@
-const mongoose = require("mongoose");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../database/sequelize'); 
 
-const projectSchema = new mongoose.Schema(
-    {
-        id:{type:Number},
-        name:{type:String},
-        description:{type:String},
-        client:{type:String},
-        location:{  
-            type:{
-                type: String,
-                enum: ['Point'],
-                required: true
-            },
-            coordinates: {
-                type: [Number],
-                required: true
-            }
-        },
-        startDate:{type:Date},
-        endDate:{type:Date},
-        status:{type:String},
-        imageURL:{type:String},
-    },
-    {collection:"Project"}
-);
+const Project = sequelize.define('Project', {
+  project_id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  project_name: {
+    type: DataTypes.STRING(128),
+    allowNull: false,
+  },
+  project_startdate: {
+    type: DataTypes.DATEONLY,
+    allowNull: false,
+  },
+  project_state: {
+    type: DataTypes.STRING(64),
+    allowNull: false,
+  },
+  project_location: {
+    type: DataTypes.STRING(128),
+    allowNull: false,
+  },
+  project_image: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
+  project_description: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
+}, {
+  tableName: 'project',
+  timestamps: false,
+});
 
-module.exports = mongoose.model("Project",projectSchema);
+// Define relationships
+Project.hasMany(sequelize.models.Monitoring, { foreignKey: 'project_id' });
+Project.hasMany(sequelize.models.Permit, { foreignKey: 'project_id' });
+
+module.exports = Project;

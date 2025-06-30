@@ -29,6 +29,9 @@ const profileRoutes = require('./routes/profileRoutes');
 const userRoutes = require('./routes/userRoutes');
 const actionRoutes = require('./routes/actionRoutes');
 const reminderRoutes = require('./routes/remindersRoutes');
+const projectRoutes = require('./routes/projectRoutes');
+const monitoringRoutes = require('./routes/monitoringRoutes');
+const permitRoutes = require('./routes/permitRoutes');
 
 app.use("/projects/:projectId",EnvironmentalPlanRouter);
 app.use("/environmental-plans/:planId",activityRouter);
@@ -37,5 +40,8 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/user',userRoutes)
 app.use('/api/action', actionRoutes);
 app.use('/api/reminder', reminderRoutes);
+app.use('/projects', projectRoutes);
+app.use('/monitorings', monitoringRoutes);
+app.use('/permit', permitRoutes);
 
 app.listen(port,() => console.log("MY Computer Store Server is running on port --> "+port));
