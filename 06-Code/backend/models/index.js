@@ -1,6 +1,6 @@
-const Project = require('./Project');
-const Monitoring = require('./Monitoring');
-const Permit = require('./Permit');
+const Project = require('./project');
+const Monitoring = require('./monitoring');
+const Permit = require('./permit');
 
 Project.hasMany(Monitoring, { foreignKey: 'project_id' });
 Project.hasMany(Permit, { foreignKey: 'project_id' });
