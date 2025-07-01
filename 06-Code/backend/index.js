@@ -42,6 +42,6 @@ app.use('/api/action', actionRoutes);
 app.use('/api/reminder', reminderRoutes);
 app.use('/projects', projectRoutes);
 app.use('/monitorings', monitoringRoutes);
-app.use('/permit', permitRoutes);
+app.use('/permits', permitRoutes);
 
 app.listen(port,() => console.log("System Running in --> "+port));
