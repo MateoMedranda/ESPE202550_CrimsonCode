@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 exports.getUsers = async (req,res) =>
 {
     const query = `
-    SELECT DISTINCT u.*,p.profiles_name FROM users u JOIN profiles p
+    SELECT DISTINCT u.*,p.profiles_name, p.profiles_id FROM users u JOIN profiles p
     on  u.profiles_id = p.profiles_id AND p.profiles_state = 'ACTIVE' 
   `;
 

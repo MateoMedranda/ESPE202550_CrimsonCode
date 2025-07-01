@@ -1,13 +1,21 @@
 const pool = require('../models/db');
+const { ProfileServices } = require('../services/profileServices');
 
-exports.getProfiles = async (req, res) => {
-  const query = `
-    SELECT DISTINCT "profiles_name", "profiles_state", "profiles_id"
-    FROM profiles
-  `;
-
+exports.getAllProfiles = async (req, res) => {
   try {
-    const { rows } = await pool.query(query);
+    const { rows } = await ProfileServices.ProfilesSearch();
+    res.json(rows);
+  } catch (err) {
+    console.error('Error al obtener perfiles:', err);
+    res.status(500).json({ error: 'Error al obtener perfiles' });
+  }
+};
+
+
+exports.getProfilesTable = async (req, res) => {
+  try {
+    const response = await fetch('./profiles'); 
+    const rows = await response.json();
 
     let tabla = '';
 
@@ -44,7 +52,7 @@ exports.getProfiles = async (req, res) => {
 
     res.send(tabla);
   } catch (err) {
-    console.error('Error al obtener perfiles:', err);
+    console.error('Error al obtener perfiles desde API:', err);
     res.status(500).send('Error');
   }
 };

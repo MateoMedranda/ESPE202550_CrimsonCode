@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/profileController');
 
-router.get('/profiles', controller.getProfiles);
+router.get('/profiles', controller.getAllProfiles);
+router.get('/profilesTable', controller.getProfilesTable);
 router.get('/permits', controller.getPermits);
 router.post('/profiles', controller.createProfile);
 router.put('/profiles/:id', controller.updateProfile);

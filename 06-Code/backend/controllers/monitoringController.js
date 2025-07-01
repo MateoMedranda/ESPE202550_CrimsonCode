@@ -72,7 +72,7 @@ exports.getMonitoringFile = async (req, res) => {
     if (!monitoring) return res.status(404).json({ error: 'Monitoring not found' });
     const filePath = path.join(__dirname, '../uploads', monitoring.monitoring_evidence);
     const file = await fs.readFile(filePath);
-    res.setHeader('Content-Type', 'application/pdf'); // Adjust based on file type
+    res.setHeader('Content-Type', 'application/pdf'); 
     res.status(200).send(file);
   } catch (error) {
     res.status(error.code === 'ENOENT' ? 404 : 500).json({ error: error.code === 'ENOENT' ? 'File not found' : 'Server error' });
