@@ -12,5 +12,6 @@ router.get('/users/:id',verifyToken,controller.SearchUser);
 router.post('/users', controller.createUser);
 router.put('/users/:id', verifyToken,controller.updateUser);
 router.patch('/users/:id',verifyToken ,controller.toggleUser);
+router.post('/login', controller.loginUser);
 
 module.exports = router;
