@@ -1,9 +1,8 @@
-const pool = require('../models/db');
 const { ProfileServices } = require('../services/profileServices');
 
 exports.getAllProfiles = async (req, res) => {
   try {
-    const { rows } = await ProfileServices.ProfilesSearch();
+    const { rows } = await ProfileServices.AllProfiles();
     res.json(rows);
   } catch (err) {
     console.error('Error al obtener perfiles:', err);
@@ -14,8 +13,7 @@ exports.getAllProfiles = async (req, res) => {
 
 exports.getProfilesTable = async (req, res) => {
   try {
-    const response = await fetch('./profiles'); 
-    const rows = await response.json();
+    const { rows } = await ProfileServices.AllProfiles(); 
 
     let tabla = '';
 
@@ -163,22 +161,14 @@ Object.keys(permitsGroups).forEach((key) => {
 exports.getPermits = async (req, res) => {
   const { id, just_permits } = req.body;
 
-  const queryColumns = `
-    SELECT column_name
-    FROM information_schema.columns
-    WHERE table_name = 'profiles'
-      AND table_schema = 'public' 
-      AND data_type IN ('boolean', 'smallint') 
-      AND column_name != 'profiles_state'; -- en PostgreSQL todo lowercase
-  `;
-
   try {
-    const { rows: columnResults } = await pool.query(queryColumns);
+    const {columnResults } = await ProfileServices.getPermitsData();
     const permits = {};
 
     if (id) {
-      const { rows: profileResults } = await pool.query('SELECT * FROM profiles WHERE profiles_id = $1', [id]);
-      if (profileResults.length === 0) return res.json({});
+      const { rows: profileResults } = await ProfileServices.ProfilesSearch(id);
+
+      if (profileResults.length === 0) return res.status(200).json({"message": "Perfil no encontrado"});
 
       const profile = profileResults[0];
 
@@ -236,14 +226,15 @@ const Allpermits = [
 exports.createProfile = async (req, res) => {
   const profile_name = req.body.profile_name;
   let selected_permits = req.body.selected_permits || [];
-
+  if(selected_permits === undefined || selected_permits === null) {
+    return res.status(400).json({ error: 'Permisos seleccionados no pueden estar vacíos' });
+  }
   if (!Array.isArray(selected_permits)) {
     selected_permits = [selected_permits];
   }
 
   try {
-    const checkQuery = 'SELECT profiles_name FROM profiles WHERE LOWER(profiles_name) = LOWER($1)';
-    const { rows } = await pool.query(checkQuery, [profile_name]);
+    const { rows } = await ProfileServices.checkProfileName(profile_name);
 
     if (rows.length > 0) {
       return res.send('Nombre de perfil ya existe');
@@ -253,12 +244,8 @@ exports.createProfile = async (req, res) => {
     const placeholders = columns.map((_, idx) => `$${idx + 1}`).join(', ');
     const values = [profile_name, ...Allpermits.map(p => selected_permits.includes(p) ? 1 : 0)];
 
-    const insertQuery = `
-      INSERT INTO profiles (${columns.join(', ')})
-      VALUES (${placeholders})
-    `;
-
-    await pool.query(insertQuery, values);
+    await ProfileServices.createProfile( placeholders,values,columns);
+    
     res.status(200).json({ status: "ok" });
 
   } catch (err) {
@@ -271,34 +258,30 @@ exports.updateProfile = async (req, res) => {
    const profile_id = req.params.id;
   const { name, permits } = req.body;
 
-  if (!profile_id || !name || !permits) {
-    return res.status(400).json({ message: 'Profile id, name, and permits are required.' });
+  if (!profile_id) {
+    return res.status(400).json({ message: 'Se necesita el id del perfil a actualizar.' });
+  }
+
+  if ( !name) {
+    return res.status(400).json({ message: 'Se necesita un nombre de perfil a actualizar.' });
+  }
+
+  if (!permits) {
+    return res.status(400).json({ message: 'Se necesitapermisos seleccionados para actualizar.'});
   }
 
   try {
-    const { rows: existingProfiles } = await pool.query(
-      'SELECT profiles_name FROM profiles WHERE profiles_name = $1 AND profiles_id != $2',
-      [name, profile_id]
-    );
+    const { rows: existingProfiles } = await ProfileServices.checkProfileExistence(name, profile_id);
 
     if (existingProfiles.length > 0) {
-      return res.status(400).json({ message: 'Profile name already exists.' });
+      return res.status(400).json({ message: 'Nombre de perfil ya existente.'});
     }
-
-    await pool.query(
-      'UPDATE profiles SET profiles_name = $1 WHERE profiles_id = $2',
-      [name, profile_id]
-    );
-
     const setClause = Allpermits.map((permit, i) => `${permit} = $${i + 1}`).join(', ');
     const permitValues = Allpermits.map(p => permits[p] ? 1 : 0);
 
-    await pool.query(
-      `UPDATE profiles SET ${setClause} WHERE profiles_id = $${Allpermits.length + 1}`,
-      [...permitValues, profile_id]
-    );
+    await ProfileServices.updateProfile(profile_id, name, permitValues,setClause);
 
-    res.status(200).json({ message: 'Profile updated successfully.' });
+    res.status(200).json({ message: 'Perfil acutalizado' });
   } catch (error) {
     console.error('Error updating profile:', error);
     res.status(500).json({ message: 'Error updating profile: ' + error.message });
@@ -310,25 +293,23 @@ exports.toggleProfile = async (req, res) => {
   const {  state } = req.body;
 
   if (!profile || !state) {
-    return res.status(400).send('Missing parameters');
+    return res.status(400).send('falta el id del perfil o el estado');
   }
 
+  if( state !== 'ACTIVE' && state !== 'INACTIVE') {
+    return res.status(400).send('Estado no válido, debe ser ACTIVE o INACTIVE');
+  }
+  
   try {
     if (state === 'INACTIVE') {
-      const { rows } = await pool.query(
-        'SELECT COUNT(*) AS count FROM users WHERE profiles_id = $1',
-        [profile]
-      );
+      const { rows } = await ProfileServices.IsProfileAsigned(profile);
 
       if (parseInt(rows[0].count) > 0) {
-        return res.send("El usuario esta asignado");
+        return res.status(200).send("El usuario esta asignado");
       }
     }
 
-    await pool.query(
-      'UPDATE profiles SET profiles_state = $1 WHERE profiles_id = $2',
-      [state, profile]
-    );
+    await ProfileServices.toggleProfile(state, profile);
 
     res.send('success');
   } catch (error) {

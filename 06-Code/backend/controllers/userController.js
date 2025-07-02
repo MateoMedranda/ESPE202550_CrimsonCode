@@ -1,15 +1,31 @@
-const pool = require('../models/db');
+const { UserServices } = require('../services/userServices');
 const bcrypt = require('bcrypt');
-
-exports.getUsers = async (req,res) =>
-{
-    const query = `
-    SELECT DISTINCT u.*,p.profiles_name, p.profiles_id FROM users u JOIN profiles p
-    on  u.profiles_id = p.profiles_id AND p.profiles_state = 'ACTIVE' 
-  `;
-
+exports.getUsers = async (req, res) => {
   try {
-    const { rows } = await pool.query(query);
+    const { rows } = await UserServices.AllUsers();
+
+    const users = rows.map(register => ({
+      id: register.users_id,
+      name: register.users_name,
+      surname: register.users_surname,
+      personal_id: register.users_personal_id,
+      email: register.users_email,
+      phone_number: register.users_phonenumber,
+      state: register.users_state,
+      profile_name: register.profiles_name
+    }));
+
+    res.json(users);
+  } catch (err) {
+    console.error('Error al obtener los usuarios:', err);
+    res.status(500).send('Error');
+  } 
+};
+
+exports.getUsersTable = async (req,res) =>
+{
+  try {
+    const { rows } = await UserServices.AllUsers();
 
     let tabla = '';
 
@@ -70,13 +86,24 @@ function sanitize(str) {
 
 exports.getProfiles = async (req,res) =>
 {
-   const query = `
-    SELECT DISTINCT p.profiles_name,p.profiles_id FROM users u JOIN profiles p
-    on  u.profiles_id = p.profiles_id AND p.profiles_state = 'ACTIVE' 
-  `;
-
   try {
-    const { rows } = await pool.query(query);
+    const { rows } = await UserServices.getProfiles();
+    const profiles = rows.map(register => ({
+      id: register.profiles_id,
+      name: register.profiles_name
+
+    }));
+    res.json(profiles);
+  } catch (err) {
+    console.error('Error al obtener perfiles:', err);
+    res.status(500).send('Error');
+  }
+}
+
+exports.getProfilesChecklist = async (req,res) =>
+{  
+  try {
+    const { rows } = await UserServices.getProfiles();
 
     let select = '';
 
@@ -98,14 +125,11 @@ exports.getProfiles = async (req,res) =>
 
 exports.SearchUser = async (req,res) =>{
   const id = req.params.id;
-    const query = `
-    SELECT DISTINCT u.*,p.profiles_name FROM users u JOIN profiles p
-    on  u.profiles_id = p.profiles_id AND p.profiles_state = 'ACTIVE' AND u.users_id = $1 
-  `;
-  
+  if (!id) {
+    return res.status(400).send('ID de usuario no proporcionado');
+  }
   try {
-
-    const result = await pool.query(query, [id]);
+    const result = await UserServices.getUserData(id);
     const row = result.rows[0];
 
     if (!row) {
@@ -162,39 +186,51 @@ exports.createUser = async (req,res) =>
       password
       
     } = req.body;
+    if(user_profile === undefined ||user_profile === null || user_profile === ''){
+      return res.status(400).json({ error: 'El perfil del usuario es obligatorio' });
+    } 
+    if(name === undefined ||name === null || name === ''){
+      return res.status(400).json({ error: 'El nombre del usuario es obligatorio' });
+    } 
+    if(surname === undefined ||surname === null || surname === ''){
+      return res.status(400).json({ error: 'El apellido del usuario es obligatorio' });
+    } 
+    if(personal_id === undefined ||personal_id === null || personal_id === ''){
+      return res.status(400).json({ error: 'La cédula del usuario es obligatoria' });
+    }
+    if(born_date === undefined ||born_date === null || born_date === ''){
+      return res.status(400).json({ error: 'La fecha de nacimiento del usuario es obligatoria' });
+    }
+    if(email === undefined ||email === null || email === ''){
+      return res.status(400).json({ error: 'El correo electrónico del usuario es obligatorio' });
+    }
+    if(phone_number === undefined ||phone_number === null || phone_number === ''){
+      return res.status(400).json({ error: 'El número de teléfono del usuario es obligatorio' });
+    }
+    if(username === undefined ||username === null || username === ''){
+      return res.status(400).json({ error: 'El nombre de usuario es obligatorio'
+      });
+    }
+    if(password === undefined ||password === null || password === ''){
+      return res.status(400).json({ error: 'La contraseña del usuario es obligatoria'});
+    } 
 
     const bornDateISO = born_date;
 
-    const checkQuery = 'SELECT users_id FROM users WHERE users_personal_id = $1';
-    const { rows } = await pool.query(checkQuery, [personal_id]);
+    
+    const { rows } = await UserServices.CheckPersonalIdExistence(personal_id);
 
     if (rows.length > 0) {
       return res.status(409).json({ error: 'Ya existe un usuario con esa cédula' });
     }
 
-    const checkUserQuery = 'SELECT users_id FROM users WHERE users_users = $1';
-    const result = await pool.query(checkUserQuery, [username]);
+    const result = await UserServices.CheckUsernameExistence(username);
 
     if (result.rows.length > 0) {
       return res.status(409).json({ error: 'Ya existe un usuario con ese nombre' });
     }
 
   const hashPassword = await bcrypt.hash(password, 10);
-
-    const query = `
-      INSERT INTO users (
-        profiles_id,
-        users_name,
-        users_surname,
-        users_personal_id,
-        users_borndate,
-        users_email,
-        users_phonenumber,
-        users_users,
-        users_password
-      )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-    `;
 
     const values = [
       user_profile,
@@ -208,8 +244,7 @@ exports.createUser = async (req,res) =>
       hashPassword
     ];
 
-    await pool.query(query, values);
-
+    await UserServices.createUser(values);
 
     res.status(201).json({ message: 'Usuario registrado exitosamente' });
   } catch (error) {
@@ -224,12 +259,17 @@ exports.updateUser = async (req,res) =>
 {
   const { id } = req.params;
   const { profile } = req.body;
+  if (!id || id === undefined || id === null || id === ''||isNaN(id)) {
+    return res.status(400).json({ error: 'ID de usuario no proporcionado' });
+  }
 
+  if (!profile || profile === undefined || profile === null || profile === '') {
+    return res.status(400).json({ error: 'Perfil de usuario no proporcionado'
+    });
+  }
   try {
-    const query = 'UPDATE users SET profiles_id = $1 WHERE users_id = $2';
     const values = [profile, id];
-
-    const result = await pool.query(query, values);
+    const result = await UserServices.updateUser(values);
 
     if (result.rowCount === 0) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
@@ -246,12 +286,24 @@ exports.toggleUser = async (req,res) =>
 {
   const { id } = req.params;
   const { state } = req.body;
+  if (!state || (state !== 'ACTIVE' && state !== 'INACTIVE')) {
+    return res.status(400).json({ error: "Estado de usuario no proporcionado o inválido" });
+  }
+  if (!id || id === undefined || id === null || id === '' || isNaN(id)) {
+    return res.status(400).json({ error: "ID de usuario no proporcionado" });
+  }
+  
 
   try {
-    const query = `UPDATE users SET users_state = $1 WHERE users_id = $2`;
-    const values = [state, id];
+    const userfind = await UserServices.getUserData(id);
+    const row = userfind.rows[0];
 
-    const result = await pool.query(query, values);
+    if (!row) {
+      return res.status(404).send('Usuario no encontrado');
+    }
+
+    const values = [state, id];
+    const result = await UserServices.toggleUser(values);
 
     if (result.rowCount === 0) {
       return res.status(404).json({ error: "Usuario no encontrado" });
