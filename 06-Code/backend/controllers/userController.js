@@ -1,5 +1,8 @@
 const { UserServices } = require('../services/userServices');
+const { generateToken } = require('../middleware/auth');
 const bcrypt = require('bcrypt');
+const pool = require('../models/db');
+
 exports.getUsers = async (req, res) => {
   try {
     const { rows } = await UserServices.AllUsers();
@@ -315,3 +318,43 @@ exports.toggleUser = async (req,res) =>
     res.status(500).json({ error: "Error en el servidor" });
   }
 }
+
+exports.loginUser = async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const query = `
+      SELECT * FROM users
+      INNER JOIN profiles ON users.profiles_id = profiles.profiles_id
+      WHERE users_users = $1
+    `;
+
+    const { rows } = await pool.query(query, [username]);
+
+    if (rows.length === 0) {
+      return res.status(401).json({ message: 'User not found' });
+    }
+
+    const user = rows[0];
+
+    const isValidPassword = await bcrypt.compare(password, user.users_password);
+    if (!isValidPassword) {
+      return res.status(401).json({ message: 'Incorrect password' });
+    }
+
+    const payload = {
+      id: user.users_id,
+      username: user.users_users,
+      name: user.users_name,
+      profile: user.profiles_name
+    };
+
+    const token = generateToken(payload);
+
+    res.json({ token, user: payload });
+
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

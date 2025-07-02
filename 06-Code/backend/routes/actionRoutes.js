@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/actionController');
+const {verifyToken} = require('../middleware/auth');
 
+router.use(verifyToken);
 router.get('/actions', controller.getActions);
 router.get('/user/:personal_id', controller.getActionByPersonalId);
 router.get('/date', controller.getActionByDate);

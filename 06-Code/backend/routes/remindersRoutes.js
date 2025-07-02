@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/remindersController');
+const {verifyToken} = require('../middleware/auth');
 
+router.use(verifyToken);
 
 router.get('/notifications', controller.notifyReminders);
 router.get('/data/:reminder_id', controller.getReminderData);

@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const permitController = require('../controllers/permitController');
+const {verifyToken} = require('../middleware/auth');
 
+router.use(verifyToken);
 
 router.get('/', permitController.getAllPermits);
 router.post('/', permitController.createPermit);

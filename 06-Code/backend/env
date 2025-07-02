@@ -1,4 +1,0 @@
-# DATABASE_URL= postgresql://admin:WB6MqIsYWSrWM2Z9fki9hXHZZFoVrHhm@dpg-d18dl2fdiees73apjh70-a.oregon-postgres.render.com/biosigma_db
-DATABASE_URL=postgresql://biosigma_db_b5av_user:tZFzWgImaMRPujP3ECGmFDXgbP7P1chZ@dpg-d1gmq2ffte5s738rvpo0-a.oregon-postgres.render.com/biosigma_db_b5av
-
-NODE_ENV=production

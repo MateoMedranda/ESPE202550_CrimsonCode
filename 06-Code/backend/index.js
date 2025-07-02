@@ -37,7 +37,7 @@ app.use("/projects/:projectId",EnvironmentalPlanRouter);
 app.use("/environmental-plans/:planId",activityRouter);
 app.use("/activities/:activityId",controlRouter);
 app.use('/api/profile', profileRoutes);
-app.use('/api/user',userRoutes)
+app.use('/api/user',userRoutes);
 app.use('/api/action', actionRoutes);
 app.use('/api/reminder', reminderRoutes);
 app.use('/projects', projectRoutes);
