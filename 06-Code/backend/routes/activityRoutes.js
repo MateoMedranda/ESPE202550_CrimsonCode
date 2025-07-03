@@ -12,5 +12,7 @@ router.delete("/activities/:activityId", activityController.deleteActivity);
 router.get("/compliance/", activityController.getCompliance);
 router.get("/pending/", activityController.getActivitiesPending);
 router.get('/reports/controls', activityController.getControllReportByDate);
+router.get('/reportPrueba', activityController.getActivitiesByEvaluationStatus);
+router.get('/report', activityController.getEnvironmentalPlanReport);
 
 module.exports = router;
