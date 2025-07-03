@@ -1,5 +1,4 @@
-const pool = require('../models/db');
-
+const { actionsServices } = require('../services/actionsServices');
 const puppeteer = require('puppeteer');
 
 function sanitize(str) {
@@ -13,13 +12,8 @@ function sanitize(str) {
 
 exports.getActions = async (req,res) =>
 {
-    const query = `
-    SELECT DISTINCT a.*, u.users_name, u.users_surname, users_users, u.users_id FROM actions a JOIN users u
-    on  u.users_id = a.users_id 
-  `;
-
   try {
-    const { rows } = await pool.query(query);
+    const { rows } = await actionsServices.getActions();
 
     let tabla = '';
 
@@ -51,28 +45,12 @@ exports.getActions = async (req,res) =>
 exports.getActionByPersonalId = async (req, res) => {
   const { personal_id } = req.params;
 
-  const queryUser = `
-    SELECT users_id FROM users WHERE users_personal_id = $1
-  `;
-  const query = `
-    SELECT a.*, u.users_name, u.users_surname, u.users_users
-    FROM actions a 
-    JOIN users u ON u.users_id = a.users_id 
-    WHERE u.users_id = $1
-  `;
-
   try {
-    const { rows: userRows } = await pool.query(queryUser, [personal_id]);
-
-    if (userRows.length === 0) {
-      return res.status(404).send('Usuario no encontrado');
-    }
-
-    const userId = userRows[0].users_id;
-    const { rows } = await pool.query(query, [userId]);
+    
+    const { rows } = await actionsServices.queryActionByPersonalId(personal_id);
 
     if (rows.length === 0) {
-      return res.status(404).send('Acción no encontrada');
+      return res.status(404).send('Acciones no encontradas');
     }
     let tabla = '';
     for (const register of rows) {
@@ -100,16 +78,8 @@ exports.getActionByPersonalId = async (req, res) => {
 
 exports.getActionByDate = async (req, res) => {
   const { date } = req.body; 
-
-  const query = `
-    SELECT a.*, u.users_name, u.users_surname, u.users_users, u.users_id 
-    FROM actions a 
-    JOIN users u ON u.users_id = a.users_id 
-    WHERE DATE(a.actions_date) = $1
-  `;
-
   try {
-    const { rows } = await pool.query(query, [date]);
+    const { rows } = await actionsServices.queryActionByDate(date);
 
     if (rows.length === 0) {
       return res.status(404).send('No se encontraron acciones en esa fecha.');
@@ -140,18 +110,11 @@ exports.getActionByDate = async (req, res) => {
   }
 };
 
-
 exports.postAction = async (req, res) => {
   const { users_id, actions_description } = req.body;
 
-  const query = `
-    INSERT INTO actions (users_id, actions_description, actions_date)
-    VALUES ($1, $2, NOW())
-    RETURNING *
-  `;
-
   try {
-    const { rows } = await pool.query(query, [users_id, actions_description]);
+    const { rows } = await actionsServices.CreateAction(users_id, actions_description);
     const action = rows[0];
 
     if (!action) {
@@ -170,29 +133,11 @@ exports.postAction = async (req, res) => {
 
 exports.getActionPdf = async (req, res) => {
   const { personal_id } = req.params;
-
-  const queryUser = `
-    SELECT users_id FROM users WHERE users_personal_id = $1
-  `;
-  const query = `
-    SELECT a.*, u.users_name, u.users_surname, u.users_users
-    FROM actions a 
-    JOIN users u ON u.users_id = a.users_id 
-    WHERE u.users_id = $1
-  `;
-
   try {
-    const { rows: userRows } = await pool.query(queryUser, [personal_id]);
-
-    if (userRows.length === 0) {
-      return res.status(404).send('Usuario no encontrado');
-    }
-
-    const userId = userRows[0].users_id;
-    const { rows } = await pool.query(query, [userId]);
+    const { rows } = await actionsServices.queryActionByPersonalId(personal_id);
 
     if (rows.length === 0) {
-      return res.status(404).send('Acción no encontrada');
+      return res.status(404).send('Acciones no encontradas');
     }
     const name = sanitize(rows[0].users_name);
     const surname = sanitize(rows[0].users_surname);

@@ -1,27 +1,12 @@
-const pool = require('../models/db');
+const {reminderServices} = require('../services/reminderServices');
 
 exports.getReminders = async (req, res) => {
   try {
     const { date } = req.body;
-
-    const inputDate = new Date(date);
-    const year = inputDate.getFullYear();
-    const month = inputDate.getMonth(); 
-
-    const firstDay = new Date(year, month, 1);
-    const firstDayNextMonth = new Date(year, month + 1, 1);
-
-    const query = `
-      SELECT DISTINCT r.*, p.project_name
-      FROM reminder r
-      JOIN project p ON r.project_id = p.project_id
-      WHERE r.reminder_state = 'ACTIVE'
-        AND r.reminder_torememberdate >= $1
-        AND r.reminder_torememberdate < $2
-    `;
-
-    const values = [firstDay.toISOString(), firstDayNextMonth.toISOString()];
-    const { rows } = await pool.query(query, values);
+    if (!date) {
+      return res.status(400).send('Falta la fecha para obtener los recordatorios');
+    }
+    const { rows } = await reminderServices.AllReminders(date);
 
     const reminders = rows.map(register => ({
       id: register.reminder_id,
@@ -41,15 +26,11 @@ exports.getRemindersByProject = async (req, res) => {
   try {
     const { project_id } = req.params;
 
-    const query = `
-      SELECT DISTINCT r.*, p.project_name
-      FROM reminder r
-      JOIN project p ON r.project_id = p.project_id
-      WHERE r.reminder_state = 'ACTIVE'
-        AND r.project_id = $1
-    `;
-    const values = [project_id];
-    const { rows } = await pool.query(query,values);
+    if (!project_id) {
+      return res.status(400).send('Falta el ID del proyecto');
+    }
+
+    const { rows } = await reminderServices.getRemindersByProject(project_id);
 
     const reminders = rows.map(register => ({
       id: register.reminder_id,
@@ -68,15 +49,10 @@ exports.getRemindersByProject = async (req, res) => {
 exports.getReminderData = async (req, res) => {
   try {
     const { reminder_id } = req.params;
-
-    const query = `
-      SELECT DISTINCT r.*, p.project_name
-      FROM reminder r
-      JOIN project p ON r.project_id = p.project_id
-      WHERE r.reminder_id = $1
-    `;
-    const values = [reminder_id];
-    const { rows } = await pool.query(query,values);
+    if (!reminder_id) {
+      return res.status(400).send('Falta el ID del recordatorio');
+    }
+    const { rows } = await reminderServices.getRemindeById(reminder_id);
 
     const reminders = rows.map(register => ({
       id: register.reminder_id,
@@ -98,16 +74,14 @@ exports.postReminder = async (req, res) => {
   try {
     const { title, description, date, project_id } = req.body;
 
-    const query = `
-      INSERT INTO reminder (reminder_title, reminder_content, reminder_torememberdate, project_id, reminder_registerdate)
-      VALUES ($1, $2, $3, $4,NOW())
-      RETURNING reminder_id
-    `;
-    const values = [title, description, date, project_id];
-    const { rows } = await pool.query(query, values);
+    if (!title || !description || !date || !project_id) {
+      return res.status(400).send('Faltan datos para crear el recordatorio');
+    }
 
-    if(rows.length === 0) {
-      return res.status(400).send('No se pudo crear el recordatorio');
+    const result = await reminderServices.createReminder(title, description, date, project_id);
+
+    if (result.rowCount === 0) {
+    return res.status(400).send('No se pudo generar el recordatorio');
     }
     res.status(201).json({ message: 'Recordatorio creado exitosamente'});
   } catch (err) {
@@ -120,24 +94,24 @@ exports.putReminder = async (req, res) => {
   try {
     const { reminder_id } = req.params;
     const { title, description, date, project_id } = req.body;
-
-    const queryCheck = `
-      SELECT reminder_state FROM reminder WHERE reminder_id = $1
-    `;
-    const valuesCheck = [reminder_id];
-    const { rows: checkRows } = await pool.query(queryCheck, valuesCheck);
-
-    if (checkRows[0].reminder_state !== 'ACTIVE') {
-      return res.status(404).send('Recordatorio no se puede actualizar porque no está activo');
+    if (!reminder_id) {
+      return res.status(400).send('Falta el ID del recordatorio');
     }
+    if (!title || !description || !date || !project_id) {
+      return res.status(400).send('Faltan datos para actualizar el recordatorio');
+    }
+    const reminderData = await reminderServices.getRemindeById(reminder_id);
+    if (reminderData ==null) {
+      return res.status(404).send('Recordatorio no encontrado');
+    }
+    else if (reminderData.reminder_state === 'INACTIVE') {
+      return res.status(400).send('No se puede actualizar un recordatorio inactivo');
+    }
+    const result = await reminderServices.updateReminder(reminder_id, title, description, date, project_id);
 
-    const query = `
-      UPDATE reminder
-      SET reminder_title = $1, reminder_content = $2, reminder_torememberdate = $3, project_id = $4
-      WHERE reminder_id = $5
-    `;
-    const values = [title, description, date, project_id, reminder_id];
-    await pool.query(query, values);
+    if (result.rowCount === 0) {
+    return res.status(400).send('No se pudo actualizar el recordatorio');
+    }
 
     res.json({ message: 'Recordatorio actualizado exitosamente' });
   } catch (err) {
@@ -150,14 +124,17 @@ exports.toggleReminderState = async (req, res) => {
      try {
     const { reminder_id } = req.params;
     const { state } = req.body;
+    if (!reminder_id) {
+      return res.status(400).send('Falta el ID del recordatorio');
+    }
 
-    const query = `
-      UPDATE reminder
-      SET reminder_state = $1
-      WHERE reminder_id = $2
-    `;
-    const values = [state, reminder_id];
-    await pool.query(query, values);
+    if (!state || (state !== 'ACTIVE' && state !== 'INACTIVE')) {
+      return res.status(400).send('Estado inválido. Debe ser "ACTIVE" o "INACTIVE"');
+    }
+    
+    if(reminderServices.updateReminderState(reminder_id, state).length === 0) {
+      return res.status(400).send('No se pudo actualizar el estado del recordatorio');
+    }
 
     res.json({ message: 'Recordatorio ha sido modificado exitosamente' });
   } catch (err) {
@@ -168,16 +145,12 @@ exports.toggleReminderState = async (req, res) => {
 
 exports.notifyReminders = async (req, res) => {
   try {
-    const query = `
-    SELECT r.reminder_id, r.reminder_title, r.reminder_torememberdate, p.project_name
-    FROM reminder r
-    JOIN project p ON r.project_id = p.project_id
-    WHERE r.reminder_state = 'ACTIVE'
-        AND r.reminder_torememberdate = CURRENT_DATE
-    `;
-
-    const { rows } = await pool.query(query);
+    const { rows } = await reminderServices.notifyReminders();
     
+    if (rows.length === 0) {
+      return res.send('No hay recordatorios para notificar');
+    }
+
     const notifications = rows.map(register => ({
       title: register.reminder_title,
       project: register.project_name
