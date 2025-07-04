@@ -6,7 +6,11 @@ const { Op } = require('sequelize');
 
 exports.getAllProjects = async (req, res) => {
   try {
-    const projects = await Project.findAll();
+    const projects = await Project.findAll({
+      where: {
+        project_state: { [Op.ne]: 'Cancelado' }
+      }
+    });
     res.status(200).json(projects);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -56,23 +60,22 @@ exports.updateProject = async (req, res) => {
 };
 
 exports.deleteProject = async (req, res) => {
-    try {
-      const id = parseInt(req.params.id, 10);
-      if (isNaN(id)) return res.status(400).json({ error: 'Invalid project ID' });
-  
-      await EnvironmentalPlan.destroy({ where: { project_id: id } });
-      await Monitoring.destroy({ where: { project_id: id } });
-      await Permit.destroy({ where: { project_id: id } });
-  
-      const deleted = await Project.destroy({ where: { project_id: id } });
-      if (deleted === 0) return res.status(404).json({ error: 'Project not found' });
-  
-      res.status(200).json({ message: 'Project deleted' });
-    } catch (error) {
-      console.error("Error deleting project:", error);
-      res.status(500).json({ error: 'Server error' });
-    }
-  };
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) return res.status(400).json({ error: 'Invalid project ID' });
+
+    const project = await Project.findOne({ where: { project_id: id } });
+    if (!project) return res.status(404).json({ error: 'Project not found' });
+
+    await project.update({ project_state: 'Cancelado' });
+
+    res.status(200).json({ message: 'Project marked as canceled' });
+  } catch (error) {
+    console.error("Error updating project state:", error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
   
   
 
