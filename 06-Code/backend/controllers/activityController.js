@@ -8,209 +8,209 @@ activity.hasMany(control, { foreignKey: 'activity_id' });
 
 
 exports.getAllActivities = async (req, res) => {
-    try {
-        const { planId } = req.params;
-        const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
-        res.status(200).json(activities);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+  try {
+    const { planId } = req.params;
+    const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
+    res.status(200).json(activities);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.getActivityById = async (req, res) => {
-    try {
-        const activityObject = await activity.findOne({ where: { environmentalplan_id: req.params.planId, activity_id: req.params.activityId } });
-        if (!activityObject) {
-            return res.status(404).json({ message: "The activity was not found or does not exist" });
-        }
-        res.status(200).json(activityObject);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+  try {
+    const activityObject = await activity.findOne({ where: { environmentalplan_id: req.params.planId, activity_id: req.params.activityId } });
+    if (!activityObject) {
+      return res.status(404).json({ message: "The activity was not found or does not exist" });
     }
+    res.status(200).json(activityObject);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.createActivity = async (req, res) => {
-    try {
-        const environmentalplan_id = req.params.planId;
-        const { aspect, impact, measure, verification, frecuency } = req.body;
+  try {
+    const environmentalplan_id = req.params.planId;
+    const { aspect, impact, measure, verification, frecuency } = req.body;
 
-        if (!environmentalplan_id || isNaN(Number(environmentalplan_id)) || !aspect || !impact || !measure || !verification || !frecuency) {
-            return res.status(400).json({ message: "Empty parameters are not allowed or the format is incorrect" });
-        }
-
-        const newActivity = await activity.create({
-            environmentalplan_id,
-            activity_aspect: aspect,
-            activity_impact: impact,
-            activity_measure: measure,
-            activity_verification: verification,
-            activity_frecuency: frecuency
-        });
-
-        res.status(201).json(newActivity);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+    if (!environmentalplan_id || isNaN(Number(environmentalplan_id)) || !aspect || !impact || !measure || !verification || !frecuency) {
+      return res.status(400).json({ message: "Empty parameters are not allowed or the format is incorrect" });
     }
+
+    const newActivity = await activity.create({
+      environmentalplan_id,
+      activity_aspect: aspect,
+      activity_impact: impact,
+      activity_measure: measure,
+      activity_verification: verification,
+      activity_frecuency: frecuency
+    });
+
+    res.status(201).json(newActivity);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.updateActivity = async (req, res) => {
-    try {
+  try {
 
-        const id = req.params.activityId;
+    const id = req.params.activityId;
 
-        const activityObject = await activity.findByPk(id);
+    const activityObject = await activity.findByPk(id);
 
-        if (!activityObject) {
-            return res.status(404).json({ message: "Activity not found" });
-        }
-
-        const { aspect, impact, measure, verification, frecuency } = req.body;
-
-        await activityObject.update({
-            activity_aspect: aspect,
-            activity_impact: impact,
-            activity_measure: measure,
-            activity_verification: verification,
-            activity_frecuency: frecuency
-        });
-
-        res.status(200).json(activityObject);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+    if (!activityObject) {
+      return res.status(404).json({ message: "Activity not found" });
     }
+
+    const { aspect, impact, measure, verification, frecuency } = req.body;
+
+    await activityObject.update({
+      activity_aspect: aspect,
+      activity_impact: impact,
+      activity_measure: measure,
+      activity_verification: verification,
+      activity_frecuency: frecuency
+    });
+
+    res.status(200).json(activityObject);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.deleteActivity = async (req, res) => {
-    try {
-        const id = req.params.activityId;
+  try {
+    const id = req.params.activityId;
 
-        const activityObject = await activity.findByPk(id);
+    const activityObject = await activity.findByPk(id);
 
-        if (!activityObject) {
-            return res.status(404).json({ message: "Activity not found" });
-        }
-
-        await activityObject.destroy();
-
-        res.status(204).send();
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+    if (!activityObject) {
+      return res.status(404).json({ message: "Activity not found" });
     }
+
+    await activityObject.destroy();
+
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 function calculatelimitFrecuency(frecuency) {
-    limit = 99999;
-    switch (frecuency.toLowerCase()) {
-        case 'mensual': limit = 30; break;
-        case 'bimestral': limit = 60; break;
-        case 'trimestral': limit = 90; break;
-        case 'anual': limit = 365; break;
-    }
+  limit = 99999;
+  switch (frecuency.toLowerCase()) {
+    case 'mensual': limit = 30; break;
+    case 'bimestral': limit = 60; break;
+    case 'trimestral': limit = 90; break;
+    case 'anual': limit = 365; break;
+  }
 
-    return limit;
+  return limit;
 }
 
-function calculateDaysSinceLastControl(DayLastControl){
-    return  (new Date() - new Date(DayLastControl)) / (1000 * 60 * 60 * 24);
+function calculateDaysSinceLastControl(DayLastControl) {
+  return (new Date() - new Date(DayLastControl)) / (1000 * 60 * 60 * 24);
 }
 
 exports.getCompliance = async (req, res) => {
-    try {
-        const planId = Number(req.params.planId);
-        const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
+  try {
+    const planId = Number(req.params.planId);
+    const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
 
-        let evaluate = 0;
-        let satisfy = 0;
+    let evaluate = 0;
+    let satisfy = 0;
 
-        for (const activityr of activities) {
+    for (const activityr of activities) {
 
-            const controls = await control.findAll({ where: { activity_id: activityr.activity_id }, order: [['createdat', 'DESC']] });
-            console.log(`Actividad ID: ${activityr.activity_id}, Frecuencia: ${activityr.activity_frecuency}`);
+      const controls = await control.findAll({ where: { activity_id: activityr.activity_id }, order: [['createdat', 'DESC']] });
+      console.log(`Actividad ID: ${activityr.activity_id}, Frecuencia: ${activityr.activity_frecuency}`);
 
 
-            if (controls.length == 0) continue;
+      if (controls.length == 0) continue;
 
-            const lastControl = controls[0];
-            const daysSinceLastControl = calculateDaysSinceLastControl(lastControl.createdat);
+      const lastControl = controls[0];
+      const daysSinceLastControl = calculateDaysSinceLastControl(lastControl.createdat);
 
-            let limit = calculatelimitFrecuency(activityr.activity_frecuency);
+      let limit = calculatelimitFrecuency(activityr.activity_frecuency);
 
-            if (daysSinceLastControl <= limit) {
-                evaluate++;
-                if (lastControl.control_criterion.toLowerCase() == "cumple") {
-                    satisfy++;
-                }
-            }
+      if (daysSinceLastControl <= limit) {
+        evaluate++;
+        if (lastControl.control_criterion.toLowerCase() == "cumple") {
+          satisfy++;
         }
-
-        let percentage = activities.length ? (satisfy / activities.length * 100).toFixed(2) : 0;
-
-        res.status(200).json(
-            {
-                totalActivities: activities.length,
-                activitiesEvaluated: evaluate,
-                activitiesSatisfy: satisfy,
-                percentageSatisfy: percentage
-            }
-        );
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+      }
     }
+
+    let percentage = activities.length ? (satisfy / activities.length * 100).toFixed(2) : 0;
+
+    res.status(200).json(
+      {
+        totalActivities: activities.length,
+        activitiesEvaluated: evaluate,
+        activitiesSatisfy: satisfy,
+        percentageSatisfy: percentage
+      }
+    );
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.getActivitiesPending = async (req, res) => {
-    try {
-        const planId = Number(req.params.planId);
-        const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
-        const pendingActivities = [];
+  try {
+    const planId = Number(req.params.planId);
+    const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
+    const pendingActivities = [];
 
-        for (const activityr of activities) {
-            const controls = await control.findAll({
-                where: {
-                    activity_id: activityr.activity_id,
-                    control_verification: { [Op.ne]: 'Anulado' }
-                },
-                order: [['createdat', 'DESC']]
-            });
+    for (const activityr of activities) {
+      const controls = await control.findAll({
+        where: {
+          activity_id: activityr.activity_id,
+          control_verification: { [Op.ne]: 'Anulado' }
+        },
+        order: [['createdat', 'DESC']]
+      });
 
-            let lastControlDate = null;
-            let diffDays = null;
+      let lastControlDate = null;
+      let diffDays = null;
 
-            if (controls.length > 0) {
-                lastControlDate = new Date(controls[0].createdat);
-                diffDays = calculateDaysSinceLastControl(controls[0].createdat);
-            }
+      if (controls.length > 0) {
+        lastControlDate = new Date(controls[0].createdat);
+        diffDays = calculateDaysSinceLastControl(controls[0].createdat);
+      }
 
-            const limit = calculatelimitFrecuency(activityr.activity_frecuency);
-            const shouldBeControlled = !lastControlDate || diffDays > limit;
+      const limit = calculatelimitFrecuency(activityr.activity_frecuency);
+      const shouldBeControlled = !lastControlDate || diffDays > limit;
 
-            if (shouldBeControlled) {
-                pendingActivities.push({
-                    activity_id: activityr.activity_id,
-                    activity_measure: activityr.activity_measure,
-                    activity_frecuency: activityr.activity_frecuency,
-                    lastControlDate: lastControlDate ? lastControlDate.toISOString().split('T')[0] : 'Nunca',
-                    daysSinceLastControl: lastControlDate ? Math.floor(diffDays) : 'N/A'
-                });
-            }
-        }
-
-        res.status(200).json({
-            totalActivities: activities.length,
-            pendingActivities: pendingActivities.length,
-            details: pendingActivities
+      if (shouldBeControlled) {
+        pendingActivities.push({
+          activity_id: activityr.activity_id,
+          activity_measure: activityr.activity_measure,
+          activity_frecuency: activityr.activity_frecuency,
+          lastControlDate: lastControlDate ? lastControlDate.toISOString().split('T')[0] : 'Nunca',
+          daysSinceLastControl: lastControlDate ? Math.floor(diffDays) : 'N/A'
         });
-
-    } catch (err) {
-        console.error("Error en /pending/:", err);
-        res.status(500).json({ message: err.message });
+      }
     }
+
+    res.status(200).json({
+      totalActivities: activities.length,
+      pendingActivities: pendingActivities.length,
+      details: pendingActivities
+    });
+
+  } catch (err) {
+    console.error("Error en /pending/:", err);
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.getControllReportByDate = async (req, res) => {
   try {
     const planId = req.params.planId;
-    const { from, to} = req.query;
+    const { from, to } = req.query;
 
     if (!from || !to) {
       return res.status(400).json({ message: "Cannot have empty atributes, please send from, to" });
@@ -316,7 +316,7 @@ exports.getEnvironmentalPlanReport = async (req, res) => {
   try {
     const planId = Number(req.params.planId);
 
-    const EPObject = await EPM.findOne({ where: {environmentalplan_id: req.params.planId } });
+    const EPObject = await EPM.findOne({ where: { environmentalplan_id: req.params.planId } });
 
     const activities = await activity.findAll({
       where: { environmentalplan_id: planId }
@@ -344,22 +344,24 @@ exports.getEnvironmentalPlanReport = async (req, res) => {
       const recentControl = controls.find(ctrl => new Date(ctrl.createdat) >= oneMonthAgo);
 
       if (recentControl && recentControl.control_criterion.toLowerCase() !== 'no aplica') {
-        activitiesEString +=  `<tr><td>${activityr.activity_measure}</td><td>${activityr.activity_frecuency}</td><td>${recentControl.control_criterion}</td><td>${recentControl.control_observation}</td></tr>`;
+        activitiesEString += `<tr><td>${activityr.activity_measure}</td><td>${activityr.activity_frecuency}</td><td>${recentControl.control_criterion}</td><td>${recentControl.control_observation}</td></tr>`;
         activitiesEvaluated++;
-        if(recentControl.control_criterion.toLowerCase() == "cumple"){
-            satisfy++;
-        }else if(recentControl.control_criterion.toLowerCase() == "no cumple"){
-            nonSatisfy++;
+        if (recentControl.control_criterion.toLowerCase() == "cumple") {
+          satisfy++;
+        } else if (recentControl.control_criterion.toLowerCase() == "no cumple") {
+          nonSatisfy++;
         }
 
       } else {
         const lastControl = controls.length > 0 ? controls[0] : null;
-        activitiesNEString +=  `<tr><td>${activityr.activity_measure}</td><td>${activityr.activity_frecuency}</td><td>'N/A'</td><td>'N/A'</td></tr>`;
-        activitiesNonEvaluated ++;
+        activitiesNEString += `<tr><td>${activityr.activity_measure}</td><td>${activityr.activity_frecuency}</td><td>'N/A'</td><td>'N/A'</td></tr>`;
+        activitiesNonEvaluated++;
       }
     }
 
-    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
     const page = await browser.newPage();
 
     const html = `
@@ -505,7 +507,7 @@ exports.getEnvironmentalPlanReport = async (req, res) => {
                     ],
                     datasets: [{
                       label: 'Actividades',
-                      data: [${activities.length}, ${activitiesEvaluated}, ${satisfy}, ${nonSatisfy}, ${activitiesNonEvaluated}], // Reemplazar con datos reales si se desea
+                      data: [${activities.length}, ${activitiesEvaluated}, ${satisfy}, ${nonSatisfy}, ${activitiesNonEvaluated}],
                       backgroundColor: [
                         '#3498db',
                         '#2ecc71',
@@ -526,7 +528,7 @@ exports.getEnvironmentalPlanReport = async (req, res) => {
                     }
                   }
                 });
-                setTimeout(resolve, 1000); // Espera para que el gráfico se pinte
+                setTimeout(resolve, 1000); 
               });
             };
             drawChart();
