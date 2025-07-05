@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database/sequelize'); 
+const sequelize = require('../database/sequelize');
 
 const Monitoring = sequelize.define('Monitoring', {
   monitoring_id: {
@@ -38,20 +38,10 @@ const Monitoring = sequelize.define('Monitoring', {
   monitoring_folder: {
     type: DataTypes.STRING(255),
     allowNull: false,
-  },
-  createdat: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-  },
-  updatedat: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-  },
+  }
 }, {
   tableName: 'monitoring',
-  timestamps: true,
-  createdAt: 'createdat',
-  updatedAt: 'updatedat',
+  timestamps: false, 
 });
 
 module.exports = Monitoring;
