@@ -52,7 +52,7 @@ export default function Login() {
 
 
   return (
-    <div className="login-background d-flex justify-content-center align-items-center min-vh-100">
+    <div className="login-bck d-flex justify-content-center align-items-center min-vh-100">
       <div className="login-box text-center">
         <img src="/img/biosigma_logo.png" alt="Logo" className="mb-3" />
         <h3>Bienvenido</h3>

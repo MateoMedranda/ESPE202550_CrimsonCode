@@ -30,11 +30,6 @@ body{
     font-family: "Quicksand",sans-serif;
 }
 
-.nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    margin-top: 0;
-}
-
 .active{
     border-bottom: 1px solid black !important;
 }

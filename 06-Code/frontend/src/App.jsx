@@ -1,13 +1,67 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import './css/menu.css';
 import './css/project_managment.css';
+
+import { Modal } from 'bootstrap';
 import Profiles from './Router/ProfileRouter.jsx';
+import handleLogout, {Menu_logout} from './Router/LogoutRouter.jsx';
 import { useNavigate, Routes, Route } from 'react-router-dom';
+import { useState, useRef, useEffect, useCallback } from "react";
+import { createPopper } from "@popperjs/core";
 
 function Menu() {
+  const INACTIVITY_TIMEOUT = 1800000; 
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const buttonRef = useRef(null);
+  const menuRef = useRef(null);
+  const inactivityRef = useRef(null);
+
+  const resetInactivityTimer = useCallback(() => {
+    if (inactivityRef.current) {
+      clearTimeout(inactivityRef.current);
+    }
+    
+    inactivityRef.current = setTimeout(() => {
+      const modalEl = document.getElementById('logoutModal');
+      const modal = new Modal(modalEl);
+      modal.show();
+    }, INACTIVITY_TIMEOUT);
+  }, []);
+
+   useEffect(() => {
+    resetInactivityTimer();
+
+    const handleUserActivity = () => {
+      resetInactivityTimer();
+    };
+
+    window.addEventListener('mousemove', handleUserActivity);
+    window.addEventListener('keydown', handleUserActivity);
+    window.addEventListener('click', handleUserActivity);
+
+    return () => {
+      window.removeEventListener('mousemove', handleUserActivity);
+      window.removeEventListener('keydown', handleUserActivity);
+      window.removeEventListener('click', handleUserActivity);
+      if (inactivityRef.current) {
+        clearTimeout(inactivityRef.current);
+      }
+    };
+  }, [resetInactivityTimer]);
+
+  useEffect(() => {
+    if (open && buttonRef.current && menuRef.current) {
+      createPopper(buttonRef.current, menuRef.current, {
+        placement: "bottom-end",
+      });
+    }
+  }, [open]);
+
+  const toggleDropdown = () => setOpen(!open);
+
    return (
     <div>
       <header className="navbar bg-white navbar-expand-lg header_sistem">
@@ -18,20 +72,30 @@ function Menu() {
         <h1 className="fs-3 my-2">SIMA</h1>
       </div>
 
-      <div className="dropdown ms-auto d-flex align-items-center text-center">
-        <i className="bi bi-bell"></i>
-        <i>&nbsp;&nbsp;&nbsp;</i>
-        <a className="d-flex align-items-center text-center text-black text-decoration-none nav-link dropdown-toggle"
-          id="PerfilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <span id="username" className="me-2 d-none d-md-flex">Nombre Apellido</span>
-          <i className="bi bi-person-circle"></i>
-        </a>
-        <ul className="dropdown-menu dropdown-menu-end conf_user" aria-labelledby="PerfilDropdown">
-          <li><a className="dropdown-item" href="project_User_Edit.html"><i className="bi bi-person-fill"></i> Mi Perfil</a></li>
-          <li><hr className="dropdown-divider"></hr></li>
-          <li><a className="dropdown-item text-danger" href="project_login.html">Cerrar Sesión</a></li>
-        </ul>
-      </div>
+    <div className="dropdown ms-auto d-flex align-items-center text-center position-relative">
+      <i className="bi bi-bell"></i>
+      <i>&nbsp;&nbsp;&nbsp;</i>
+      <button
+        type="button"
+        className="btn btn-link d-flex align-items-center text-center text-black text-decoration-none nav-link dropdown-toggle"
+        id="PerfilDropdown"
+        onClick={toggleDropdown}
+        ref={buttonRef}
+      >
+        <span id="username" className="me-2 d-none d-md-flex">Nombre Apellido</span>
+        <i className="bi bi-person-circle"></i>
+      </button>
+      <ul
+        className={`dropdown-menu dropdown-menu-end conf_user ${open ? 'show' : ''}`}
+        ref={menuRef}
+        aria-labelledby="PerfilDropdown"
+      >
+        <li><button className="dropdown-item" ><i className="bi bi-person-fill"></i> Mi Perfil</button></li>
+        <li><hr className="dropdown-divider" /></li>
+        <li><button className="dropdown-item text-danger" onClick={handleLogout}>Cerrar Sesión</button></li>
+      </ul>
+    </div>
+
     </div>
   </div>
       </header>
@@ -85,11 +149,14 @@ function Menu() {
               <Route path="/projects" element={<div>Projects</div>} />
               <Route path="/profiles" element={<Profiles />} />
               <Route path="/reports" element={<div>Reports</div>} />
-              <Route path="/calendar" element={<div>Calendar</div>} />
+              <Route path="/cal
+              sendar" element={<div>Calendar</div>} />
               <Route path="/users" element={<div>Users</div>} />
             </Routes>
           </main>
+          <Menu_logout/>
       </div>
+      
   )
 }
 

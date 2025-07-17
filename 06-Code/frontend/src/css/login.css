@@ -1,10 +1,7 @@
-.login-background {
-  background-image: url('public/img/fondoLogin.jpg');
+.login-bck {
+  background-image: url('img/fondoLogin.png');
   background-size: cover;
   background-position: center;
-  margin: 0;
-  padding: 0;
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;

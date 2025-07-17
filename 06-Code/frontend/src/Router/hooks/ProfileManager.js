@@ -1,5 +1,8 @@
 import { useRef } from "react";
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 export default function useProfilesController() {
   const profilesTableRef = useRef(null);
