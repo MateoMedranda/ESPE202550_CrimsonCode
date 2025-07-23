@@ -344,13 +344,14 @@ exports.loginUser = async (req, res) => {
 
     const payload = {
       id: user.users_id,
+      profile_id : user.profiles_id,
       username: user.users_users,
       name: user.users_name,
+      surname: user.users_surname,
       profile: user.profiles_name
     };
-
     const token = generateToken(payload);
-
+    
     res.json({ token, user: payload });
 
   } catch (error) {

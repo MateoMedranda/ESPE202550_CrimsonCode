@@ -18,7 +18,11 @@ function Menu() {
   const buttonRef = useRef(null);
   const menuRef = useRef(null);
   const inactivityRef = useRef(null);
-
+  const [userName, setUserName] = useState("");
+  const [userSurName, setUserSurName] = useState("");
+  const [userID, setUserID] = useState("");
+  const [userProfileID, setProfileID] = useState("");
+  const [token, setToken] = useState("");
   const resetInactivityTimer = useCallback(() => {
     if (inactivityRef.current) {
       clearTimeout(inactivityRef.current);
@@ -31,13 +35,31 @@ function Menu() {
     }, INACTIVITY_TIMEOUT);
   }, []);
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const tokenVal = localStorage.getItem("token"); 
+    if (user && user.name && user.surname && user.id && user.profile_id && tokenVal) {
+      setUserName(user.name);
+      setUserSurName(user.surname);
+      setUserID(user.id);
+      setProfileID(user.profile_id);
+      setToken(tokenVal);
+    } else {
+      setUserName("");  
+      setUserSurName("");
+      setUserID("");
+      setProfileID("");
+      setToken("");
+    }
+  }, []);
+
    useEffect(() => {
     resetInactivityTimer();
 
     const handleUserActivity = () => {
       resetInactivityTimer();
     };
-
+    
     window.addEventListener('mousemove', handleUserActivity);
     window.addEventListener('keydown', handleUserActivity);
     window.addEventListener('click', handleUserActivity);
@@ -68,7 +90,7 @@ function Menu() {
   <div className="container">
     <div className="d-flex justify-content-between align-items-center w-100">
       <div className="d-flex align-items-center">
-        <img className="mx-3 d-none d-md-flex" src="../IMG/Logo.png" alt="Logo" width="80"></img>
+        <img className="mx-3 d-none d-md-flex" src="../img/Logo.png" alt="Logo" width="80"></img>
         <h1 className="fs-3 my-2">SIMA</h1>
       </div>
 
@@ -82,7 +104,7 @@ function Menu() {
         onClick={toggleDropdown}
         ref={buttonRef}
       >
-        <span id="username" className="me-2 d-none d-md-flex">Nombre Apellido</span>
+        <span id="username" className="me-2 d-none d-md-flex">{userName +" " + userSurName}</span>
         <i className="bi bi-person-circle"></i>
       </button>
       <ul
@@ -147,7 +169,7 @@ function Menu() {
             <Routes>
               <Route path="/" element={<div>Home</div>} />
               <Route path="/projects" element={<div>Projects</div>} />
-              <Route path="/profiles" element={<Profiles />} />
+              <Route path="/profiles" element={<Profiles token={token} />} />
               <Route path="/reports" element={<div>Reports</div>} />
               <Route path="/cal
               sendar" element={<div>Calendar</div>} />

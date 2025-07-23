@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import useProfilesController from "./hooks/ProfileManager";
 
-export default function Profiles() {
+export default function Profiles({ token }) {
   const {
     ProfileTableGet,
     handleAddProfile,
@@ -9,7 +9,7 @@ export default function Profiles() {
     profilesTableRef,
     permitsContainerRef,
     
-  } = useProfilesController();
+  } = useProfilesController(token);
 
   useEffect(() => {
     ProfileTableGet(); 
@@ -43,7 +43,7 @@ export default function Profiles() {
                   <th></th>
                 </tr>
               </thead>
-              <tbody ref={profilesTableRef}></tbody>
+              <tbody ref={profilesTableRef}>Cargando ...</tbody>
             </table>
           </div>
         </div>
