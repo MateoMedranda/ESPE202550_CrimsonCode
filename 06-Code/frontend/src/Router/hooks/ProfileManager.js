@@ -10,11 +10,7 @@ export default function useProfilesController(Token) {
   const permitsContainerRef = useRef(null);
   const permitsContainerEditRef = useRef(null);
   const [beforeEditProfile, setBeforeEditProfile] = useState(null);
-  const profileIdEditRef = useRef(null);
-    const profileNameEditRef = useRef(null);
-    const profileNameViewRef = useRef(null);
     const permitsContainerViewRef = useRef(null);
-    const messageRef = useRef(null);
     const [loading, setLoading] = useState(true);
     const [profileName, setProfileName] = useState("");
     const [permits, setPermits] = useState([]); 
@@ -404,12 +400,8 @@ export default function useProfilesController(Token) {
     handleEditPermits,
     handleSaveProfile,
     profiles,
-    profileIdEditRef,
-    profileNameEditRef,
-    profileNameViewRef,
     permitsContainerViewRef,
     permitsContainerEditRef,
-    messageRef,
     handleEditProfile,
     profileName,
     setProfileName,

@@ -1,5 +1,9 @@
 import React, { useState,useEffect } from "react";
 import useProfilesController from "./hooks/ProfileManager";
+import bootstrap from "bootstrap/dist/js/bootstrap.bundle";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 export default function Profiles({ token }) {
     
@@ -15,17 +19,7 @@ export default function Profiles({ token }) {
     profiles,
     permitsContainerViewRef,
     permitsContainerEditRef,
-    profileIdEditRef,
-    profileNameEditRef,
-    profileNameViewRef,
-    messageRef,
-    profileName,
-    setProfileName,
-    permits,
-    setPermits,
     message,
-    setMessage,
-    handleEdit,
     handleToggleState,
     loading
   } = useProfilesController(token);
@@ -259,14 +253,7 @@ export default function Profiles({ token }) {
 
                 <label htmlFor="profile_name_view" className="form-label">
                   Nombre del perfil:
-                  <input
-                    type="text"
-                    id="profile_name_view"
-                    name="profile_name_view"
-                    className="form-control border-dark"
-                    value={profileName}
-                    readOnly
-                  />
+                  <input type="text" id="profile_name_view" name="profile_name_view" className="form-control border-dark" readOnly/>
                 </label>
               </div>
             </div>

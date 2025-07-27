@@ -4,8 +4,9 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './css/menu.css';
 import './css/project_managment.css';
 
-import { Modal } from 'bootstrap';
+import { Modal,Collapse } from 'bootstrap';
 import Profiles from './Router/ProfileRouter.jsx';
+import Users from './Router/UserRouter.jsx';
 import handleLogout, {Menu_logout} from './Router/LogoutRouter.jsx';
 import { useNavigate, Routes, Route } from 'react-router-dom';
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -82,49 +83,76 @@ function Menu() {
     }
   }, [open]);
 
+  
+  useEffect(() => {
+    const collapseElement = document.getElementById('menuNav');
+    if (collapseElement) {
+      new Collapse(collapseElement, { toggle: false });
+    }
+  }, []);
+
+  const toggleNavbar = () => {
+  const collapseElement = document.getElementById('menuNav');
+  if (!collapseElement) return;
+
+  const instance = Collapse.getOrCreateInstance(collapseElement);
+  if (collapseElement.classList.contains('show')) {
+    instance.hide();
+  } else {
+    instance.show();
+  }
+};
+
+
   const toggleDropdown = () => setOpen(!open);
 
    return (
     <div>
       <header className="navbar bg-white navbar-expand-lg header_sistem">
-  <div className="container">
-    <div className="d-flex justify-content-between align-items-center w-100">
-      <div className="d-flex align-items-center">
-        <img className="mx-3 d-none d-md-flex" src="../img/Logo.png" alt="Logo" width="80"></img>
-        <h1 className="fs-3 my-2">SIMA</h1>
-      </div>
+        <div className="container">
+          <div className="d-flex justify-content-between align-items-center w-100">
+            <div className="d-flex align-items-center">
+              <img className="mx-3 d-none d-md-flex" src="../img/Logo.png" alt="Logo" width="80" />
+              <h1 className="fs-3 my-2">SIMA</h1>
+            </div>
 
-    <div className="dropdown ms-auto d-flex align-items-center text-center position-relative">
-      <i className="bi bi-bell"></i>
-      <i>&nbsp;&nbsp;&nbsp;</i>
-      <button
-        type="button"
-        className="btn btn-link d-flex align-items-center text-center text-black text-decoration-none nav-link dropdown-toggle"
-        id="PerfilDropdown"
-        onClick={toggleDropdown}
-        ref={buttonRef}
-      >
-        <span id="username" className="me-2 d-none d-md-flex">{userName +" " + userSurName}</span>
-        <i className="bi bi-person-circle"></i>
-      </button>
-      <ul
-        className={`dropdown-menu dropdown-menu-end conf_user ${open ? 'show' : ''}`}
-        ref={menuRef}
-        aria-labelledby="PerfilDropdown"
-      >
-        <li><button className="dropdown-item" ><i className="bi bi-person-fill"></i> Mi Perfil</button></li>
-        <li><hr className="dropdown-divider" /></li>
-        <li><button className="dropdown-item text-danger" onClick={handleLogout}>Cerrar Sesión</button></li>
-      </ul>
-    </div>
 
-    </div>
-  </div>
+            {/* Perfil */}
+            <div className="dropdown ms-2 d-flex align-items-center text-center position-relative">
+              <i className="bi bi-bell me-3"></i>
+              <button
+                type="button"
+                className="btn btn-link d-flex align-items-center text-black text-decoration-none nav-link dropdown-toggle"
+                id="PerfilDropdown"
+                onClick={toggleDropdown}
+                ref={buttonRef}
+              >
+                <span id="username" className="me-2 d-sm-inline">{userName + " " + userSurName}</span>
+                <i className="bi bi-person-circle"></i>
+              </button>
+              <ul
+                className={`dropdown-menu dropdown-menu-end conf_user ${open ? 'show' : ''}`}
+                ref={menuRef}
+                aria-labelledby="PerfilDropdown"
+              >
+                <li><button className="dropdown-item"><i className="bi bi-person-fill"></i> Mi Perfil</button></li>
+                <li><hr className="dropdown-divider" /></li>
+                <li><button className="dropdown-item text-danger" onClick={handleLogout}>Cerrar Sesión</button></li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </header>
+
     <div className="navbar navbar-expand-lg navbar-light sticky-top shadow menu">
-            <div className="container-fluid">
-              <div className="collapse navbar-collapse" id="menuNav">
-                <ul className="navbar-nav mx-auto">
+      <div className="container-fluid">
+        {/* Botón hamburguesa para colapsar en móviles */}
+                <button className="navbar-toggler"  type="button" data-bs-target="#menuNav"
+      aria-controls="menuNav" aria-expanded="false" aria-label="Toggle navigation" onClick={toggleNavbar}>
+      <span className="navbar-toggler-icon"></span>
+    </button>
+        <div className="collapse navbar-collapse" id="menuNav">
+          <ul className="navbar-nav mx-auto">
                   <li className="nav-item opcion fw-bold mx-2">
                     <button className="nav-link btn" onClick={() => navigate('/')}>
                       <i className="bi bi-speedometer2"></i> INICIO
@@ -173,7 +201,7 @@ function Menu() {
               <Route path="/reports" element={<div>Reports</div>} />
               <Route path="/cal
               sendar" element={<div>Calendar</div>} />
-              <Route path="/users" element={<div>Users</div>} />
+              <Route path="/users" element={<Users token={token}/>} />
             </Routes>
           </main>
           <Menu_logout/>
