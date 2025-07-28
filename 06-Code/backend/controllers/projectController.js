@@ -17,6 +17,27 @@ exports.getAllProjects = async (req, res) => {
   }
 };
 
+exports.getProjectById = async (req, res) => {
+  try {
+    const { ProjectId } = req.params;
+    const project = await Project.findOne({
+      where: {
+        project_id: ProjectId,
+        project_state: { [Op.ne]: 'Cancelado' }
+      }
+    });
+
+    if (!project) {
+      return res.status(404).json({ message: 'Proyecto no encontrado' });
+    }
+
+    res.status(200).json(project);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+
 exports.createProject = async (req, res) => {
   try {
     const { name, startDate, image, state, location, description } = req.body;

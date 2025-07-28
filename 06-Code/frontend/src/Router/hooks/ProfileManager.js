@@ -16,8 +16,7 @@ export default function useProfilesController(Token) {
     const [permits, setPermits] = useState([]); 
     const [message, setMessage] = useState("");
   const [profiles, setProfiles] = useState([]);
-  
-    
+      
    const ProfileTableGet = async () => {
     setLoading(true);
     try {

@@ -11,6 +11,7 @@ import handleLogout, {Menu_logout} from './Router/LogoutRouter.jsx';
 import { useNavigate, Routes, Route } from 'react-router-dom';
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPopper } from "@popperjs/core";
+import Projects from './Router/ProjectDetailRouter.jsx';
 
 function Menu() {
   const INACTIVITY_TIMEOUT = 1800000; 
@@ -160,7 +161,7 @@ function Menu() {
                   </li>
 
                   <li className="nav-item opcion fw-bold mx-2">
-                    <button className="nav-link btn" onClick={() => navigate('/projects')}>
+                    <button className="nav-link btn" onClick={() => navigate('/projects/1')}>
                       <i className="bi bi-folder"></i> PROYECTOS
                     </button>
                   </li>
@@ -196,11 +197,10 @@ function Menu() {
           <main className="container mt-4">
             <Routes>
               <Route path="/" element={<div>Home</div>} />
-              <Route path="/projects" element={<div>Projects</div>} />
+              <Route path="/projects/:projectId" element={<Projects token={token}/>} />
               <Route path="/profiles" element={<Profiles token={token} />} />
               <Route path="/reports" element={<div>Reports</div>} />
-              <Route path="/cal
-              sendar" element={<div>Calendar</div>} />
+              <Route path="/calendar" element={<div>Calendar</div>} />
               <Route path="/users" element={<Users token={token}/>} />
             </Routes>
           </main>

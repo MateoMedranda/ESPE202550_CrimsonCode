@@ -5,6 +5,7 @@ const {verifyToken} = require('../middleware/auth');
 
 router.use(verifyToken);
 router.get('/', projectController.getAllProjects);
+router.get('/:ProjectId', projectController.getProjectById);
 router.post('/', projectController.createProject);
 router.put('/:id', projectController.updateProject);
 router.delete('/:id', projectController.deleteProject);
