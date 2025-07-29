@@ -147,7 +147,7 @@ export default function User({ token }) {
 
         <hr />
 
-        {/* Modal Registro Usuario */}
+        {/* Register Modal */}
         <div className="modal fade" id="user_register" tabIndex="-1" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content">
@@ -229,7 +229,7 @@ export default function User({ token }) {
           </div>
         </div>
 
-        {/*Modal de Edicion */}
+        {/*Edit modal */}
           <div className="modal fade" id="user_edit" tabIndex="-1" aria-labelledby="user_register_label" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered modal-lg">
                 <div className="modal-content">
@@ -238,7 +238,7 @@ export default function User({ token }) {
                     <h1 className="text-center">Registrar Usuario</h1>
                     </div>
 
-                    {/* Datos del Usuario */}
+                    {/* user data */}
                     <div className="row border border-dark p-3 my-4 mx-4 position-relative">
                     <h3 className="position-absolute top-0 start-0 ms-3 px-2"style={{backgroundColor: "white",display: "inline",}}>
                         Datos del Usuario
@@ -259,7 +259,7 @@ export default function User({ token }) {
                     </div>
                     </div>
 
-                    {/* Datos de la cuenta */}
+                    {/* account data */}
                     <div className="row border border-dark p-3 my-4 mx-4 position-relative">
                     <h3 className="position-absolute top-0 start-0 ms-3 px-2" style={{ marginTop: "-12px", backgroundColor: "white", display: "inline", }}
                     >
@@ -285,7 +285,7 @@ export default function User({ token }) {
                     </div>
                     </div>
 
-                    {/* Botones */}
+                    {/* Buttons */}
                     <div className="modal-footer d-flex justify-content-center align-items-center">
                     <button type="button" className="btn btn-white border border-dark" data-bs-dismiss="modal" onClick={() => onCancel("user_edit")}
                     >
@@ -302,7 +302,7 @@ export default function User({ token }) {
             </div>
   
 
-        {/* Modal de Información */}
+        {/* Information container */}
         <div className="modal fade" id="information_container" tabIndex="-1" aria-labelledby="information_container" aria-hidden="true">
       <div className="modal-dialog modal-dialog-centered modal-lg my-5">
         <div className="modal-content my-5">

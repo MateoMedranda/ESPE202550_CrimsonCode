@@ -8,6 +8,7 @@ import './css/project_page.css';
 import { Modal,Collapse } from 'bootstrap';
 import Profiles from './Router/ProfileRouter.jsx';
 import Users from './Router/UserRouter.jsx';
+import Calendar from './Router/CalendarRouter.jsx';
 import handleLogout, {Menu_logout} from './Router/LogoutRouter.jsx';
 import { useNavigate, Routes, Route } from 'react-router-dom';
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -201,7 +202,7 @@ function Menu() {
               <Route path="/projects/:projectId" element={<Projects token={token}/>} />
               <Route path="/profiles" element={<Profiles token={token} />} />
               <Route path="/reports" element={<div>Reports</div>} />
-              <Route path="/calendar" element={<div>Calendar</div>} />
+              <Route path="/calendar" element={<Calendar token={token}/>} />
               <Route path="/users" element={<Users token={token}/>} />
             </Routes>
           </main>

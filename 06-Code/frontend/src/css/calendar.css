@@ -1,0 +1,11 @@
+.fc-event-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  font-size: 0.85rem; 
+}
+
+.fc-event {
+  height: auto !important;
+  min-height: 1.5em !important;
+}

@@ -38,7 +38,7 @@ export default function UserManager(Token) {
 
       setLoading(true);
     try {
-        const response = await fetch('http://localhost:3001/api/user/profiles', {
+        const response = await fetch('http://localhost:3001/api/profile/profiles', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -168,7 +168,7 @@ export default function UserManager(Token) {
 
       setLoading(true);
     try {
-        const response = await fetch('http://localhost:3001/api/user/profiles', {
+        const response = await fetch('http://localhost:3001/api/profile/profiles', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -179,14 +179,14 @@ export default function UserManager(Token) {
         if (!response.ok) throw new Error("Error en la respuesta del servidor");
 
         const data = await response.json();
-
+        console.log(data);
         const selectElement = profilesEditContainerRef.current;
         if (selectElement) {
         selectElement.innerHTML = '<option value="seleccione">Seleccione...</option>';
         data.forEach((profile) => {
             const option = document.createElement("option");
-            option.value = profile.id;
-            option.textContent = profile.name;
+            option.value = profile.profiles_id;
+            option.textContent = profile.profiles_name;
             selectElement.appendChild(option);
         });
 

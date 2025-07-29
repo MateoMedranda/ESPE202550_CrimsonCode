@@ -8,7 +8,7 @@ router.use(verifyToken);
 router.get('/notifications', controller.notifyReminders);
 router.get('/data/:reminder_id', controller.getReminderData);
 
-router.get('/', controller.getReminders);
+router.post('/all', controller.getReminders);
 router.get('/:project_id', controller.getRemindersByProject);
 
 router.post('/', controller.postReminder);

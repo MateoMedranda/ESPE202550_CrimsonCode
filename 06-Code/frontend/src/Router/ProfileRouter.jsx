@@ -174,7 +174,7 @@ export default function Profiles({ token }) {
           </div>
         </div>
       </div>
-      {/* Modal Vista/edicion */}
+      {/* Modal edit */}
          <div className="modal fade" id="edit_modal" tabIndex="-1" aria-hidden="true">
       <div className="modal-dialog modal-dialog-centered modal-xl">
         <div className="modal-content">
@@ -238,7 +238,7 @@ export default function Profiles({ token }) {
         </div>
       </div>
     </div>
-        {/* Modal Vista/ */}             
+        {/* Modal view */}             
         <div className="modal fade" id="permits_view" tabIndex="-1" aria-hidden="true">
       <div className="modal-dialog modal-dialog-centered modal-xl">
         <div className="modal-content">

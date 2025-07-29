@@ -5,8 +5,9 @@ async function AllReminders(date) {
     const year = inputDate.getFullYear();
     const month = inputDate.getMonth(); 
 
-    const firstDay = new Date(year, month, 1);
-    const firstDayNextMonth = new Date(year, month + 1, 1);
+    const firstDay = new Date(year, month+ 1, 1);
+    const NextMonth = new Date(year, month + 2, 1);
+
 
     const query = `
       SELECT DISTINCT r.*, p.project_name
@@ -17,7 +18,7 @@ async function AllReminders(date) {
         AND r.reminder_torememberdate < $2
     `;
 
-    const values = [firstDay.toISOString(), firstDayNextMonth.toISOString()];
+    const values = [firstDay.toISOString(),NextMonth.toISOString(),];
     return await pool.query(query, values);
 }
 
