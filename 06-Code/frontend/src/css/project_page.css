@@ -91,7 +91,7 @@
 }
 
 .empty-emp {
-    min-width: 100%;
+  min-width: 100%;
 }
 
 
@@ -103,7 +103,7 @@
 }
 
 .emp-slider::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .project_monitoring_card {
@@ -293,8 +293,21 @@ dialog.closing {
 }
 
 .div_project_emp {
-  max-width: 80%;          
-  word-wrap: break-word;   
-  white-space: normal;     
+  max-width: 80%;
+  word-wrap: break-word;
+  white-space: normal;
   cursor: pointer;
+}
+
+.addEMP {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
 }

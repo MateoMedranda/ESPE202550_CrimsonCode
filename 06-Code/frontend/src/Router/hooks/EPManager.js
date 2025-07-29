@@ -5,8 +5,7 @@ export default function EPController(projectId, token) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-    console.log("id:"+projectId);
-    console.log("token:"+token);
+  const baseUrl = `http://localhost:3001/projects/${projectId}/environmental-plans`;
 
   useEffect(() => {
     if (!token) {
@@ -15,8 +14,7 @@ export default function EPController(projectId, token) {
       return;
     }
 
-
-    fetch(`http://localhost:3001/projects/${projectId}/environmental-plans/`, {
+    fetch(baseUrl, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -34,5 +32,82 @@ export default function EPController(projectId, token) {
       .finally(() => setLoading(false));
   }, [projectId, token]);
 
-  return { environmentalPlan, loading, error };
+  const getPlanById = async (id) => {
+  try {
+    const res = await fetch(`${baseUrl}/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!res.ok) throw new Error("Error al obtener plan");
+    return await res.json();
+  } catch (err) {
+    setError(err.message);
+    return null;
+  }
+};
+
+  const insertPlan = async (newPlan) => {
+    try {
+      const res = await fetch(baseUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newPlan)
+      });
+      if (!res.ok) throw new Error("Error al insertar plan");
+      const createdPlan = await res.json();
+      setEnvironmentalPlan((prev) => [...prev, createdPlan]);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const updatePlan = async (id, updatedData) => {
+    try {
+      const res = await fetch(`${baseUrl}/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedData)
+      });
+      if (!res.ok) throw new Error("Error al actualizar plan");
+      const updatedPlan = await res.json();
+      setEnvironmentalPlan((prev) =>
+        prev.map((plan) => (plan.id === id ? updatedPlan : plan))
+      );
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const deletePlan = async (id) => {
+    try {
+      const res = await fetch(`${baseUrl}/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!res.ok) throw new Error("Error al eliminar plan");
+      setEnvironmentalPlan((prev) => prev.filter((plan) => plan.id !== id));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  return { 
+    environmentalPlan, 
+    loading, 
+    error,
+    getPlanById, 
+    insertPlan, 
+    updatePlan, 
+    deletePlan 
+  };
 }
