@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 export default function EnvironmentalPlansList({ projectId, token }) {
-    const { environmentalPlan, loading, fetchPlans, insertPlan, deletePlan } = EPController(projectId, token);
+    const { environmentalPlan, loading, fetchPlans, insertPlan, deletePlan, updatePlan } = EPController(projectId, token);
     const today = new Date();
     const formattedDate = today.toISOString().split("T")[0];
 
@@ -33,9 +33,16 @@ export default function EnvironmentalPlansList({ projectId, token }) {
     };
 
     const handleUpdatePlan = (plan) => {
-        setSelectedPlan(plan);
-        setShowUpdateModal(true);
-    };
+    setSelectedPlan(plan);
+    setFormData({
+        project_emp_name: plan.environmentalplan_name,
+        project_emp_stage: plan.environmentalplan_stage,
+        project_emp_description: plan.environmentalplan_description,
+        project_emp_process: plan.environmentalplan_process,
+    });
+    setShowUpdateModal(true);
+};
+
 
     const handleDeletePlan = (plan) => {
         setSelectedPlan(plan);
@@ -66,12 +73,34 @@ export default function EnvironmentalPlansList({ projectId, token }) {
     };
 
     const handleDeletePlanConfirm = async (planid) => {
-        try{
+        try {
             await deletePlan(planid);
             setShowDeleteModal(false);
             alert("✅ Plan eliminado correctamente");
-        }catch(error) {
+        } catch (error) {
             alert("❌ Error al eliminar el plan");
+        }
+    }
+
+    const handleUpdatePlanConfirm = async (planid) => {
+        try {
+
+            await updatePlan(planid, {
+                name: formData.project_emp_name,
+                description: formData.project_emp_description,
+                stage: formData.project_emp_stage,
+                process: formData.project_emp_process,
+            });
+            setShowUpdateModal(false);
+            setFormData({
+                project_update_emp_name: "",
+                project_update_emp_description: "",
+                project_update_emp_stage: "",
+                project_update_emp_process: "",
+            });
+            alert("✅ Plan actualizado correctamente");
+        } catch (error) {
+            alert("❌ Error al actualizar el plan");
         }
     }
 
@@ -264,25 +293,64 @@ export default function EnvironmentalPlansList({ projectId, token }) {
                         <div className="modal-content">
                             <div className="modal-header bg-warning">
                                 <h5>Editar Plan</h5>
-                                <button className="btn-close" onClick={() => setShowUpdateModal(false)}></button>
+                                <button
+                                    className="btn-close"
+                                    onClick={() => setShowUpdateModal(false)}
+                                ></button>
                             </div>
                             <div className="modal-body">
-                                <form>
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    handleUpdatePlanConfirm(selectedPlan.environmentalplan_id);
+                                }}>
                                     <div className="mb-3">
                                         <label>Nombre</label>
-                                        <input type="text" className="form-control" defaultValue={selectedPlan?.environmentalplan_name} />
+                                        <input
+                                            type="text"
+                                            name="project_emp_name"
+                                            className="form-control"
+                                            value={formData.project_emp_name}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label>Etapa</label>
+                                        <input
+                                            type="text"
+                                            name="project_emp_stage"
+                                            className="form-control"
+                                            value={formData.project_emp_stage}
+                                            onChange={handleChange}
+                                        />
                                     </div>
                                     <div className="mb-3">
                                         <label>Descripción</label>
-                                        <input type="text" className="form-control" defaultValue={selectedPlan?.environmentalplan_description} />
+                                        <textarea
+                                            className="form-control"
+                                            name="project_emp_description"
+                                            value={formData.project_emp_description}
+                                            onChange={handleChange}
+                                        />
                                     </div>
-                                    <button className="btn btn-warning">Actualizar</button>
+                                    <div className="mb-3">
+                                        <label>Proceso</label>
+                                        <textarea
+                                            className="form-control"
+                                            name="project_emp_process"
+                                            value={formData.project_emp_process}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <button type="submit" className="btn btn-warning">
+                                        Actualizar
+                                    </button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
             )}
+
 
             {/* Modal Eliminar */}
             {showDeleteModal && (

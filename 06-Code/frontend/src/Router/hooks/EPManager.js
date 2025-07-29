@@ -79,7 +79,7 @@ export default function EPController(projectId, token) {
       if (!res.ok) throw new Error("Error al actualizar plan");
       const updatedPlan = await res.json();
       setEnvironmentalPlan((prev) =>
-        prev.map((plan) => (plan.id === id ? updatedPlan : plan))
+        prev.map((plan) => (plan.environmentalplan_id === id ? updatedPlan : plan))
       );
     } catch (err) {
       setError(err.message);
