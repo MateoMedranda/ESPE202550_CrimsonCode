@@ -4,8 +4,6 @@ export default function ProjectController(projectId, token) {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  console.log("token: "+ token);
-
   useEffect(() => {
     fetch(`http://localhost:3001/projects/${projectId}`, {
       headers: {

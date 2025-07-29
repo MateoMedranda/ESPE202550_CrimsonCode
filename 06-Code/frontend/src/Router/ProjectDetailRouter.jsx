@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useProjectController from "./hooks/ProjectController";
+import EnvironmentalPlansList from "./EPRouter";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useParams } from 'react-router-dom';
@@ -71,7 +72,7 @@ export default function ProjectDetail({ token }) {
 
                 {/* Secciones */}
                 <Section title="Permisos" icon="bi-shield-exclamation" onAdd={() => { }} />
-                <Section title="Plan de Manejo Ambiental" icon="bi-bar-chart-steps" onAdd={() => { }} />
+                <EnvironmentalPlansList projectId={1} token={token}/>
                 <Section title="Monitoreos" icon="bi-camera2" onAdd={() => { }} />
                 <Section title="Recordatorios" icon="bi-exclamation-circle" onAdd={() => { }} />
             </fieldset>
