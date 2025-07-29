@@ -95,7 +95,7 @@ export default function EPController(projectId, token) {
         }
       });
       if (!res.ok) throw new Error("Error al eliminar plan");
-      setEnvironmentalPlan((prev) => prev.filter((plan) => plan.id !== id));
+      setEnvironmentalPlan((prev) => prev.filter((plan) => plan.environmentalplan_id !== id));
     } catch (err) {
       setError(err.message);
     }

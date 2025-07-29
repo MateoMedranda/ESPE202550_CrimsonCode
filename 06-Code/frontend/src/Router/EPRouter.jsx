@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 export default function EnvironmentalPlansList({ projectId, token }) {
-    const { environmentalPlan, loading, fetchPlans, insertPlan } = EPController(projectId, token);
+    const { environmentalPlan, loading, fetchPlans, insertPlan, deletePlan } = EPController(projectId, token);
     const today = new Date();
     const formattedDate = today.toISOString().split("T")[0];
 
@@ -58,11 +58,22 @@ export default function EnvironmentalPlansList({ projectId, token }) {
                 project_emp_stage: "",
                 project_emp_process: "",
             });
+            alert("✅ Plan agregado correctamente");
         } catch (error) {
             alert("❌ Error al agregar plan");
         }
 
     };
+
+    const handleDeletePlanConfirm = async (planid) => {
+        try{
+            await deletePlan(planid);
+            setShowDeleteModal(false);
+            alert("✅ Plan eliminado correctamente");
+        }catch(error) {
+            alert("❌ Error al eliminar el plan");
+        }
+    }
 
     if (loading) return <h2>Cargando planes ambientales...</h2>;
 
@@ -287,7 +298,7 @@ export default function EnvironmentalPlansList({ projectId, token }) {
                             </div>
                             <div className="modal-footer">
                                 <button className="btn btn-secondary" onClick={() => setShowDeleteModal(false)}>Cancelar</button>
-                                <button className="btn btn-danger">Eliminar</button>
+                                <button className="btn btn-danger" onClick={() => handleDeletePlanConfirm(selectedPlan.environmentalplan_id)}>Eliminar</button>
                             </div>
                         </div>
                     </div>
