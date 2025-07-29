@@ -3,7 +3,10 @@ import EPController from "./hooks/EPManager";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
+import { useNavigate } from "react-router-dom";
+
 export default function EnvironmentalPlansList({ projectId, token }) {
+    const navigate = useNavigate();
     const { environmentalPlan, loading, fetchPlans, insertPlan, deletePlan, updatePlan } = EPController(projectId, token);
     const today = new Date();
     const formattedDate = today.toISOString().split("T")[0];
@@ -28,20 +31,20 @@ export default function EnvironmentalPlansList({ projectId, token }) {
         setShowAddModal(true);
     };
 
-    const handleOpenPlan = (id) => {
-        console.log("Abrir detalles del plan", id);
+    const handleOpenPlan = (planId) => {
+        navigate(`/projects/${projectId}/plans/${planId}`);
     };
 
     const handleUpdatePlan = (plan) => {
-    setSelectedPlan(plan);
-    setFormData({
-        project_emp_name: plan.environmentalplan_name,
-        project_emp_stage: plan.environmentalplan_stage,
-        project_emp_description: plan.environmentalplan_description,
-        project_emp_process: plan.environmentalplan_process,
-    });
-    setShowUpdateModal(true);
-};
+        setSelectedPlan(plan);
+        setFormData({
+            project_emp_name: plan.environmentalplan_name,
+            project_emp_stage: plan.environmentalplan_stage,
+            project_emp_description: plan.environmentalplan_description,
+            project_emp_process: plan.environmentalplan_process,
+        });
+        setShowUpdateModal(true);
+    };
 
 
     const handleDeletePlan = (plan) => {

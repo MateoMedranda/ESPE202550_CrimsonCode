@@ -14,6 +14,7 @@ import { useNavigate, Routes, Route } from 'react-router-dom';
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPopper } from "@popperjs/core";
 import Projects from './Router/ProjectDetailRouter.jsx';
+import EnvironmentalPlanDetail from './Router/EnvironmentalPlanDetail.jsx';
 
 function Menu() {
   const INACTIVITY_TIMEOUT = 1800000; 
@@ -200,6 +201,7 @@ function Menu() {
             <Routes>
               <Route path="/" element={<div>Home</div>} />
               <Route path="/projects/:projectId" element={<Projects token={token}/>} />
+              <Route path="/projects/:projectId/plans/:planId" element={<EnvironmentalPlanDetail />} />
               <Route path="/profiles" element={<Profiles token={token} />} />
               <Route path="/reports" element={<div>Reports</div>} />
               <Route path="/calendar" element={<Calendar token={token}/>} />
@@ -207,6 +209,7 @@ function Menu() {
             </Routes>
           </main>
           <Menu_logout/>
+          
       </div>
       
   )
