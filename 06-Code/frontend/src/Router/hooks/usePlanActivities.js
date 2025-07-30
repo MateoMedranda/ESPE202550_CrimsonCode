@@ -6,7 +6,7 @@ export function usePlanActivities(planId, token) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const baseUrl = `http://localhost:3001/environmental-plans/${planId}/activities`;
+    const baseUrl = `https://sima-es01.onrender.com/environmental-plans/${planId}/activities`;
 
     useEffect(() => {
         if (!planId) return;

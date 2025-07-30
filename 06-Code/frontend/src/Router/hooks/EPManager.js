@@ -5,7 +5,7 @@ export default function EPController(projectId, token) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const baseUrl = `http://localhost:3001/projects/${projectId}/environmental-plans`;
+  const baseUrl = `https://sima-es01.onrender.com/projects/${projectId}/environmental-plans`;
 
   useEffect(() => {
     if (!token) {

@@ -20,7 +20,7 @@ export default function useProfilesController(Token) {
    const ProfileTableGet = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:3001/api/profile/profiles", {
+      const response = await fetch("https://sima-es01.onrender.com/api/profile/profiles", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -49,7 +49,7 @@ export default function useProfilesController(Token) {
       permitsContainerRef.current.innerHTML = "";
     setLoading(true);
     try {
-      fetch("http://localhost:3001/api/profile/permits", {
+      fetch("https://sima-es01.onrender.com/api/profile/permits", {
         method: "POST", 
         headers: { 
           "Content-Type": "application/json",
@@ -120,7 +120,7 @@ export default function useProfilesController(Token) {
       return;
     }
 
-    fetch("http://localhost:3001/api/profile/profiles", {
+    fetch("https://sima-es01.onrender.com/api/profile/profiles", {
       method: "POST",
       headers: { "Content-Type": "application/json" ,
         "Authorization": `Bearer ${Token}`},
@@ -152,7 +152,7 @@ export default function useProfilesController(Token) {
 
     setLoading(true);
     try {
-      fetch("http://localhost:3001/api/profile/permits", {
+      fetch("https://sima-es01.onrender.com/api/profile/permits", {
         method: "POST", 
         headers: { 
           "Content-Type": "application/json",
@@ -270,7 +270,7 @@ export default function useProfilesController(Token) {
     permits: permitObject
   };
 
-  fetch(`http://localhost:3001/api/profile/profiles/${id}`, {
+  fetch(`https://sima-es01.onrender.com/api/profile/profiles/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -303,7 +303,7 @@ export default function useProfilesController(Token) {
     profileNameEdit.value = name;
     setLoading(true);
     try {
-      fetch("http://localhost:3001/api/profile/permits", {
+      fetch("https://sima-es01.onrender.com/api/profile/permits", {
         method: "POST", 
         headers: { 
           "Content-Type": "application/json",
@@ -358,7 +358,7 @@ export default function useProfilesController(Token) {
   }
   const handleToggleState = (id, state) => {
     const nuevoEstado = state === "ACTIVE" ? "INACTIVE" : "ACTIVE";
-    fetch(`http://localhost:3001/api/profile/profiles/${id}/state`, {
+    fetch(`https://sima-es01.onrender.com/api/profile/profiles/${id}/state`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

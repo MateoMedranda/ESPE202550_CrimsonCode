@@ -5,7 +5,7 @@ export default function ProjectController(projectId) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/projects`)
+    fetch(`https://sima-es01.onrender.com/projects`)
       .then((res) => res.json())
       .then((data) => setProject(data))
       .catch((err) => console.error(err))

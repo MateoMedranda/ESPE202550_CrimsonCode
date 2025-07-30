@@ -20,7 +20,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:3001/api/user/login", {
+      const res = await fetch("https://sima-es01.onrender.com/api/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

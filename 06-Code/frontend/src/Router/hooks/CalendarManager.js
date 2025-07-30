@@ -17,7 +17,7 @@ export default function CalendarManager(token) {
     const CalendarContentGet = async (date) => {
         const dateOnly = date.toISOString().split("T")[0];
 
-        const response = await fetch("http://localhost:3001/api/reminder/all", {
+        const response = await fetch("https://sima-es01.onrender.com/api/reminder/all", {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export default function CalendarManager(token) {
     const handleAddNotification = async () => {
         setLoading(true);
             try {
-                const response = await fetch('http://localhost:3001/projects', {
+                const response = await fetch('https://sima-es01.onrender.com/projects', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -85,7 +85,7 @@ export default function CalendarManager(token) {
     }
 
     try {
-        const response = await fetch('http://localhost:3001/api/reminder', {
+        const response = await fetch('https://sima-es01.onrender.com/api/reminder', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

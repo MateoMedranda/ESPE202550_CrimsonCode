@@ -12,7 +12,7 @@ export default function UserManager(Token) {
     const UserTableGet = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:3001/api/user/users", {
+      const response = await fetch("https://sima-es01.onrender.com/api/user/users", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export default function UserManager(Token) {
 
       setLoading(true);
     try {
-        const response = await fetch('http://localhost:3001/api/profile/profiles', {
+        const response = await fetch('https://sima-es01.onrender.com/api/profile/profiles', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -114,7 +114,7 @@ export default function UserManager(Token) {
 
   try {
 
-    const response = await fetch("http://localhost:3001/api/user/users", {
+    const response = await fetch("https://sima-es01.onrender.com/api/user/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -168,7 +168,7 @@ export default function UserManager(Token) {
 
       setLoading(true);
     try {
-        const response = await fetch('http://localhost:3001/api/profile/profiles', {
+        const response = await fetch('https://sima-es01.onrender.com/api/profile/profiles', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -190,7 +190,7 @@ export default function UserManager(Token) {
             selectElement.appendChild(option);
         });
 
-        const responseUser = await fetch(`http://localhost:3001/api/user/users/${id}`, {
+        const responseUser = await fetch(`https://sima-es01.onrender.com/api/user/users/${id}`, {
           method : "GET",
           headers : {
             "Content-Type": "application/json",
@@ -227,7 +227,7 @@ export default function UserManager(Token) {
     if (beforeUserDatam.profile_id === user_profile) return handleMessage("No se han realizado cambios en el perfil del usuario");
 
     try {
-      const response = await fetch(`http://localhost:3001/api/user/users/${beforeUserDatam.user_id}`, {
+      const response = await fetch(`https://sima-es01.onrender.com/api/user/users/${beforeUserDatam.user_id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

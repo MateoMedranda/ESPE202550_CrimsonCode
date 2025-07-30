@@ -5,7 +5,7 @@ export default function ProjectController(projectId, token) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/projects/${projectId}`, {
+    fetch(`https://sima-es01.onrender.com/projects/${projectId}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'

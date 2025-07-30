@@ -4,7 +4,7 @@ get_profiles_table();
 
 function get_profiles_table() {
     document.getElementById("profile_name").value = "";
-    fetch('http://localhost:3001/api/profile/profiles', {
+    fetch('https://sima-es01.onrender.com/api/profile/profiles', {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ if (add_button && !add_button.dataset.addedevent) {
         modal.show();
         document.getElementById("profile_name").value = "";
 
-        fetch('http://localhost:3001/api/profile/permits', {
+        fetch('https://sima-es01.onrender.com/api/profile/permits', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ just_permits: true })
@@ -82,7 +82,7 @@ document.addEventListener("click", function (event) {
         document.getElementById("profile_name_view").value = name;
         document.getElementById("profile_id_view").value = id;
 
-        fetch('http://localhost:3001/api/profile/permits', {
+        fetch('https://sima-es01.onrender.com/api/profile/permits', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id })
@@ -135,7 +135,7 @@ document.getElementById("insert").addEventListener("click", (event) => {
     formData.append("profile_name", profile_name);
     selected_permits.forEach(p => formData.append("selected_permits", p));
 
-    fetch('http://localhost:3001/api/profile/profiles', {
+    fetch('https://sima-es01.onrender.com/api/profile/profiles', {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: formData.toString()
@@ -168,7 +168,7 @@ document.addEventListener("click", function (event) {
         document.getElementById("profile_name_edit").value = name;
         document.getElementById("profile_id_edit").value = id;
 
-        fetch('http://localhost:3001/api/profiles/permits', {
+        fetch('https://sima-es01.onrender.com/api/profiles/permits', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id })
@@ -228,7 +228,7 @@ document.getElementById("update_profile").addEventListener("click", () => {
 
     if (!changed) return message("No ha realizado cambios");
 
-    fetch('http://localhost:3001/api/profile/profiles/${profileId}', {
+    fetch('https://sima-es01.onrender.com/api/profile/profiles/${profileId}', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -268,7 +268,7 @@ document.addEventListener("click", function (event) {
         const currentState = event.target.dataset.state;
         const newState = currentState === "ACTIVE" ? "INACTIVE" : "ACTIVE";
 
-        fetch('http://localhost:3001/api/profile/profiles/${profile}/state', {
+        fetch('https://sima-es01.onrender.com/api/profile/profiles/${profile}/state', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({ state: newState })
