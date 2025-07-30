@@ -16,11 +16,9 @@ export default function EnvironmentalPlanDetail({ token }) {
         deleteActivity,
     } = usePlanActivities(planId, token);
 
-    // Estados para modal crear y editar
     const [showModal, setShowModal] = useState(false);
-    const [editingActivity, setEditingActivity] = useState(null); // null = crear
+    const [editingActivity, setEditingActivity] = useState(null); 
 
-    // Formulario común para crear o editar
     const [formData, setFormData] = useState({
         aspect: "",
         impact: "",
@@ -32,7 +30,6 @@ export default function EnvironmentalPlanDetail({ token }) {
     const [formError, setFormError] = useState(null);
     const [saving, setSaving] = useState(false);
 
-    // Abrir modal para crear
     const openCreateModal = () => {
         setEditingActivity(null);
         setFormData({
@@ -46,7 +43,6 @@ export default function EnvironmentalPlanDetail({ token }) {
         setShowModal(true);
     };
 
-    // Abrir modal para editar y precargar datos
     const openEditModal = (activity) => {
         setEditingActivity(activity);
         setFormData({
@@ -60,13 +56,11 @@ export default function EnvironmentalPlanDetail({ token }) {
         setShowModal(true);
     };
 
-    // Manejar cambios de formulario
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    // Guardar creación o edición
     const handleSubmit = async (e) => {
         e.preventDefault();
         setFormError(null);
@@ -80,10 +74,9 @@ export default function EnvironmentalPlanDetail({ token }) {
         try {
             setSaving(true);
             if (editingActivity) {
-                // Editar
                 await updateActivity(editingActivity.activity_id, formData);
             } else {
-                // Crear
+                console.log(formData);
                 await createActivity(formData);
             }
             setShowModal(false);
@@ -94,7 +87,6 @@ export default function EnvironmentalPlanDetail({ token }) {
         }
     };
 
-    // Borrar actividad con confirmación
     const handleDelete = async (activityId) => {
         if (window.confirm("¿Seguro que quieres eliminar esta actividad?")) {
             try {
