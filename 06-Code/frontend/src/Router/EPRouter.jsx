@@ -31,9 +31,12 @@ export default function EnvironmentalPlansList({ projectId, token }) {
         setShowAddModal(true);
     };
 
-    const handleOpenPlan = (planId) => {
-        navigate(`/projects/${projectId}/plans/${planId}`);
+    const handleOpenPlan = (plan) => {
+        navigate(`/projects/${projectId}/plans/${plan.environmentalplan_id}`, {
+            state: { plan }
+        });
     };
+
 
     const handleUpdatePlan = (plan) => {
         setSelectedPlan(plan);
@@ -151,7 +154,7 @@ export default function EnvironmentalPlansList({ projectId, token }) {
                             <div className="px-2 pt-2">
                                 <div className="d-flex justify-content-between align-items-start">
                                     <div
-                                        onClick={() => handleOpenPlan(plan.environmentalplan_id)}
+                                        onClick={() => handleOpenPlan(plan)}
                                         className="div_project_emp"
                                         style={{
                                             cursor: "pointer",
@@ -191,7 +194,7 @@ export default function EnvironmentalPlansList({ projectId, token }) {
                                             <li>
                                                 <button
                                                     className="dropdown-item"
-                                                    onClick={() => handleOpenPlan(plan.environmentalplan_id)}
+                                                    onClick={() => handleOpenPlan(plan)}
                                                 >
                                                     Ver detalles
                                                 </button>

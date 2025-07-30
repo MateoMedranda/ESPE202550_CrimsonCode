@@ -1,14 +1,18 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
-export default function EnvironmentalPlanDetail() {
+export default function EnvironmentalPlanDetail({ token }) {
     const { planId } = useParams();
+    const location = useLocation();
+    const plan = location.state?.plan;
+
+    console.log(plan);
 
     return (
         <div className="container mt-4">
             <div className="d-flex">
                 <div className="col">
-                    <h2 style={{ color: "white" }}>Detalle del Plan {planId}</h2>
+                    <h2 style={{ color: "white" }}>{plan?.environmentalplan_name}</h2>
                 </div>
                 <div className="col text-end">
                     <button className="btn bg-info-subtle border-black">

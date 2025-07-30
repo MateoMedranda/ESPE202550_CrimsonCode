@@ -201,7 +201,7 @@ function Menu() {
             <Routes>
               <Route path="/" element={<div>Home</div>} />
               <Route path="/projects/:projectId" element={<Projects token={token}/>} />
-              <Route path="/projects/:projectId/plans/:planId" element={<EnvironmentalPlanDetail />} />
+              <Route path="/projects/:projectId/plans/:planId" element={<EnvironmentalPlanDetail token={token} />} />
               <Route path="/profiles" element={<Profiles token={token} />} />
               <Route path="/reports" element={<div>Reports</div>} />
               <Route path="/calendar" element={<Calendar token={token}/>} />

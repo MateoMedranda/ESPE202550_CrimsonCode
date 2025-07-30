@@ -18,7 +18,7 @@
 
 body{
     background-image:linear-gradient(to bottom, rgba(0, 0, 0, 0.13), rgba(0, 0, 0, 0.151)), 
-                      url("../IMG/fondo.jpg");
+                      url("../../public/img/fondo.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
