@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useProjectController from "./hooks/ProjectController";
-import EnvironmentalPlansList from "./EPRouter";
+import EnvironmentalPlansList from "./components/EnvironmentalPlanList";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useParams } from 'react-router-dom';

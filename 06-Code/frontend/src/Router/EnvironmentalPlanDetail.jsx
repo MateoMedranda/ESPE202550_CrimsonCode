@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { usePlanActivities } from "./hooks/usePlanActivities";
+import ActivityModal from "./components/ActivityModal";
+import * as bootstrap from "bootstrap";
 
 export default function EnvironmentalPlanDetail({ token }) {
     const { planId } = useParams();
     const location = useLocation();
     const plan = location.state?.plan;
+    const [formError, setFormError] = useState(null);
+    const [saving, setSaving] = useState(false);
+    const [filterText, setFilterText] = useState("");
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+    const [showModal, setShowModal] = useState(false);
+    const [editingActivity, setEditingActivity] = useState(null);
 
     const {
         activities,
@@ -16,8 +24,6 @@ export default function EnvironmentalPlanDetail({ token }) {
         deleteActivity,
     } = usePlanActivities(planId, token);
 
-    const [showModal, setShowModal] = useState(false);
-    const [editingActivity, setEditingActivity] = useState(null); 
 
     const [formData, setFormData] = useState({
         aspect: "",
@@ -27,18 +33,17 @@ export default function EnvironmentalPlanDetail({ token }) {
         frecuency: "",
     });
 
-    const [formError, setFormError] = useState(null);
-    const [saving, setSaving] = useState(false);
+    const resetForm = () => ({
+        aspect: "",
+        impact: "",
+        measure: "",
+        verification: "",
+        frecuency: "",
+    });
 
     const openCreateModal = () => {
         setEditingActivity(null);
-        setFormData({
-            aspect: "",
-            impact: "",
-            measure: "",
-            verification: "",
-            frecuency: "",
-        });
+        setFormData(resetForm());
         setFormError(null);
         setShowModal(true);
     };
@@ -76,7 +81,6 @@ export default function EnvironmentalPlanDetail({ token }) {
             if (editingActivity) {
                 await updateActivity(editingActivity.activity_id, formData);
             } else {
-                console.log(formData);
                 await createActivity(formData);
             }
             setShowModal(false);
@@ -97,11 +101,66 @@ export default function EnvironmentalPlanDetail({ token }) {
         }
     };
 
+    useEffect(() => {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltipTriggerList.forEach((el) => new bootstrap.Tooltip(el));
+    }, [activities]);
+
+    const sortedFilteredActivities = useMemo(() => {
+        if (!activities) return [];
+
+        const text = filterText.toLowerCase();
+        let filtered = activities.filter((act) =>
+            act.activity_aspect.toLowerCase().includes(text) ||
+            act.activity_impact.toLowerCase().includes(text) ||
+            act.activity_measure.toLowerCase().includes(text) ||
+            act.activity_frecuency.toLowerCase().includes(text)
+        );
+
+        if (sortConfig.key) {
+            filtered.sort((a, b) => {
+                let aValue = a[sortConfig.key];
+                let bValue = b[sortConfig.key];
+
+                if (sortConfig.key === "updatedat") {
+                    aValue = new Date(aValue);
+                    bValue = new Date(bValue);
+                } else {
+                    aValue = String(aValue).toLowerCase();
+                    bValue = String(bValue).toLowerCase();
+                }
+
+                if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+                if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
+                return 0;
+            });
+        }
+
+        return filtered;
+    }, [activities, filterText, sortConfig]);
+
+    const requestSort = (key) => {
+        let direction = "asc";
+        if (sortConfig.key === key && sortConfig.direction === "asc") {
+            direction = "desc";
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const getSortIndicator = (key) => {
+        if (sortConfig.key !== key) return <span className="text-muted ms-1">⇅</span>;
+        return sortConfig.direction === "asc" ? (
+            <span className="ms-1">▲</span>
+        ) : (
+            <span className="ms-1">▼</span>
+        );
+    };
+
     return (
-        <div className="container mt-4 position-relative">
+        <div className="container mt-4 position-relative bg-light p-4">
             <div className="d-flex">
                 <div className="col">
-                    <h2 style={{ color: "white" }}>{plan?.environmentalplan_name}</h2>
+                    <h2 className="fw-bold text-dark">{plan?.environmentalplan_name}</h2>
                 </div>
                 <div className="col text-end">
                     <button
@@ -113,33 +172,95 @@ export default function EnvironmentalPlanDetail({ token }) {
                 </div>
             </div>
 
-            <fieldset className="project_activities_container rounded shadow p-2">
-                <hr />
+            {/* Filtro con icono lupa y tamaño pequeño */}
+            <div className="input-group input-group-sm mb-3 mt-3" style={{ maxWidth: "300px" }}>
+                <span className="input-group-text bg-white border-end-0" id="search-addon">
+                    <i className="bi bi-search"></i>
+                </span>
+                <input
+                    type="text"
+                    className="form-control border-start-0"
+                    placeholder="Filtrar actividades..."
+                    aria-label="Filtrar actividades"
+                    aria-describedby="search-addon"
+                    value={filterText}
+                    onChange={(e) => setFilterText(e.target.value)}
+                />
+            </div>
+
+            <hr />
+            <p>Para ordenar haga click en el nombre de la columna</p>
+
+            <fieldset className="project_activities_container rounded shadow p-2 mt-3">
                 {loading ? (
-                    <p className="text-white">Cargando actividades...</p>
+                    <p className="text-dark">Cargando actividades...</p>
                 ) : error ? (
-                    <p className="text-danger">Error al cargar actividades: {error.message}</p>
+                    <p className="text-danger">
+                        Error al cargar actividades: {error?.message || "Error desconocido"}
+                    </p>
                 ) : (
                     <div className="table-responsive">
-                        <table className="table text-center table-striped rounded">
-                            <thead>
+                        <table className="table text-center table-striped rounded align-middle">
+                            <thead className="table-dark">
                                 <tr>
-                                    <th>Código</th>
-                                    <th>Proceso / Actividad</th>
-                                    <th>Impacto Ambiental</th>
-                                    <th>Medidas</th>
-                                    <th>Frecuencia</th>
-                                    <th>Actualización</th>
-                                    <th></th>
+                                    {[
+                                        { key: "activity_id", label: "Código" },
+                                        { key: "activity_aspect", label: "Proceso / Actividad" },
+                                        { key: "activity_impact", label: "Impacto Ambiental" },
+                                        { key: "activity_measure", label: "Medidas" },
+                                        { key: "activity_frecuency", label: "Frecuencia" },
+                                        { key: "updatedat", label: "Actualización" },
+                                    ].map(({ key, label }) => (
+                                        <th
+                                            key={key}
+                                            onClick={() => requestSort(key)}
+                                            style={{ cursor: "pointer", userSelect: "none" }}
+                                            title={`Ordenar por ${label}`}
+                                        >
+                                            {label} {getSortIndicator(key)}
+                                        </th>
+                                    ))}
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {activities.map((act) => (
-                                    <tr key={act.activity_id} className="align-middle">
+                                {sortedFilteredActivities.length === 0 && (
+                                    <tr>
+                                        <td colSpan="7" className="text-center text-muted">
+                                            No se encontraron actividades.
+                                        </td>
+                                    </tr>
+                                )}
+                                {sortedFilteredActivities.map((act) => (
+                                    <tr key={act.activity_id}>
                                         <td>P{planId}C{act.activity_id}</td>
-                                        <td>{act.activity_aspect}</td>
-                                        <td>{act.activity_impact}</td>
-                                        <td>{act.activity_measure}</td>
+                                        <td
+                                            className="text-truncate"
+                                            style={{ maxWidth: "150px" }}
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title={act.activity_aspect}
+                                        >
+                                            {act.activity_aspect}
+                                        </td>
+                                        <td
+                                            className="text-truncate"
+                                            style={{ maxWidth: "150px" }}
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title={act.activity_impact}
+                                        >
+                                            {act.activity_impact}
+                                        </td>
+                                        <td
+                                            className="text-truncate"
+                                            style={{ maxWidth: "150px" }}
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title={act.activity_measure}
+                                        >
+                                            {act.activity_measure}
+                                        </td>
                                         <td>{act.activity_frecuency}</td>
                                         <td>{new Date(act.updatedat).toLocaleDateString()}</td>
                                         <td>
@@ -151,13 +272,13 @@ export default function EnvironmentalPlanDetail({ token }) {
                                                     <i className="bi bi-clipboard-check-fill me-2"></i> Controles
                                                 </button>
                                                 <i
-                                                    className="bi bi-pencil-square mx-2"
+                                                    className="bi bi-pencil-square mx-2 fs-3 icon-hover"
                                                     style={{ color: "blue", cursor: "pointer" }}
                                                     title="Editar"
                                                     onClick={() => openEditModal(act)}
                                                 ></i>
                                                 <i
-                                                    className="bi bi-x-circle mx-2"
+                                                    className="bi bi-x-circle mx-2 fs-3 icon-hover"
                                                     style={{ color: "red", cursor: "pointer" }}
                                                     title="Eliminar"
                                                     onClick={() => handleDelete(act.activity_id)}
@@ -172,130 +293,17 @@ export default function EnvironmentalPlanDetail({ token }) {
                 )}
             </fieldset>
 
-            {/* Modal (crear/editar) */}
-            {showModal && (
-                <>
-                    {/* Overlay */}
-                    <div
-                        style={{
-                            position: "fixed",
-                            top: 0,
-                            left: 0,
-                            width: "100vw",
-                            height: "100vh",
-                            backgroundColor: "rgba(0,0,0,0.5)",
-                            zIndex: 1000,
-                        }}
-                        onClick={() => setShowModal(false)}
-                    ></div>
-
-                    {/* Modal */}
-                    <div
-                        style={{
-                            position: "fixed",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            backgroundColor: "white",
-                            borderRadius: "8px",
-                            padding: "1.5rem",
-                            boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
-                            zIndex: 1001,
-                            maxWidth: "600px",
-                            width: "90%",
-                            maxHeight: "90vh",
-                            overflowY: "auto",
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <form onSubmit={handleSubmit}>
-                            <h3>{editingActivity ? "Editar Actividad Ambiental" : "Nueva Actividad Ambiental"}</h3>
-                            <hr />
-
-                            {formError && (
-                                <p className="text-danger" style={{ fontWeight: "bold" }}>
-                                    {formError}
-                                </p>
-                            )}
-
-                            <div className="mb-3">
-                                <label className="form-label">Proceso / Actividad *</label>
-                                <input
-                                    type="text"
-                                    name="aspect"
-                                    className="form-control"
-                                    value={formData.aspect}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label">Impacto Ambiental *</label>
-                                <input
-                                    type="text"
-                                    name="impact"
-                                    className="form-control"
-                                    value={formData.impact}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label">Medidas *</label>
-                                <input
-                                    type="text"
-                                    name="measure"
-                                    className="form-control"
-                                    value={formData.measure}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label">Verificación *</label>
-                                <input
-                                    type="text"
-                                    name="verification"
-                                    className="form-control"
-                                    value={formData.verification}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label">Frecuencia *</label>
-                                <select
-                                    name="frecuency"
-                                    className="form-select"
-                                    value={formData.frecuency}
-                                    onChange={handleChange}
-                                    required
-                                >
-                                    <option value="">Seleccione</option>
-                                    <option value="Anual">Anual</option>
-                                    <option value="Mensual">Mensual</option>
-                                    <option value="Permanente">Permanente</option>
-                                    <option value="No aplica">No aplica</option>
-                                </select>
-                            </div>
-
-                            <div className="text-end">
-                                <button
-                                    type="button"
-                                    className="btn btn-secondary me-2"
-                                    onClick={() => setShowModal(false)}
-                                    disabled={saving}
-                                >
-                                    Cancelar
-                                </button>
-                                <button type="submit" className="btn btn-primary" disabled={saving}>
-                                    {saving ? "Guardando..." : "Guardar"}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </>
-            )}
+            <ActivityModal
+                show={showModal}
+                onClose={() => setShowModal(false)}
+                onSubmit={handleSubmit}
+                formData={formData}
+                handleChange={handleChange}
+                formError={formError}
+                saving={saving}
+                title={editingActivity ? "Editar Actividad Ambiental" : "Nueva Actividad Ambiental"}
+                submitLabel={editingActivity ? "Actualizar" : "Guardar"}
+            />
         </div>
     );
 }

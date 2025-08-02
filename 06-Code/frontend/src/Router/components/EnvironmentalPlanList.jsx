@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import EPController from "./hooks/EPManager";
+import EPController from "../hooks/EPManager";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useNavigate } from "react-router-dom";
-import PlanModal from "./components/PlanModal";
-import ConfirmDeleteModal from "./components/ConfirmDeleteModal";
-import ActionDropdown from "./components/ActionDropDown";
+import PlanModal from "./PlanModal";
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import ActionDropdown from "./ActionDropDown";
 
 export default function EnvironmentalPlansList({ projectId, token }) {
     const navigate = useNavigate();
