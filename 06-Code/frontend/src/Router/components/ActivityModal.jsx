@@ -1,15 +1,15 @@
 import React from "react";
 
-const ActivityModal = ({ 
-    show, 
-    onClose, 
-    onSubmit, 
-    formData, 
-    handleChange, 
+const ActivityModal = ({
+    show,
+    onClose,
+    onSubmit,
+    formData,
+    handleChange,
     formError,
     saving,
-    title, 
-    submitLabel 
+    title,
+    submitLabel
 }) => {
     if (!show) return null;
 
@@ -29,7 +29,7 @@ const ActivityModal = ({
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
-                                onSubmit();
+                                onSubmit(e); 
                             }}
                         >
                             <div className="mb-3">
@@ -102,9 +102,9 @@ const ActivityModal = ({
                                 >
                                     Cancelar
                                 </button>
-                                <button 
-                                    type="submit" 
-                                    className={`btn ${title.includes("Editar") ? "btn-warning" : "btn-success"}`} 
+                                <button
+                                    type="submit"
+                                    className={`btn ${title.includes("Editar") ? "btn-warning" : "btn-success"}`}
                                     disabled={saving}
                                 >
                                     {saving ? "Guardando..." : submitLabel}
