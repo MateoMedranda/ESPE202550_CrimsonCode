@@ -151,15 +151,14 @@ export default function EnvironmentalPlansList({ projectId, token }) {
                         <div
                             key={plan.environmentalplan_id}
                             className="project_plan_card col-3 rounded m-4"
-                            style={{ minWidth: "250px" }}
+                            style={{ minWidth: "250px", cursor: "pointer" }}
+                            onClick={() => handleOpenPlan(plan)}
                         >
                             <div className="px-2 pt-2">
                                 <div className="d-flex justify-content-between align-items-start">
                                     <div
-                                        onClick={() => handleOpenPlan(plan)}
                                         className="div_project_emp"
                                         style={{
-                                            cursor: "pointer",
                                             whiteSpace: "normal",
                                             wordWrap: "break-word",
                                             maxWidth: "80%"
@@ -167,11 +166,13 @@ export default function EnvironmentalPlansList({ projectId, token }) {
                                     >
                                         <h5 className="mb-0 title_project">{plan.environmentalplan_name}</h5>
                                     </div>
-                                    <ActionDropdown
-                                        onEdit={() => handleUpdatePlan(plan)}
-                                        onDelete={() => handleDeletePlan(plan)}
-                                        onView={() => handleOpenPlan(plan)}
-                                    />
+                                    <div onClick={(e) => e.stopPropagation()}>
+                                        <ActionDropdown
+                                            onEdit={() => handleUpdatePlan(plan)}
+                                            onDelete={() => handleDeletePlan(plan)}
+                                            onView={() => handleOpenPlan(plan)}
+                                        />
+                                    </div>
                                 </div>
                                 <hr />
                                 <div className="plan_progress_container">
@@ -181,6 +182,7 @@ export default function EnvironmentalPlansList({ projectId, token }) {
                                 </div>
                             </div>
                         </div>
+
                     ))}
                 </div>
             )}

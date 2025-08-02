@@ -14,9 +14,13 @@ const ActionDropdown = ({ onEdit, onDelete, onView, customItems = [] }) => {
             <ul className="dropdown-menu dropdown-menu-end shadow">
                 {onEdit && (
                     <li>
-                        <button className="dropdown-item" onClick={onEdit}>
+                        <button className="dropdown-item" onClick={(e) => {
+                            e.stopPropagation();
+                            onEdit && onEdit(e);
+                        }}>
                             Editar
                         </button>
+
                     </li>
                 )}
                 {onDelete && (
