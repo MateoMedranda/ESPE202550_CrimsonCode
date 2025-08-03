@@ -8,15 +8,17 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");  // Estado para el mensaje de error
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!username.trim() || !password.trim()) {
-      alert("Por favor, completa todos los campos.");
+      setErrorMsg("Por favor, completa todos los campos.");
       return;
     }
 
+    setErrorMsg("");
     setLoading(true);
 
     try {
@@ -30,7 +32,7 @@ export default function Login() {
 
       if (!res.ok) {
         const err = await res.json();
-        alert(err.message || "Error en el login");
+        setErrorMsg(err.message || "Error en el login");
         setLoading(false);
         return;
       }
@@ -40,51 +42,72 @@ export default function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      window.location.reload(); 
+      window.location.reload();
 
     } catch (err) {
       console.error(err);
-      alert("Error de conexión al servidor");
+      setErrorMsg("Error de conexión al servidor");
     } finally {
       setLoading(false);
     }
   };
 
-
   return (
     <div className="login-bck d-flex justify-content-center align-items-center min-vh-100">
-      <div className="login-box text-center">
-        <img src="/img/biosigma_logo.png" alt="Logo" className="mb-3" />
-        <h3>Bienvenido</h3>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group mb-3">
+      <div className="login-box p-4 rounded shadow-lg">
+        <div className="text-center mb-4">
+          <img src="/img/Logo.png" alt="Logo" width={"110px"} className="login-logo mb-2" />
+          <h3 className="login-title">Bienvenido</h3>
+        </div>
+
+        <form onSubmit={handleSubmit} noValidate>
+          <div className="input-group mb-3">
+            <span className="input-group-text bg-success text-white">
+              <i className="bi bi-person-fill"></i>
+            </span>
             <input
               type="text"
               className="form-control"
-              name="username"
-              placeholder="Username"
+              placeholder="Usuario"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              disabled={loading}
               required
             />
           </div>
-          <div className="form-group mb-3">
+
+          <div className="input-group mb-4">
+            <span className="input-group-text bg-success text-white">
+              <i className="bi bi-lock-fill"></i>
+            </span>
             <input
               type="password"
               className="form-control"
-              name="password"
-              placeholder="Password"
+              placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
               required
             />
           </div>
+
+          {errorMsg && (
+            <div className="alert bg-danger-subtle border-danger rounded mb-3" role="alert">
+              {errorMsg}
+            </div>
+          )}
+
           <button
             type="submit"
-            className="btn btn-primary w-100"
+            className="btn btn-success w-100 fw-semibold"
             disabled={loading}
           >
-            {loading ? "Cargando…" : "LOGIN"}
+            {loading ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Cargando…
+              </>
+            ) : "Ingresar"}
           </button>
         </form>
       </div>
