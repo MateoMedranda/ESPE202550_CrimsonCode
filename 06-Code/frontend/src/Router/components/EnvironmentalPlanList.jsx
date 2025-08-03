@@ -124,7 +124,7 @@ export default function EnvironmentalPlansList({ projectId, token }) {
                 <div className="col text-end">
                     <button
                         id="add_emp"
-                        className="btn_add btn bg-info-subtle border-black"
+                        className="btn_add btn button_hover"
                         onClick={handleAddPlan}
                     >
                         <i className="bi bi-plus-circle"></i> Agregar Plan

@@ -3,8 +3,11 @@ import { useParams, useLocation } from "react-router-dom";
 import { usePlanActivities } from "./hooks/usePlanActivities";
 import ActivityModal from "./components/ActivityModal";
 import * as bootstrap from "bootstrap";
+import { useNavigate } from 'react-router-dom';
+import ControlModal from "./components/ControlModal";
 
 export default function EnvironmentalPlanDetail({ token }) {
+    const navigate = useNavigate();
     const { planId } = useParams();
     const location = useLocation();
     const plan = location.state?.plan;
@@ -14,6 +17,7 @@ export default function EnvironmentalPlanDetail({ token }) {
     const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
     const [showModal, setShowModal] = useState(false);
     const [editingActivity, setEditingActivity] = useState(null);
+    const [showControlModal, setShowControlModal] = useState(false);
 
     const {
         activities,
@@ -162,14 +166,10 @@ export default function EnvironmentalPlanDetail({ token }) {
                 <div className="col">
                     <h2 className="fw-bold text-dark">{plan?.environmentalplan_name}</h2>
                 </div>
-                <div className="col text-end">
-                    <button
-                        className="btn bg-info-subtle border-black"
-                        onClick={openCreateModal}
-                    >
-                        <i className="bi bi-plus-circle"></i> Agregar Actividad
-                    </button>
-                </div>
+                <button className="btn btn-outline-danger px-4 py-2 rounded-pill shadow-sm" onClick={() => navigate(`/projects/${plan.project_id}`)}>
+                    <i className="bi bi-arrow-left me-2"></i> Regresar
+                </button>
+
             </div>
 
             {/* Filtro con icono lupa y tamaño pequeño */}
@@ -189,7 +189,21 @@ export default function EnvironmentalPlanDetail({ token }) {
             </div>
 
             <hr />
-            <p>Para ordenar haga click en el nombre de la columna</p>
+            <div className="d-flex">
+                <div className="col">
+                    <p>Para ordenar haga click en el nombre de la columna</p>
+                </div>
+
+                <div className="col text-end">
+                    <button
+                        className="btn button_hover"
+                        onClick={openCreateModal}
+                    >
+                        <i className="bi bi-plus-circle"></i> Agregar Actividad
+                    </button>
+                </div>
+
+            </div>
 
             <fieldset className="project_activities_container rounded shadow p-2 mt-3">
                 {loading ? (
@@ -266,11 +280,13 @@ export default function EnvironmentalPlanDetail({ token }) {
                                         <td>
                                             <div className="d-flex justify-content-center">
                                                 <button
-                                                    className="btn bg-success-subtle btn-sm mx-2"
+                                                    className="btn bg-success-subtle btn-sm mx-2 icon-hover"
                                                     title="Controles"
+                                                    onClick={() => setShowControlModal(true)}
                                                 >
                                                     <i className="bi bi-clipboard-check-fill me-2"></i> Controles
                                                 </button>
+
                                                 <i
                                                     className="bi bi-pencil-square mx-2 fs-3 icon-hover"
                                                     style={{ color: "blue", cursor: "pointer" }}
@@ -304,6 +320,12 @@ export default function EnvironmentalPlanDetail({ token }) {
                 title={editingActivity ? "Editar Actividad Ambiental" : "Nueva Actividad Ambiental"}
                 submitLabel={editingActivity ? "Actualizar" : "Guardar"}
             />
+
+            <ControlModal
+                show={showControlModal}
+                onClose={() => setShowControlModal(false)}
+            />
+
         </div>
     );
 }

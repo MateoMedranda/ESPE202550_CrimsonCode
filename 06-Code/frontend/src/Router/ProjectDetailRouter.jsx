@@ -4,8 +4,10 @@ import EnvironmentalPlansList from "./components/EnvironmentalPlanList";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProjectDetail({ token }) {
+    const navigate = useNavigate();
     const { projectId } = useParams();
     const { project, loading } = useProjectController(projectId, token);
     const [modalImage, setModalImage] = useState(null);
@@ -18,11 +20,10 @@ export default function ProjectDetail({ token }) {
             {/* Header */}
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h1 className="fw-bold text-dark">{project.project_name}</h1>
-                <button
-                    className="btn btn-outline-danger px-4 py-2 rounded-pill shadow-sm"
-                >
+                <button className="btn btn-outline-danger px-4 py-2 rounded-pill shadow-sm" onClick={() => navigate("/")} >
                     <i className="bi bi-arrow-left me-2"></i> Regresar
                 </button>
+
             </div>
 
             {/* Card principal */}
@@ -87,11 +88,10 @@ export default function ProjectDetail({ token }) {
             )}
 
             {/* Secciones */}
-            <div className="mt-4">
+            <div className="mt-5">
                 <Section title="Permisos" icon="bi-shield-lock" onAdd={() => { }} />
                 <EnvironmentalPlansList projectId={1} token={token} />
                 <Section title="Monitoreos" icon="bi-camera-video" onAdd={() => { }} />
-                <Section title="Recordatorios" icon="bi-bell-fill" onAdd={() => { }} />
             </div>
         </div>
     );
@@ -101,12 +101,13 @@ export default function ProjectDetail({ token }) {
 function Section({ title, icon, onAdd }) {
     return (
         <>
+        <hr></hr>
             <div className="d-flex">
                 <div className="col">
                     <h3 className="title inter-title">{title}</h3>
                 </div>
                 <div className="col text-end">
-                    <button className="btn bg-info-subtle border-black" onClick={onAdd}>
+                    <button className="btn button_hover" onClick={onAdd}>
                         <i className="bi bi-plus-circle"></i> Agregar
                     </button>
                 </div>

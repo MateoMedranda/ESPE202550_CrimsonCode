@@ -100,3 +100,11 @@ body{
 .icon-hover:hover {
     transform: scale(1.2); 
 }
+.button_hover{
+    background-color: rgb(146, 231, 231);
+    border-color: rgb(5, 131, 139);
+}
+.button_hover:hover {
+    background-color: rgb(178, 160, 228);
+    border-color: blueviolet;
+}
