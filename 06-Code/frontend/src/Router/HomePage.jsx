@@ -9,17 +9,25 @@ const HomePage = () => {
     <div id="container" className="container mt-4 fade-in">
       <h1 className="letter_quicksand text-center text-light fw-bold">Bienvenido!</h1>
 
-      <div className="row home_container">
-        <div className="col-6 text-center">
+      <div className="row home_container d-flex" style={{ alignItems: 'stretch' }}>
+        <div className="col-6 p-0 d-flex" style={{ overflow: 'hidden' }}>
           <img
             className="rounded shadow"
             src="/img/Macas.png"
-            width="130%"
             alt="Macas"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
           />
         </div>
 
-        <div className="col-6 bg-light rounded p-4 shadow home_letter" style={{ color: 'rgb(21, 44, 26)' }}>
+        <div
+          className="col-6 bg-light rounded p-4 shadow home_letter d-flex flex-column justify-content-center"
+          style={{ color: 'rgb(21, 44, 26)' }}
+        >
           <h2 className="letter_quicksand fw-bold">¿Qué significa BIOSIGMA?</h2>
           <p className="letter_quicksand fs-5">
             Nace de la unión de palabras que enfocan nuestro trabajo y filosofía:
@@ -35,7 +43,7 @@ const HomePage = () => {
             y sabiduría y que enfoca gráficamente nuestro objetivo de crecimiento
             y mejoramiento continuo.
           </p>
-          <img src="/img/biosigma_logo.png" alt="Biosigma Logo" />
+          <img className='m-auto' width={"300px"} src="/img/biosigma_logo.png" alt="Biosigma Logo" />
         </div>
       </div>
     </div>

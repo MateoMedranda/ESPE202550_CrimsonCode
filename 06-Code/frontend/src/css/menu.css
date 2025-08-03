@@ -93,6 +93,7 @@ body{
     border: none;
 }
 
+
 .icon-hover {
     transition: transform 0.2s ease-in-out;
 }
@@ -107,4 +108,35 @@ body{
 .button_hover:hover {
     background-color: rgb(178, 160, 228);
     border-color: blueviolet;
+}
+
+.active-circle {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #2b0f8f;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.active-circle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background-color: #247494;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.active-menu .nav-link {
+  color: #2b0f8f;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
 }
