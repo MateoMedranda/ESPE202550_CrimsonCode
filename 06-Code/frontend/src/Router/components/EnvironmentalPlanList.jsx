@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import EPController from "../hooks/EPManager";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -10,13 +10,12 @@ import ActionDropdown from "./ActionDropDown";
 export default function EnvironmentalPlansList({ projectId, token }) {
     const navigate = useNavigate();
     const { environmentalPlan, loading, insertPlan, deletePlan, updatePlan } = EPController(projectId, token);
-    const today = new Date();
-    const formattedDate = today.toISOString().split("T")[0];
 
     const [showAddModal, setShowAddModal] = useState(false);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState(null);
+    const [progressData, setProgressData] = useState({}); // ✅ aquí guardamos los porcentajes
 
     const [formData, setFormData] = useState({
         project_emp_name: "",
@@ -29,16 +28,13 @@ export default function EnvironmentalPlansList({ projectId, token }) {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleAddPlan = () => {
-        setShowAddModal(true);
-    };
+    const handleAddPlan = () => setShowAddModal(true);
 
     const handleOpenPlan = (plan) => {
         navigate(`/projects/${projectId}/plans/${plan.environmentalplan_id}`, {
             state: { plan }
         });
     };
-
 
     const handleUpdatePlan = (plan) => {
         setSelectedPlan(plan);
@@ -50,7 +46,6 @@ export default function EnvironmentalPlansList({ projectId, token }) {
         });
         setShowUpdateModal(true);
     };
-
 
     const handleDeletePlan = (plan) => {
         setSelectedPlan(plan);
@@ -74,10 +69,9 @@ export default function EnvironmentalPlansList({ projectId, token }) {
                 project_emp_process: "",
             });
             alert("✅ Plan agregado correctamente");
-        } catch (error) {
+        } catch {
             alert("❌ Error al agregar plan");
         }
-
     };
 
     const handleDeletePlanConfirm = async (planid) => {
@@ -85,14 +79,13 @@ export default function EnvironmentalPlansList({ projectId, token }) {
             await deletePlan(planid);
             setShowDeleteModal(false);
             alert("✅ Plan eliminado correctamente");
-        } catch (error) {
+        } catch {
             alert("❌ Error al eliminar el plan");
         }
-    }
+    };
 
     const handleUpdatePlanConfirm = async (planid) => {
         try {
-
             await updatePlan(planid, {
                 name: formData.project_emp_name,
                 description: formData.project_emp_description,
@@ -101,16 +94,54 @@ export default function EnvironmentalPlansList({ projectId, token }) {
             });
             setShowUpdateModal(false);
             setFormData({
-                project_update_emp_name: "",
-                project_update_emp_description: "",
-                project_update_emp_stage: "",
-                project_update_emp_process: "",
+                project_emp_name: "",
+                project_emp_description: "",
+                project_emp_stage: "",
+                project_emp_process: "",
             });
             alert("✅ Plan actualizado correctamente");
-        } catch (error) {
+        } catch {
             alert("❌ Error al actualizar el plan");
         }
-    }
+    };
+
+    const getPercentageOfPlan = async (plan_id) => {
+        const headers = {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        };
+
+        try {
+            const response = await fetch(
+                `https://sima-es01.onrender.com/environmental-plans/${plan_id}/compliance`,
+                { method: "GET", headers }
+            );
+
+            if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+
+            const result = await response.json();
+            return result.percentageSatisfy ?? 0;
+        } catch (error) {
+            console.error(`Error obteniendo el porcentaje completado`, error);
+            return 0;
+        }
+    };
+
+    // ✅ Cargar porcentajes después de que se carguen los planes
+    useEffect(() => {
+        if (!environmentalPlan || environmentalPlan.length === 0) return;
+
+        const fetchAllProgress = async () => {
+            const progressMap = {};
+            for (const plan of environmentalPlan) {
+                const percentage = await getPercentageOfPlan(plan.environmentalplan_id);
+                progressMap[plan.environmentalplan_id] = percentage;
+            }
+            setProgressData(progressMap);
+        };
+
+        fetchAllProgress();
+    }, [environmentalPlan]);
 
     if (loading) return <h2>Cargando planes ambientales...</h2>;
 
@@ -142,52 +173,53 @@ export default function EnvironmentalPlansList({ projectId, token }) {
                     </div>
                 </div>
             ) : (
-                <div
-                    id="plan_content_div"
-                    className="d-flex overflow-auto"
-                    style={{ whiteSpace: "nowrap" }}
-                >
-                    {environmentalPlan.map((plan) => (
-                        <div
-                            key={plan.environmentalplan_id}
-                            className="project_plan_card col-3 rounded m-4"
-                            style={{ minWidth: "250px", cursor: "pointer" }}
-                            onClick={() => handleOpenPlan(plan)}
-                        >
-                            <div className="px-2 pt-2">
-                                <div className="d-flex justify-content-between align-items-start">
-                                    <div
-                                        className="div_project_emp"
-                                        style={{
-                                            whiteSpace: "normal",
-                                            wordWrap: "break-word",
-                                            maxWidth: "80%"
-                                        }}
-                                    >
-                                        <h5 className="mb-0 title_project">{plan.environmentalplan_name}</h5>
+                <div id="plan_content_div" className="d-flex overflow-auto" style={{ whiteSpace: "nowrap" }}>
+                    {environmentalPlan.map((plan) => {
+                        const percentage = progressData[plan.environmentalplan_id] || 0;
+                        return (
+                            <div
+                                key={plan.environmentalplan_id}
+                                className="project_plan_card col-3 rounded m-4"
+                                style={{ minWidth: "250px", cursor: "pointer" }}
+                                onClick={() => handleOpenPlan(plan)}
+                            >
+                                <div className="px-2 pt-2">
+                                    <div className="d-flex justify-content-between align-items-start">
+                                        <div
+                                            className="div_project_emp"
+                                            style={{
+                                                whiteSpace: "normal",
+                                                wordWrap: "break-word",
+                                                maxWidth: "80%"
+                                            }}
+                                        >
+                                            <h5 className="mb-0 title_project">{plan.environmentalplan_name}</h5>
+                                        </div>
+                                        <div onClick={(e) => e.stopPropagation()}>
+                                            <ActionDropdown
+                                                onEdit={() => handleUpdatePlan(plan)}
+                                                onDelete={() => handleDeletePlan(plan)}
+                                                onView={() => handleOpenPlan(plan)}
+                                            />
+                                        </div>
                                     </div>
-                                    <div onClick={(e) => e.stopPropagation()}>
-                                        <ActionDropdown
-                                            onEdit={() => handleUpdatePlan(plan)}
-                                            onDelete={() => handleDeletePlan(plan)}
-                                            onView={() => handleOpenPlan(plan)}
-                                        />
-                                    </div>
-                                </div>
-                                <hr />
-                                <div className="plan_progress_container">
-                                    <div className="plan_progress_bar" id="plan_progress_bar">
-                                        0%
+                                    <hr />
+                                    <div className="plan_progress_container">
+                                        <div
+                                            className="plan_progress_bar"
+                                            style={{ width: `${percentage}%` }}
+                                        >
+                                            <p className="ms-3">{percentage}%</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                    ))}
+                        );
+                    })}
                 </div>
             )}
 
-            {/* Modal Agregar */}
+            {/* Modals */}
             <PlanModal
                 show={showAddModal}
                 onClose={() => setShowAddModal(false)}
@@ -198,7 +230,6 @@ export default function EnvironmentalPlansList({ projectId, token }) {
                 submitLabel="Guardar"
             />
 
-            {/* Modal Editar */}
             <PlanModal
                 show={showUpdateModal}
                 onClose={() => setShowUpdateModal(false)}

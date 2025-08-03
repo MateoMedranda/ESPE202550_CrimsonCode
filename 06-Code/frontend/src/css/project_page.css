@@ -15,8 +15,9 @@
 }
 
 .plan_progress_container {
-  width: 80%;
+  width: 99%;
   max-width: 500px;
+  border: 1px solid rgb(0, 134, 119);
   background-color: #e0e0e0;
   border-radius: 5px;
   overflow: hidden;
@@ -26,7 +27,6 @@
 
 .plan_progress_bar {
   height: 20px;
-  width: 0%;
   background: linear-gradient(90deg, #4facfe, #00f2fe);
   text-align: center;
   font-weight: bold;
@@ -305,7 +305,7 @@ dialog.closing {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
