@@ -17,6 +17,7 @@ import Projects from './Router/ProjectDetailRouter.jsx';
 import EnvironmentalPlanDetail from './Router/EnvironmentalPlanDetail.jsx';
 import HomePage from './Router/HomePage.jsx';
 import EnvironmentalCharts from './Router/ReportsRouter.jsx';
+import ProfileForm from './Router/InformationUser.jsx';
 
 function Menu() {
   const INACTIVITY_TIMEOUT = 1800000;
@@ -149,7 +150,7 @@ function Menu() {
                 ref={menuRef}
                 aria-labelledby="PerfilDropdown"
               >
-                <li><button className="dropdown-item"><i className="bi bi-person-fill"></i> Mi Perfil</button></li>
+                <li><button className="dropdown-item" onClick={() => navigate("/userInfo")}><i className="bi bi-person-fill"></i> Mi Perfil</button></li>
                 <li><hr className="dropdown-divider" /></li>
                 <li><button className="dropdown-item text-danger" onClick={handleLogout}>Cerrar Sesión</button></li>
               </ul>
@@ -228,6 +229,7 @@ function Menu() {
           <Route path="/reports" element={<EnvironmentalCharts planId={2} token={token} />} />
           <Route path="/calendar" element={<Calendar token={token} />} />
           <Route path="/users" element={<Users token={token} />} />
+          <Route path="/userInfo" element={<ProfileForm/>} />
         </Routes>
       </main>
       <Menu_logout />
