@@ -127,7 +127,6 @@ export default function EnvironmentalPlansList({ projectId, token }) {
         }
     };
 
-    // ✅ Cargar porcentajes después de que se carguen los planes
     useEffect(() => {
         if (!environmentalPlan || environmentalPlan.length === 0) return;
 

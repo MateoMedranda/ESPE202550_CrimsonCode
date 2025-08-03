@@ -29,7 +29,7 @@ const ActivityModal = ({
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
-                                onSubmit(e); 
+                                onSubmit(e);
                             }}
                         >
                             <div className="mb-3">

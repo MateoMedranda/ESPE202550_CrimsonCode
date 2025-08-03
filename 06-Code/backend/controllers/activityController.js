@@ -137,7 +137,7 @@ exports.getCompliance = async (req, res) => {
 
             if (daysSinceLastControl <= limit) {
                 evaluate++;
-                if (lastControl.control_criterion.toLowerCase() == "cumple") {
+                if (lastControl.control_criterion.toLowerCase() == "cumple" && lastControl.control_verification.toLowerCase() != "anulado") {
                     satisfy++;
                 }
             }

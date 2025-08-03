@@ -106,9 +106,22 @@ export default function EnvironmentalPlanDetail({ token }) {
     };
 
     useEffect(() => {
+        const prevTooltips = bootstrap.Tooltip.getInstance(document.body);
+        if (prevTooltips) prevTooltips.dispose();
+
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        tooltipTriggerList.forEach((el) => new bootstrap.Tooltip(el));
+        tooltipTriggerList.forEach((el) => {
+            new bootstrap.Tooltip(el, { trigger: 'hover' });
+        });
+
+        return () => {
+            tooltipTriggerList.forEach((el) => {
+                const instance = bootstrap.Tooltip.getInstance(el);
+                if (instance) instance.dispose();
+            });
+        };
     }, [activities]);
+
 
     const sortedFilteredActivities = useMemo(() => {
         if (!activities) return [];
@@ -159,6 +172,11 @@ export default function EnvironmentalPlanDetail({ token }) {
             <span className="ms-1">▼</span>
         );
     };
+
+    const openControlsModal = (activity) => {
+        setEditingActivity(activity);
+        setShowControlModal(true);
+    }
 
     return (
         <div className="container mt-4 position-relative bg-light p-4">
@@ -282,7 +300,7 @@ export default function EnvironmentalPlanDetail({ token }) {
                                                 <button
                                                     className="btn bg-success-subtle btn-sm mx-2 icon-hover"
                                                     title="Controles"
-                                                    onClick={() => setShowControlModal(true)}
+                                                    onClick={() => openControlsModal(act)}
                                                 >
                                                     <i className="bi bi-clipboard-check-fill me-2"></i> Controles
                                                 </button>
@@ -324,6 +342,8 @@ export default function EnvironmentalPlanDetail({ token }) {
             <ControlModal
                 show={showControlModal}
                 onClose={() => setShowControlModal(false)}
+                token={token}
+                activity={editingActivity}
             />
 
         </div>

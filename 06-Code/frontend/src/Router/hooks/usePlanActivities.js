@@ -29,7 +29,6 @@ export function usePlanActivities(planId, token) {
         fetchActivities();
     }, [planId, token]);
 
-    // Crear actividad
     const createActivity = async (activityData) => {
         try {
             const response = await axios.post(baseUrl, activityData, {
@@ -42,7 +41,6 @@ export function usePlanActivities(planId, token) {
         }
     };
 
-    // Actualizar actividad
     const updateActivity = async (activityId, activityData) => {
         try {
             const url = `${baseUrl}/${activityId}`;
@@ -58,7 +56,6 @@ export function usePlanActivities(planId, token) {
         }
     };
 
-    // Eliminar actividad
     const deleteActivity = async (activityId) => {
         try {
             const url = `${baseUrl}/${activityId}`;

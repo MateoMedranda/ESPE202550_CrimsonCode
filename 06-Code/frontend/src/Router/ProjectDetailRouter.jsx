@@ -12,8 +12,18 @@ export default function ProjectDetail({ token }) {
     const { project, loading } = useProjectController(projectId, token);
     const [modalImage, setModalImage] = useState(null);
 
-    if (loading) return <h2>Cargando...</h2>;
-    if (!project) return <h2>No se encontró el proyecto</h2>;
+    if (loading) return (
+        <div className="text-center py-4 bg-light">
+            <h2>Cargando Proyecto</h2>
+            <div className="spinner-border text-success-emphasis fs-6" role="status">
+            </div>
+        </div>
+    );
+    if (!project) return (
+        <div className="text-center py-4 bg-light">
+            <h2>Hubo un error al abrir el proyecto</h2>
+        </div>
+    );
 
     return (
         <div className="container mt-5 bg-light p-4 mb-5">
@@ -101,7 +111,7 @@ export default function ProjectDetail({ token }) {
 function Section({ title, icon, onAdd }) {
     return (
         <>
-        <hr></hr>
+            <hr></hr>
             <div className="d-flex">
                 <div className="col">
                     <h3 className="title inter-title">{title}</h3>
