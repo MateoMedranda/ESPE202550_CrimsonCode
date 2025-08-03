@@ -15,7 +15,7 @@ export default function EnvironmentalPlansList({ projectId, token }) {
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState(null);
-    const [progressData, setProgressData] = useState({}); // ✅ aquí guardamos los porcentajes
+    const [progressData, setProgressData] = useState({}); 
 
     const [formData, setFormData] = useState({
         project_emp_name: "",
