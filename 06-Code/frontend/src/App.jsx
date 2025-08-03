@@ -16,6 +16,7 @@ import { createPopper } from "@popperjs/core";
 import Projects from './Router/ProjectDetailRouter.jsx';
 import EnvironmentalPlanDetail from './Router/EnvironmentalPlanDetail.jsx';
 import HomePage from './Router/HomePage.jsx';
+import EnvironmentalCharts from './Router/ReportsRouter.jsx';
 
 function Menu() {
   const INACTIVITY_TIMEOUT = 1800000;
@@ -224,7 +225,7 @@ function Menu() {
           <Route path="/projects/:projectId" element={<Projects token={token} />} />
           <Route path="/projects/:projectId/plans/:planId" element={<EnvironmentalPlanDetail token={token} />} />
           <Route path="/profiles" element={<Profiles token={token} />} />
-          <Route path="/reports" element={<div>Reports</div>} />
+          <Route path="/reports" element={<EnvironmentalCharts planId={2} token={token} />} />
           <Route path="/calendar" element={<Calendar token={token} />} />
           <Route path="/users" element={<Users token={token} />} />
         </Routes>
