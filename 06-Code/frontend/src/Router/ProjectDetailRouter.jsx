@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import useProjectController from "./hooks/ProjectController";
 import EnvironmentalPlansList from "./components/EnvironmentalPlanList";
+import PermitsRouter from "./PermitsRouter";
+import MonitoringsRouter from "./MonitoringsRouter";
+import RemindersRouter from "./RemindersRouter";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useParams } from 'react-router-dom';
@@ -30,7 +33,7 @@ export default function ProjectDetail({ token }) {
             {/* Header */}
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h1 className="fw-bold text-dark">{project.project_name}</h1>
-                <button className="btn btn-outline-danger px-4 py-2 rounded-pill shadow-sm" onClick={() => navigate("/")} >
+                <button className="btn btn-outline-danger px-4 py-2 rounded-pill shadow-sm" onClick={() => navigate("/projects")} >
                     <i className="bi bi-arrow-left me-2"></i> Regresar
                 </button>
 
@@ -99,9 +102,10 @@ export default function ProjectDetail({ token }) {
 
             {/* Secciones */}
             <div className="mt-5">
-                <Section title="Permisos" icon="bi-shield-lock" onAdd={() => { }} />
-                <EnvironmentalPlansList projectId={1} token={token} />
-                <Section title="Monitoreos" icon="bi-camera-video" onAdd={() => { }} />
+                <PermitsRouter projectId={projectId} token={token} />
+                <EnvironmentalPlansList projectId={projectId} token={token} />
+                <MonitoringsRouter projectId={projectId} token={token} />
+                <RemindersRouter projectId={projectId} token={token} />
             </div>
         </div>
     );
