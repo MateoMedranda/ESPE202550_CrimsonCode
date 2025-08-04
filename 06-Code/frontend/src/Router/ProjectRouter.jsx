@@ -6,7 +6,7 @@ export default function ProjectList({ token }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:3001/projects', {
+    fetch('https://sima-es01.onrender.com/projects/', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())

@@ -18,6 +18,7 @@ import EnvironmentalPlanDetail from './Router/EnvironmentalPlanDetail.jsx';
 import HomePage from './Router/HomePage.jsx';
 import EnvironmentalCharts from './Router/ReportsRouter.jsx';
 import ProfileForm from './Router/InformationUser.jsx';
+import ProjectsRouter from './Router/ProjectRouter.jsx';
 
 function Menu() {
   const INACTIVITY_TIMEOUT = 1800000;
@@ -183,7 +184,7 @@ function Menu() {
               </li>
 
               <li className={`nav-item opcion fw-bold mx-2 ${isActive('/projects/1') ? 'active-menu' : ''}`}>
-                <button className="nav-link btn d-flex align-items-center" onClick={() => navigate('/projects/1')}>
+                <button className="nav-link btn d-flex align-items-center" onClick={() => navigate('/projects')}>
                   <i className="bi bi-folder"></i> PROYECTOS
                   {isActive('/projects/1') && <span className="active-circle ms-2"></span>}
                 </button>
@@ -223,7 +224,7 @@ function Menu() {
       <main className="container mt-4">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/projects/" element={<ProjectsRouter token={token}/>} />
+          <Route path="/projects" element={<ProjectsRouter token={token}/>} />
           <Route path="/projects/:projectId" element={<Projects token={token} />} />
           <Route path="/projects/:projectId/plans/:planId" element={<EnvironmentalPlanDetail token={token} />} />
           <Route path="/profiles" element={<Profiles token={token} />} />
