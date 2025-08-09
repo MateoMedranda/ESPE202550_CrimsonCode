@@ -1,6 +1,7 @@
 const activity = require("../models/activity");
 const control = require("../models/control");
 const EPM = require("../models/environmentalPlan");
+require("dotenv").config();
 const { Op } = require('sequelize');
 const puppeteer = require('puppeteer');
 control.belongsTo(activity, { foreignKey: 'activity_id' });
@@ -361,7 +362,8 @@ exports.getEnvironmentalPlanReport = async (req, res) => {
 
     const browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      args: ['--no-sandbox', '--disable-setuid-sandbox','--single-process','--no-zygote'],
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath()
     });
 
     const page = await browser.newPage();
