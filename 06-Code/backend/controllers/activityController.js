@@ -172,7 +172,7 @@ exports.getCompliance = async (req, res) => {
         activitiesEvaluated: evaluate,
         activitiesSatisfy: satisfy,
         activitiesNoSatisfy: nonSatisfy,
-        activitiesNotApply: activitiesNA,
+        activitiesNotApply: activitiesNA.length,
         percentageSatisfy: percentage
       }
     );
