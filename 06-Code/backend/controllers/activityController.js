@@ -2,8 +2,7 @@ const activity = require("../models/activity");
 const control = require("../models/control");
 const EPM = require("../models/environmentalPlan");
 const { Op } = require('sequelize');
-import PDFDocument from 'pdfkit';
-import axios from 'axios';
+const puppeteer = require('puppeteer');
 control.belongsTo(activity, { foreignKey: 'activity_id' });
 activity.hasMany(control, { foreignKey: 'activity_id' });
 
@@ -311,27 +310,27 @@ exports.getActivitiesByEvaluationStatus = async (req, res) => {
 };
 
 
-const logoUrl = 'https://biosigmambiental.com/wp-content/uploads/2019/09/cropped-cropped-logo-png-01.png';
+const logo = 'https://biosigmambiental.com/wp-content/uploads/2019/09/cropped-cropped-logo-png-01.png';
 
 exports.getEnvironmentalPlanReport = async (req, res) => {
   try {
     const planId = Number(req.params.planId);
 
-    const EPObject = await EPM.findOne({ where: { environmentalplan_id: planId } });
-    const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
+    const EPObject = await EPM.findOne({ where: { environmentalplan_id: req.params.planId } });
+
+    const activities = await activity.findAll({
+      where: { environmentalplan_id: planId }
+    });
 
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-    // Contadores para estadísticas
+    let activitiesEString = "";
+    let activitiesNEString = "";
     let activitiesEvaluated = 0;
     let activitiesNonEvaluated = 0;
     let satisfy = 0;
     let nonSatisfy = 0;
-
-    // Preparar arrays para actividades evaluadas y no evaluadas
-    const evaluatedActivities = [];
-    const nonEvaluatedActivities = [];
 
     for (const activityr of activities) {
       const controls = await control.findAll({
@@ -345,150 +344,219 @@ exports.getEnvironmentalPlanReport = async (req, res) => {
       const recentControl = controls.find(ctrl => new Date(ctrl.createdat) >= oneMonthAgo);
 
       if (recentControl && recentControl.control_criterion.toLowerCase() !== 'no aplica') {
+        activitiesEString += `<tr><td>${activityr.activity_measure}</td><td>${activityr.activity_frecuency}</td><td>${recentControl.control_criterion}</td><td>${recentControl.control_observation}</td></tr>`;
         activitiesEvaluated++;
-        if (recentControl.control_criterion.toLowerCase() === "cumple") satisfy++;
-        else if (recentControl.control_criterion.toLowerCase() === "no cumple") nonSatisfy++;
+        if (recentControl.control_criterion.toLowerCase() == "cumple") {
+          satisfy++;
+        } else if (recentControl.control_criterion.toLowerCase() == "no cumple") {
+          nonSatisfy++;
+        }
 
-        evaluatedActivities.push({
-          measure: activityr.activity_measure,
-          frequency: activityr.activity_frecuency,
-          criterion: recentControl.control_criterion,
-          observation: recentControl.control_observation,
-        });
       } else {
+        const lastControl = controls.length > 0 ? controls[0] : null;
+        activitiesNEString += `<tr><td>${activityr.activity_measure}</td><td>${activityr.activity_frecuency}</td><td>'N/A'</td><td>'N/A'</td></tr>`;
         activitiesNonEvaluated++;
-        nonEvaluatedActivities.push({
-          measure: activityr.activity_measure,
-          frequency: activityr.activity_frecuency,
-        });
       }
     }
 
-    // Descargar logo como buffer para insertar en pdfkit
-    const logoResponse = await axios.get(logoUrl, { responseType: 'arraybuffer' });
-    const logoBuffer = Buffer.from(logoResponse.data, 'binary');
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
 
-    // Crear documento PDF
-    const doc = new PDFDocument({ size: 'A4', margin: 50 });
+    const page = await browser.newPage();
 
-    // Headers HTTP para PDF inline
+    const html = `
+      <html>
+        <head>
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          <style>
+            @page {
+              margin: 40px 50px;
+            }
+            body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              color: #333;
+              font-size: 12px;
+            }
+            header {
+              display: flex;
+              align-items: center;
+              border-bottom: 2px solid #2980b9;
+              padding-bottom: 10px;
+              margin-bottom: 20px;
+            }
+            header img {
+              height: 60px;
+              margin-right: 20px;
+            }
+            header h1 {
+              font-size: 28px;
+              color: #2980b9;
+              margin: 0;
+            }
+            .subheader {
+              font-size: 14px;
+              color: #555;
+              margin-bottom: 20px;
+            }
+            #chart-container {
+              width: 600px;
+              margin: 0 auto 30px auto;
+              text-align: center;
+            }
+            h2 {
+              font-size: 18px;
+              color: #2980b9;
+              margin-bottom: 10px;
+              margin-top: 40px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 40px;
+            }
+            table, th, td {
+              border: 1px solid #ddd;
+            }
+            th {
+              background-color: #2980b9;
+              color: white;
+              padding: 12px 10px;
+              text-align: left;
+            }
+            td {
+              padding: 10px;
+            }
+            tr:nth-child(even) {
+              background-color: #f2f6fb;
+            }
+            footer {
+              position: fixed;
+              bottom: 30px;
+              left: 50px;
+              right: 50px;
+              font-size: 10px;
+              color: #888;
+              border-top: 1px solid #ccc;
+              padding-top: 5px;
+              text-align: center;
+            }
+            .pageNumber:after {
+              content: counter(page);
+            }
+          </style>
+        </head>
+        <body>
+          <header>
+            <img src="${logo}" alt="Logo">
+            <h1>Reporte Plan De Manejo Ambiental</h1>
+          </header>
+          <h1>${EPObject.environmentalplan_name}</h1>
+          <div class="subheader">Fecha de emisión: ${new Date().toLocaleDateString()}</div>
+
+          <div id="chart-container">
+            <canvas id="chart" width="600" height="300"></canvas>
+          </div>
+
+          <h2>Actividades Evaluadas</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Actividad</th>
+                <th>Responsable</th>
+                <th>Evaluación</th>
+                <th>Observación</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${activitiesEString}
+            </tbody>
+          </table>
+
+          <h2>Actividades No Evaluadas</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Actividad</th>
+                <th>Frecuencia</th>
+                <th>Criterio</th>
+                <th>Observación</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${activitiesNEString}
+            </tbody>
+          </table>
+
+          <footer>
+            Página <span class="pageNumber"></span> - Sistema Gestión Ambiental © ${new Date().getFullYear()}
+          </footer>
+
+          <script>
+            const drawChart = async () => {
+              return new Promise((resolve) => {
+                const ctx = document.getElementById('chart').getContext('2d');
+                new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                    labels: [
+                      'Total actividades',
+                      'Evaluadas',
+                      'Cumplen',
+                      'No cumplen',
+                      'No aplica'
+                    ],
+                    datasets: [{
+                      label: 'Actividades',
+                      data: [${activities.length}, ${activitiesEvaluated}, ${satisfy}, ${nonSatisfy}, ${activitiesNonEvaluated}],
+                      backgroundColor: [
+                        '#3498db',
+                        '#2ecc71',
+                        '#27ae60',
+                        '#e74c3c',
+                        '#95a5a6'
+                      ]
+                    }]
+                  },
+                  options: {
+                    animation: false,
+                    responsive: false,
+                    plugins: {
+                      legend: { display: false }
+                    },
+                    scales: {
+                      y: { beginAtZero: true }
+                    }
+                  }
+                });
+                setTimeout(resolve, 1000); 
+              });
+            };
+            drawChart();
+          </script>
+        </body>
+      </html>
+    `;
+
+    await page.setContent(html, { waitUntil: 'networkidle0' });
+
+    await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 1500)));
+
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: { top: '40px', bottom: '60px', left: '50px', right: '50px' }
+    });
+
+    await browser.close();
+
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'inline; filename="reporte.pdf"');
-
-    // Pipe PDF al response
-    doc.pipe(res);
-
-    // --- Encabezado ---
-    doc.image(logoBuffer, 50, 45, { width: 60 });
-    doc.fillColor('#2980b9').fontSize(28).text('Reporte Plan De Manejo Ambiental', 120, 57);
-    doc.moveDown(2);
-
-    // --- Título del plan ---
-    doc.fillColor('black').fontSize(20).text(EPObject.environmentalplan_name, { align: 'left' });
-    doc.fontSize(12).fillColor('#555').text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, { align: 'left' });
-    doc.moveDown(2);
-
-    // --- Gráfico de barras (simple) ---
-    // Como pdfkit no dibuja gráficos complejos, hacemos una barra básica
-    const barLabels = ['Total', 'Evaluadas', 'Cumplen', 'No cumplen', 'No aplica'];
-    const barValues = [activities.length, activitiesEvaluated, satisfy, nonSatisfy, activitiesNonEvaluated];
-    const colors = ['#3498db', '#2ecc71', '#27ae60', '#e74c3c', '#95a5a6'];
-
-    const startX = 50;
-    let startY = doc.y;
-    const barHeight = 20;
-    const maxBarWidth = 400;
-    const maxValue = Math.max(...barValues);
-
-    doc.fontSize(14).fillColor('#2980b9').text('Resumen de Actividades:', startX, startY);
-    startY += 25;
-
-    for (let i = 0; i < barLabels.length; i++) {
-      const barWidth = (barValues[i] / maxValue) * maxBarWidth;
-      doc.fillColor('black').fontSize(12).text(barLabels[i], startX, startY + i * (barHeight + 10));
-      doc.rect(startX + 100, startY + i * (barHeight + 10) + 4, barWidth, barHeight).fill(colors[i]);
-      doc.fillColor('black').text(barValues[i].toString(), startX + 110 + barWidth, startY + i * (barHeight + 10));
-    }
-
-    doc.moveDown(7);
-
-    // --- Tabla actividades evaluadas ---
-    doc.fillColor('#2980b9').fontSize(18).text('Actividades Evaluadas');
-    doc.moveDown(0.5);
-
-    const table1Top = doc.y;
-    // Encabezados tabla
-    const table1Headers = ['Actividad', 'Frecuencia', 'Evaluación', 'Observación'];
-    const colWidths = [180, 100, 100, 150];
-    let x = startX, y = table1Top;
-    doc.fontSize(12).fillColor('white');
-    for (let i = 0; i < table1Headers.length; i++) {
-      doc.rect(x, y, colWidths[i], 20).fill('#2980b9');
-      doc.fillColor('white').text(table1Headers[i], x + 5, y + 5);
-      x += colWidths[i];
-    }
-
-    // Filas
-    y += 20;
-    doc.fillColor('black');
-    evaluatedActivities.forEach((act, idx) => {
-      x = startX;
-      if (idx % 2 === 0) {
-        doc.rect(x, y, colWidths.reduce((a,b)=>a+b,0), 20).fill('#f2f6fb');
-      }
-      doc.fillColor('black').text(act.measure, x + 5, y + 5, { width: colWidths[0] - 10 });
-      x += colWidths[0];
-      doc.text(act.frequency, x + 5, y + 5, { width: colWidths[1] - 10 });
-      x += colWidths[1];
-      doc.text(act.criterion, x + 5, y + 5, { width: colWidths[2] - 10 });
-      x += colWidths[2];
-      doc.text(act.observation, x + 5, y + 5, { width: colWidths[3] - 10 });
-      y += 20;
-    });
-
-    doc.moveDown(2);
-
-    // --- Tabla actividades no evaluadas ---
-    doc.fillColor('#2980b9').fontSize(18).text('Actividades No Evaluadas');
-    doc.moveDown(0.5);
-
-    const table2Top = doc.y;
-    x = startX; y = table2Top;
-    const table2Headers = ['Actividad', 'Frecuencia', 'Criterio', 'Observación'];
-    doc.fontSize(12).fillColor('white');
-    for (let i = 0; i < table2Headers.length; i++) {
-      doc.rect(x, y, colWidths[i], 20).fill('#2980b9');
-      doc.fillColor('white').text(table2Headers[i], x + 5, y + 5);
-      x += colWidths[i];
-    }
-
-    y += 20;
-    doc.fillColor('black');
-    nonEvaluatedActivities.forEach((act, idx) => {
-      x = startX;
-      if (idx % 2 === 0) {
-        doc.rect(x, y, colWidths.reduce((a,b)=>a+b,0), 20).fill('#f2f6fb');
-      }
-      doc.text(act.measure, x + 5, y + 5, { width: colWidths[0] - 10 });
-      x += colWidths[0];
-      doc.text(act.frequency, x + 5, y + 5, { width: colWidths[1] - 10 });
-      x += colWidths[1];
-      doc.text('N/A', x + 5, y + 5, { width: colWidths[2] - 10 });
-      x += colWidths[2];
-      doc.text('N/A', x + 5, y + 5, { width: colWidths[3] - 10 });
-      y += 20;
-    });
-
-    // --- Pie de página ---
-    const bottom = doc.page.height - 50;
-    doc.fontSize(10).fillColor('#888')
-      .text(`Sistema Gestión Ambiental © ${new Date().getFullYear()}`, 50, bottom, { align: 'center', width: doc.page.width - 100 });
-
-    // Finaliza y envía PDF
-    doc.end();
+    res.setHeader('Content-Disposition', 'inline; filename=reporte.pdf');
+    res.send(pdfBuffer);
 
   } catch (error) {
-    console.error('Error generando PDF con pdfkit:', error);
+    console.error('Error generando PDF:', error);
     res.status(500).send('Error generando el PDF');
   }
 };
