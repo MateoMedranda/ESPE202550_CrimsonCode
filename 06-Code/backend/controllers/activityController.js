@@ -1,7 +1,6 @@
 const activity = require("../models/activity");
 const control = require("../models/control");
 const EPM = require("../models/environmentalPlan");
-require("dotenv").config();
 const { Op } = require('sequelize');
 const puppeteer = require('puppeteer');
 control.belongsTo(activity, { foreignKey: 'activity_id' });
@@ -362,184 +361,20 @@ exports.getEnvironmentalPlanReport = async (req, res) => {
 
     const browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox','--single-process','--no-zygote'],
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath()
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
+
 
     const page = await browser.newPage();
 
     const html = `
-      <html>
-        <head>
-          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-          <style>
-            @page {
-              margin: 40px 50px;
-            }
-            body {
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-              color: #333;
-              font-size: 12px;
-            }
-            header {
-              display: flex;
-              align-items: center;
-              border-bottom: 2px solid #2980b9;
-              padding-bottom: 10px;
-              margin-bottom: 20px;
-            }
-            header img {
-              height: 60px;
-              margin-right: 20px;
-            }
-            header h1 {
-              font-size: 28px;
-              color: #2980b9;
-              margin: 0;
-            }
-            .subheader {
-              font-size: 14px;
-              color: #555;
-              margin-bottom: 20px;
-            }
-            #chart-container {
-              width: 600px;
-              margin: 0 auto 30px auto;
-              text-align: center;
-            }
-            h2 {
-              font-size: 18px;
-              color: #2980b9;
-              margin-bottom: 10px;
-              margin-top: 40px;
-            }
-            table {
-              width: 100%;
-              border-collapse: collapse;
-              margin-bottom: 40px;
-            }
-            table, th, td {
-              border: 1px solid #ddd;
-            }
-            th {
-              background-color: #2980b9;
-              color: white;
-              padding: 12px 10px;
-              text-align: left;
-            }
-            td {
-              padding: 10px;
-            }
-            tr:nth-child(even) {
-              background-color: #f2f6fb;
-            }
-            footer {
-              position: fixed;
-              bottom: 30px;
-              left: 50px;
-              right: 50px;
-              font-size: 10px;
-              color: #888;
-              border-top: 1px solid #ccc;
-              padding-top: 5px;
-              text-align: center;
-            }
-            .pageNumber:after {
-              content: counter(page);
-            }
-          </style>
-        </head>
-        <body>
-          <header>
-            <img src="${logo}" alt="Logo">
-            <h1>Reporte Plan De Manejo Ambiental</h1>
-          </header>
-          <h1>${EPObject.environmentalplan_name}</h1>
-          <div class="subheader">Fecha de emisión: ${new Date().toLocaleDateString()}</div>
-
-          <div id="chart-container">
-            <canvas id="chart" width="600" height="300"></canvas>
-          </div>
-
-          <h2>Actividades Evaluadas</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Actividad</th>
-                <th>Responsable</th>
-                <th>Evaluación</th>
-                <th>Observación</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${activitiesEString}
-            </tbody>
-          </table>
-
-          <h2>Actividades No Evaluadas</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Actividad</th>
-                <th>Frecuencia</th>
-                <th>Criterio</th>
-                <th>Observación</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${activitiesNEString}
-            </tbody>
-          </table>
-
-          <footer>
-            Página <span class="pageNumber"></span> - Sistema Gestión Ambiental © ${new Date().getFullYear()}
-          </footer>
-
-          <script>
-            const drawChart = async () => {
-              return new Promise((resolve) => {
-                const ctx = document.getElementById('chart').getContext('2d');
-                new Chart(ctx, {
-                  type: 'bar',
-                  data: {
-                    labels: [
-                      'Total actividades',
-                      'Evaluadas',
-                      'Cumplen',
-                      'No cumplen',
-                      'No aplica'
-                    ],
-                    datasets: [{
-                      label: 'Actividades',
-                      data: [${activities.length}, ${activitiesEvaluated}, ${satisfy}, ${nonSatisfy}, ${activitiesNonEvaluated}],
-                      backgroundColor: [
-                        '#3498db',
-                        '#2ecc71',
-                        '#27ae60',
-                        '#e74c3c',
-                        '#95a5a6'
-                      ]
-                    }]
-                  },
-                  options: {
-                    animation: false,
-                    responsive: false,
-                    plugins: {
-                      legend: { display: false }
-                    },
-                    scales: {
-                      y: { beginAtZero: true }
-                    }
-                  }
-                });
-                setTimeout(resolve, 1000); 
-              });
-            };
-            drawChart();
-          </script>
-        </body>
-      </html>
+    <html><body>
+      <h1>Reporte simple para Render</h1>
+      <img src="${logo}" alt="Logo" style="height:50px"/>
+      </body>
+    </html>
     `;
+
 
     await page.setContent(html, { waitUntil: 'networkidle0' });
 
