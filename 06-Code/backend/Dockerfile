@@ -8,9 +8,17 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
 # Directorio de la app
 WORKDIR /app
 
-RUN npm ci
+# Copia package.json y package-lock.json
+COPY package*.json ./
 
+# Instala dependencias sin descargar Chromium extra
+RUN npm install --ignore-scripts
+
+# Copia el resto del código
 COPY . .
-CMD ["node","index.js"]
 
+# Expone puerto, ajusta si tu app escucha en otro puerto
+EXPOSE 3000
 
+# Comando para iniciar tu app (ajusta según tu entrypoint)
+CMD ["node", "index.js"]
