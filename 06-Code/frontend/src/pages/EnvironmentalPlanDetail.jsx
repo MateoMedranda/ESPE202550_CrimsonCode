@@ -6,7 +6,8 @@ import * as bootstrap from "bootstrap";
 import { useNavigate } from 'react-router-dom';
 import ControlModal from "../components/ControlModal";
 
-export default function EnvironmentalPlanDetail({ token }) {
+export default function EnvironmentalPlanDetail() {
+    const token = sessionStorage.getItem('token');
     const navigate = useNavigate();
     const { planId } = useParams();
     const location = useLocation();

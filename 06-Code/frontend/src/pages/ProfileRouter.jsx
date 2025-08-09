@@ -5,8 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-export default function Profiles({ token }) {
-    
+export default function Profiles() {
+  const token = sessionStorage.getItem('token');    
     const {
     ProfileTableGet,
     handleAddPermits,

@@ -4,8 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-export default function User({ token }) {
-    
+export default function User() {
+    const token = sessionStorage.getItem('token');
     const {
     UserTableGet,
     handleAddUser,

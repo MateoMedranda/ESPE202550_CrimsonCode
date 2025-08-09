@@ -6,7 +6,7 @@ import {
   LineChart, Line
 } from "recharts";
 
-export default function EnvironmentalCharts({ planId, token }) {
+export default function EnvironmentalCharts({ planId }) {
   const [compliance, setCompliance] = useState(null);
   const [pending, setPending] = useState(null);
   const [reportByDate, setReportByDate] = useState([]);
@@ -17,7 +17,7 @@ export default function EnvironmentalCharts({ planId, token }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const headers = { Authorization: `Bearer ${token}` };
+        const headers = { Authorization: `Bearer ${sessionStorage.getItem('token')}` };
 
         const [resCompliance, resPending, resReport, resEvalStatus] = await Promise.all([
           axios.get(`${baseUrl}${planId}/compliance/`, { headers }),
@@ -36,7 +36,7 @@ export default function EnvironmentalCharts({ planId, token }) {
     };
 
     fetchData();
-  }, [planId, token]);
+  }, [planId]);
 
   const COLORS = ["#0088FE", "#FF8042", "#00C49F", "#FFBB28"];
 
