@@ -8,16 +8,19 @@ const puppeteer = require('puppeteer');
 control.belongsTo(activity, { foreignKey: 'activity_id' });
 activity.hasMany(control, { foreignKey: 'activity_id' });
 
+const pdfFonts = require('pdfmake/build/vfs_fonts');
+
 const fonts = {
   Roboto: {
-    normal: 'node_modules/pdfmake/build/vfs_fonts.js', // o ruta a tu fuente
-    bold: 'node_modules/pdfmake/build/vfs_fonts.js',
-    italics: 'node_modules/pdfmake/build/vfs_fonts.js',
-    bolditalics: 'node_modules/pdfmake/build/vfs_fonts.js',
-  },
+    normal: 'Roboto-Regular.ttf',
+    bold: 'Roboto-Medium.ttf',
+    italics: 'Roboto-Italic.ttf',
+    bolditalics: 'Roboto-MediumItalic.ttf'
+  }
 };
 
 const printer = new PdfPrinter(fonts);
+printer.vfs = pdfFonts.pdfMake.vfs;
 
 
 exports.getAllActivities = async (req, res) => {
