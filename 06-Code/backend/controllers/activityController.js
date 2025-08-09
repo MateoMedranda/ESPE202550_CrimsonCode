@@ -2,12 +2,12 @@ const activity = require("../models/activity");
 const control = require("../models/control");
 const EPM = require("../models/environmentalPlan");
 require("dotenv").config();
-const PdfPrinter = require('pdfmake');
 const { Op } = require('sequelize');
 const puppeteer = require('puppeteer');
 control.belongsTo(activity, { foreignKey: 'activity_id' });
 activity.hasMany(control, { foreignKey: 'activity_id' });
 
+const PdfPrinter = require('pdfmake');
 const pdfFonts = require('pdfmake/build/vfs_fonts');
 
 const fonts = {
@@ -20,7 +20,7 @@ const fonts = {
 };
 
 const printer = new PdfPrinter(fonts);
-printer.vfs = pdfFonts;
+printer.vfs = pdfFonts;  // ASÍ dices que busque las fuentes en este vfs virtual
 
 
 exports.getAllActivities = async (req, res) => {
