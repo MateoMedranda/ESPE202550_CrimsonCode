@@ -1,24 +1,25 @@
-# Usamos la imagen oficial de Puppeteer que ya tiene Chromium y dependencias
 FROM ghcr.io/puppeteer/puppeteer:24.11.1
 
-# Si quieres usar el Chromium instalado en la imagen, salta la descarga al instalar Puppeteer (ya incluido)
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
-# Directorio de la app
 WORKDIR /app
 
-# Copia package.json y package-lock.json
+# Copia archivos de package.json primero
 COPY package*.json ./
 
-# Instala dependencias sin descargar Chromium extra
+# Cambia dueño del directorio para el usuario pptruser
+RUN chown -R pptruser:pptruser /app
+
+# Cambia a usuario pptruser (opcional, la imagen ya lo usa)
+USER pptruser
+
+# Ahora instala dependencias (sin scripts para evitar descargar Chromium)
 RUN npm install --ignore-scripts
 
 # Copia el resto del código
-COPY . .
+COPY --chown=pptruser:pptruser . .
 
-# Expone puerto, ajusta si tu app escucha en otro puerto
 EXPOSE 3000
 
-# Comando para iniciar tu app (ajusta según tu entrypoint)
 CMD ["node", "index.js"]
