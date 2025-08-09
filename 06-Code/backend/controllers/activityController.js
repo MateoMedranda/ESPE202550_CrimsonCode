@@ -134,6 +134,7 @@ exports.getCompliance = async (req, res) => {
   try {
     const planId = Number(req.params.planId);
     const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
+    const activitiesNA = await activity.findAll({ where: { environmentalplan_id: planId, activity_frecuency: "No aplica" } });
 
     let evaluate = 0;
     let nonSatisfy = 0;
@@ -171,6 +172,7 @@ exports.getCompliance = async (req, res) => {
         activitiesEvaluated: evaluate,
         activitiesSatisfy: satisfy,
         activitiesNoSatisfy: nonSatisfy,
+        activitiesNotApply: activitiesNA,
         percentageSatisfy: percentage
       }
     );

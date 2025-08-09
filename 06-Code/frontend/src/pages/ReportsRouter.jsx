@@ -126,28 +126,47 @@ function EnvironmentalCharts() {
 
       {selectedPlan && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 w-75 m-auto">
-          <div className="bg-white shadow rounded-xl p-4 rounded p-4 shadow">
-            <h3 className="text-lg font-bold mb-2">Reporte de Actividades</h3>
+          <div className="bg-white shadow rounded-xl p-4 rounded p-4 shadow m-auto mb-4">
+            <h3 className="text-lg font-bold mb-3">Reporte de Actividades</h3>
+            <hr></hr>
             {compliance && (
+              <div className="d-flex justify-content-center">
               <BarChart
-                width={800}
+                width={1100}
                 height={300}
                 data={[
                   { name: "Actividades del PMA", value: compliance.totalActivities },
                   { name: "Actividades Evaluadas", value: compliance.activitiesEvaluated },
-                  { name: "Actividades que cumplen el PMA", value: compliance.activitiesSatisfy }
+                  { name: "Actividades que -cumplen el PMA", value: compliance.activitiesSatisfy },
+                  { name: "Actividades que no -cumplen el PMA", value: compliance.activitiesNoSatisfy }
                 ]}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
+                <XAxis
+                  dataKey="name"
+                  tick={({ x, y, payload }) => {
+                    const words = payload.value.split("-"); 
+                    return (
+                      <text x={x} y={y + 10} textAnchor="middle">
+                        {words.map((word, index) => (
+                          <tspan key={index} x={x} dy={index === 0 ? 0 : 15}>
+                            {word}
+                          </tspan>
+                        ))}
+                      </text>
+                    );
+                  }}
+                />
                 <YAxis domain={[0, (dataMax) => dataMax + 5]} />
                 <RechartsTooltip />
                 <Bar dataKey="value">
-                  <Cell fill="#00C49F" /> {/* Barra 1 */}
-                  <Cell fill="#FF8042" /> {/* Barra 2 */}
-                  <Cell fill="#0088FE" /> {/* Barra 3 */}
+                  <Cell fill="#956CF5" />
+                  <Cell fill="#6CF5DC" />
+                  <Cell fill="#66E36E" />
+                  <Cell fill="#E36666" />
                 </Bar>
               </BarChart>
+              </div>
             )}
 
 
