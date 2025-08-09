@@ -20,7 +20,7 @@ const fonts = {
 };
 
 const printer = new PdfPrinter(fonts);
-printer.vfs = pdfFonts.pdfMake.vfs;
+printer.vfs = pdfFonts;
 
 
 exports.getAllActivities = async (req, res) => {
