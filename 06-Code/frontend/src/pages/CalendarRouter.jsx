@@ -1,6 +1,5 @@
-import CalendarManager from "./hooks/CalendarManager";
+import CalendarManager from "../hooks/CalendarManager";
 import { useState,useEffect, useRef} from "react";
-import bootstrap from "bootstrap/dist/js/bootstrap.bundle";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";

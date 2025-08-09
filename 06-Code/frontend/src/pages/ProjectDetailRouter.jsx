@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import useProjectController from "./hooks/ProjectController";
-import EnvironmentalPlansList from "./components/EnvironmentalPlanList";
+import useProjectController from "../hooks/ProjectController";
+import EnvironmentalPlansList from "../components/EnvironmentalPlanList";
 import PermitsRouter from "./PermitsRouter";
 import MonitoringsRouter from "./MonitoringsRouter";
 import RemindersRouter from "./RemindersRouter";
@@ -9,8 +9,9 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-export default function ProjectDetail({ token }) {
+export default function ProjectDetail() {
     const navigate = useNavigate();
+    const token = sessionStorage.getItem('token')
     const { projectId } = useParams();
     const { project, loading } = useProjectController(projectId, token);
     const [modalImage, setModalImage] = useState(null);

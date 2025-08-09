@@ -13,8 +13,8 @@ export default function PermitsRouter({ projectId, token }) {
     permit_description: ""
   });
 
-  const baseUrl = `http://localhost:3001/projects/${projectId}/permits`;
-  const permitActionsUrl = `http://localhost:3001/permits`;
+  const baseUrl = `https://sima-es01.onrender.com/projects/${projectId}/permits`;
+  const permitActionsUrl = `https://sima-es01.onrender.com/permits`;
 
   const fetchPermits = async () => {
     try {

@@ -7,7 +7,7 @@ export default function ProjectList({ token }) {
 
   useEffect(() => {
     fetch('https://sima-es01.onrender.com/projects/', {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` },
     })
       .then(res => res.json())
       .then(data => setProjects(data))

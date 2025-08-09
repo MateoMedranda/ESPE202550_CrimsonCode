@@ -1,15 +1,19 @@
 import { useState } from "react";
+import { useAuth } from '../context/AuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../css/login.css';
+import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+function Login() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");  // Estado para el mensaje de error
-
+  const [errorMsg, setErrorMsg] = useState("");
+  const { login } = useAuth();
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -32,17 +36,15 @@ export default function Login() {
 
       if (!res.ok) {
         const err = await res.json();
-        setErrorMsg(err.message || "Error en el login");
+        setErrorMsg(err.message || "Error al iniciar sesión");
         setLoading(false);
         return;
       }
 
       const data = await res.json();
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-
-      window.location.reload();
+      login(data.token,data.user);
+      navigate("/", { replace: true });
 
     } catch (err) {
       console.error(err);
@@ -114,3 +116,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default Login;

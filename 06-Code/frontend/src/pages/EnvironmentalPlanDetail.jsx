@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import { usePlanActivities } from "./hooks/usePlanActivities";
-import ActivityModal from "./components/ActivityModal";
+import { usePlanActivities } from "../hooks/usePlanActivities";
+import ActivityModal from "../components/ActivityModal";
 import * as bootstrap from "bootstrap";
 import { useNavigate } from 'react-router-dom';
-import ControlModal from "./components/ControlModal";
+import ControlModal from "../components/ControlModal";
 
 export default function EnvironmentalPlanDetail({ token }) {
     const navigate = useNavigate();
