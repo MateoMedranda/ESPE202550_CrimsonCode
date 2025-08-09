@@ -257,6 +257,26 @@ export default function UserManager(Token) {
     }
   }
   
+    const handleToggleUser = async (id,state) =>{
+          const nuevoEstado = state === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+    fetch(`https://sima-es01.onrender.com/api/user/users${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${Token}`
+      },
+      body: JSON.stringify({ state: nuevoEstado })
+    })
+      .then(() => {
+        handleMessage(`Perfil cambiado correctamente`);
+        UserTableGet();
+      })
+      .catch((error) => {
+        console.error("Error al cambiar el estado del perfil:", error);
+        handleMessage("Error al cambiar el estado del perfil");
+      }
+    );
+    }
   return {
     UserTableGet,
     handleAddUser,
@@ -265,6 +285,7 @@ export default function UserManager(Token) {
     handleSaveUser,
     handleEditUser,
     handleUpdateUser,
+    handleToggleUser,
     loading,
     message,
     userTableRef,

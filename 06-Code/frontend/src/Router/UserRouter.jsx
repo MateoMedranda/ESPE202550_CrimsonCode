@@ -1,23 +1,31 @@
 import React, { useState,useEffect } from "react";
+import { useAuth } from "../Context/AuthContext";
 import useUserController from "./hooks/UserManager";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
+import UserTable from "./components/User/UserTable";
+import informationModal from "./components/User/InformationModal"
+import UserHeader from "./components/User/UserHeader";
 export default function User({ token }) {
-    
     const {
     UserTableGet,
     handleAddUser,
     handleSaveUser,
     handleEditUser,
     handleUpdateUser,
+    handleToggleUser,
     profilesContainerRef,
     profilesEditContainerRef,
     loading,
     user,
     message
   } = useUserController(token);
+  const { permits} = useAuth();
+  const canEdit = permits?.Usuarios?.profiles_updateusers?.value === true;
+  const canCreate = permits?.Usuarios?.profiles_createusers?.value === true;
+  const canView = permits?.Usuarios?.profiles_readusers?.value === true;
+
 
   useEffect(() => {
     UserTableGet();
@@ -39,111 +47,17 @@ export default function User({ token }) {
    return (
     <div className="container mt-4 mb-4 p-4">
       <fieldset className="border p-4 shadow agregar bg-light rounded">
-        <div className="text-center bg-success-subtle">
-          <h2 className="title"><b>Menu Usuarios</b></h2>
-        </div>
         <hr />
-        <div className="d-flex">
-          <div className="col"></div>
-          <div className="col text-end">
-            <button id="add_user" className="btn_add btn bg-info-subtle border-black" onClick={handleAddUser}>
-              <i className="bi bi-plus-circle" ></i> Agregar Usuario
-            </button>
-          </div>
-        </div>
+        <UserHeader canCreate={canCreate} onAddUser={handleAddUser}/>
         <hr />
 
-        <div className="container" id="user_table">
-          <div className="table-responsive">
-            <table className="table table-striped">
-              <thead className="table-secondary">
-                <tr>
-                  <th>
-                    Cedula
-                    <button className="btn btn-sm btn-light ms-2" id="personal_id_filter">
-                      <i className="bi bi-arrow-down-circle"></i>
-                    </button>
-                  </th>
-                  <th>
-                    Nombre y Apellido
-                    <button className="btn btn-sm btn-light ms-2" id="name_filter">
-                      <i className="bi bi-arrow-down-circle"></i>
-                    </button>
-                  </th>
-                  <th>
-                    Perfil
-                    <button className="btn btn-sm btn-light ms-2" id="profile_filter">
-                      <i className="bi bi-arrow-down-circle"></i>
-                    </button>
-                  </th>
-                  <th>
-                    Email
-                    <button className="btn btn-sm btn-light ms-2" id="email_filter">
-                      <i className="bi bi-arrow-down-circle"></i>
-                    </button>
-                  </th>
-                  <th>
-                    Telefono
-                    <button className="btn btn-sm btn-light ms-2" id="phone_filter">
-                      <i className="bi bi-arrow-down-circle"></i>
-                    </button>
-                  </th>
-                  <th>
-                    Estado
-                    <button className="btn btn-sm btn-light ms-2" id="state_filter">
-                      <i className="bi bi-arrow-down-circle"></i>
-                    </button>
-                  </th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="table_body">
-                
-                {loading ?  (
-                    <tr>
-                      <td colSpan="3" className="text-center">Cargando...</td>
-                    </tr>
-                  ) : user.length === 0 ? (
-                    <tr>
-                      <td colSpan="3" className="text-center">No hay Usuarios disponibles.</td>
-                    </tr>
-                  ) : (
-                    user.map(({id, name, surname, personal_id, email, phone_number, profile_name,state }) => {
-                    const estadoTexto = state === 'ACTIVE' ? 'Activo' : 'Inactivo';
-                    const btnEstado = state === 'ACTIVE' ? 'btn-danger' : 'btn-success';
-                    const iconoEstado = state === 'ACTIVE' ? 'bi-check-circle' : 'bi-x-circle';
-                    const accion = state === 'ACTIVE' ? 'Desactivar' : 'Activar';
-                        return (
-                            <tr key={id}>
-                                <td>{personal_id}</td>
-                                <td>{name} {surname}</td>
-                                <td>{profile_name}</td>
-                                <td>{email}</td>
-                                <td>{phone_number}</td>
-                                <td>{estadoTexto}</td>
-                                <td>
-                                    <button
-                                        className="btn btn-sm btn-primary me-1"
-                                        onClick={()=> {handleEditUser(id)}}
-                                    >
-                                        <i className="bi bi-pencil"></i> Editar
-                                    </button>
-                                    <button
-                                        className={`btn btn-sm ${btnEstado}`}
-                                        onClick={()=> {}}
-                                    >
-                                        <i className={`bi ${iconoEstado}`}></i> {accion}
-                                    </button>
-                                </td>
-                            </tr>
-                        );
-                    
-                }))
-                    }
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <UserTable 
+          user={user} 
+          loading={loading} 
+          handleEditUser={handleEditUser} 
+          handleToggleState={handleToggleUser}
+          canEdit={canEdit}
+        />
 
         <hr />
 
@@ -300,22 +214,7 @@ export default function User({ token }) {
                 </div>
             </div>
             </div>
-  
-
-        {/* Information container */}
-        <div className="modal fade" id="information_container" tabIndex="-1" aria-labelledby="information_container" aria-hidden="true">
-      <div className="modal-dialog modal-dialog-centered modal-lg my-5">
-        <div className="modal-content my-5">
-          <div className="container my-5">
-            <div className="row">
-              <h1 className="text-center" id="message">
-                {message}
-              </h1>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+        <informationModal message={message}></informationModal>
 
       </fieldset>
 

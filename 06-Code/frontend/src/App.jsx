@@ -19,20 +19,19 @@ import HomePage from './Router/HomePage.jsx';
 import EnvironmentalCharts from './Router/ReportsRouter.jsx';
 import ProfileForm from './Router/InformationUser.jsx';
 import ProjectsRouter from './Router/ProjectRouter.jsx';
+import { useAuth } from "./Context/AuthContext";
 
 function Menu() {
   const INACTIVITY_TIMEOUT = 1800000;
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [open, setOpen] = useState(false);
   const buttonRef = useRef(null);
   const menuRef = useRef(null);
   const inactivityRef = useRef(null);
-  const [userName, setUserName] = useState("");
-  const [userSurName, setUserSurName] = useState("");
-  const [userID, setUserID] = useState("");
-  const [userProfileID, setProfileID] = useState("");
-  const [token, setToken] = useState("");
+  const { user, token } = useAuth();
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const userName = user?.name || "";
+  const userSurName = user?.surname || "";
 
   const resetInactivityTimer = useCallback(() => {
     if (inactivityRef.current) {
@@ -46,23 +45,6 @@ function Menu() {
     }, INACTIVITY_TIMEOUT);
   }, []);
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const tokenVal = localStorage.getItem("token");
-    if (user && user.name && user.surname && user.id && user.profile_id && tokenVal) {
-      setUserName(user.name);
-      setUserSurName(user.surname);
-      setUserID(user.id);
-      setProfileID(user.profile_id);
-      setToken(tokenVal);
-    } else {
-      setUserName("");
-      setUserSurName("");
-      setUserID("");
-      setProfileID("");
-      setToken("");
-    }
-  }, []);
 
   useEffect(() => {
     resetInactivityTimer();
@@ -114,10 +96,8 @@ function Menu() {
 
   const toggleDropdown = () => setOpen(!open);
 
-  // Función auxiliar para saber si la ruta está activa
   const isActive = (path) => {
     if (path === "/projects/1") {
-      // para que todas las rutas /projects/* activen PROYECTOS
       return location.pathname.startsWith("/projects");
     }
     return location.pathname === path;

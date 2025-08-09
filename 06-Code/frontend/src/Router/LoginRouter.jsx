@@ -1,14 +1,13 @@
 import { useState } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import '../css/login.css';
+import "../css/login.css";
+import { useAuth } from "../Context/AuthContext";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");  // Estado para el mensaje de error
+  const [errorMsg, setErrorMsg] = useState("");
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,25 +23,35 @@ export default function Login() {
     try {
       const res = await fetch("https://sima-es01.onrender.com/api/user/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
       if (!res.ok) {
         const err = await res.json();
         setErrorMsg(err.message || "Error en el login");
-        setLoading(false);
         return;
       }
 
       const data = await res.json();
+      const permitsRes = await fetch(`https://sima-es01.onrender.com/api/profile/permits`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data.token}`
+          },              
+          body: JSON.stringify({ id: data.user.profile_id }),
+        }
+      );
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-
-      window.location.reload();
+      
+      if (!permitsRes.ok) {
+        const err = await permitsRes.json();
+        setErrorMsg(err.message || "Error al obtener permisos");
+        return;
+      }
+      const permits = await permitsRes.json();
+      login(data.token, data.user, permits);
 
     } catch (err) {
       console.error(err);
@@ -56,7 +65,12 @@ export default function Login() {
     <div className="login-bck d-flex justify-content-center align-items-center min-vh-100">
       <div className="login-box p-4 rounded shadow-lg">
         <div className="text-center mb-4">
-          <img src="/img/Logo.png" alt="Logo" width={"110px"} className="login-logo mb-2" />
+          <img
+            src="/img/Logo.png"
+            alt="Logo"
+            width={"110px"}
+            className="login-logo mb-2"
+          />
           <h3 className="login-title">Bienvenido</h3>
         </div>
 
@@ -92,7 +106,10 @@ export default function Login() {
           </div>
 
           {errorMsg && (
-            <div className="alert bg-danger-subtle border-danger rounded mb-3" role="alert">
+            <div
+              className="alert bg-danger-subtle border-danger rounded mb-3"
+              role="alert"
+            >
               {errorMsg}
             </div>
           )}
@@ -104,10 +121,16 @@ export default function Login() {
           >
             {loading ? (
               <>
-                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
                 Cargando…
               </>
-            ) : "Ingresar"}
+            ) : (
+              "Ingresar"
+            )}
           </button>
         </form>
       </div>
