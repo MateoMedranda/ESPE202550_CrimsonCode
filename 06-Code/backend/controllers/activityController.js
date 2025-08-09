@@ -557,6 +557,6 @@ exports.getEnvironmentalPlanReport = async (req, res) => {
 
   } catch (error) {
     console.error('Error generando PDF:', error);
-    res.status(500).send('Error generando el PDF');
+    res.status(500).send('Error generando el PDF:', error);
   }
 };
