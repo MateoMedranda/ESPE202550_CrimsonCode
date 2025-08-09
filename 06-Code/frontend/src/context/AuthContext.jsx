@@ -5,7 +5,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null); 
-  const [loading, setLoading] = useState(true); // 👈 estado de carga
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const savedToken = sessionStorage.getItem("token");
@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     if (savedToken) setToken(savedToken);
     if (savedUser) setUser(JSON.parse(savedUser));
 
-    setLoading(false); // 👈 ya terminó la verificación
+    setLoading(false); 
   }, []);
 
   const login = (newToken, newUser) => {

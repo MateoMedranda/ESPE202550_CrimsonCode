@@ -13,7 +13,7 @@ import "../css/project_managment.css";
 import "../css/project_page.css";
 
 export default function Menu() {
-  const INACTIVITY_TIMEOUT = 1800000; // 30 minutos
+  const INACTIVITY_TIMEOUT = 1800000; 
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout, token } = useAuth();
@@ -23,9 +23,8 @@ export default function Menu() {
   const menuRef = useRef(null);
   const inactivityRef = useRef(null);
 
-  // Reiniciar temporizador de inactividad
   const resetInactivityTimer = useCallback(() => {
-    if (!token) return; // No iniciar temporizador si no hay sesión
+    if (!token) return; 
     if (inactivityRef.current) {
       clearTimeout(inactivityRef.current);
     }
@@ -38,9 +37,8 @@ export default function Menu() {
     }, INACTIVITY_TIMEOUT);
   }, [token]);
 
-  // Listener para actividad del usuario
   useEffect(() => {
-    if (!token) return; // No activar si no hay sesión
+    if (!token) return; 
     resetInactivityTimer();
     const handleUserActivity = () => resetInactivityTimer();
     window.addEventListener("mousemove", handleUserActivity);
@@ -54,7 +52,6 @@ export default function Menu() {
     };
   }, [resetInactivityTimer, token]);
 
-  // Posiciona dropdown
   useEffect(() => {
     if (open && buttonRef.current && menuRef.current) {
       createPopper(buttonRef.current, menuRef.current, {
@@ -63,7 +60,6 @@ export default function Menu() {
     }
   }, [open]);
 
-  // Inicializa colapsable
   useEffect(() => {
     const collapseElement = document.getElementById("menuNav");
     if (collapseElement) {
@@ -89,7 +85,6 @@ export default function Menu() {
     return location.pathname === path;
   };
 
-  // Si no hay token, no mostrar el menú
   if (!token) return null;
 
   return (

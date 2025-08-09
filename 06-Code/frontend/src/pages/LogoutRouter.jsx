@@ -1,7 +1,7 @@
 const handleLogout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
-  window.location.href = "/login"; // mejor que reload, evita bucles
+  window.location.href = "/login"; 
 };
 
 function Menu_logout() {
