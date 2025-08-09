@@ -136,6 +136,7 @@ exports.getCompliance = async (req, res) => {
     const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
 
     let evaluate = 0;
+    let nonSatisfy = 0;
     let satisfy = 0;
 
     for (const activityr of activities) {
@@ -156,6 +157,9 @@ exports.getCompliance = async (req, res) => {
         if (lastControl.control_criterion.toLowerCase() == "cumple" && lastControl.control_verification.toLowerCase() != "anulado") {
           satisfy++;
         }
+        if(lastControl.control_criterion.toLowerCase() == "no cumple" && lastControl.control_verification.toLowerCase() != "anulado"){
+          nonSatisfy++;
+        }
       }
     }
 
@@ -166,6 +170,7 @@ exports.getCompliance = async (req, res) => {
         totalActivities: activities.length,
         activitiesEvaluated: evaluate,
         activitiesSatisfy: satisfy,
+        activitiesNoSatisfy: nonSatisfy,
         percentageSatisfy: percentage
       }
     );

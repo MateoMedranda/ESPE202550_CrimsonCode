@@ -6,11 +6,12 @@ import {
   LineChart, Line
 } from "recharts";
 
-export default function EnvironmentalCharts() {
+function EnvironmentalCharts() {
   const [projects, setProjects] = useState([]);
   const [plans, setPlans] = useState([]);
   const [selectedProject, setSelectedProject] = useState("");
   const [selectedPlan, setSelectedPlan] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const [compliance, setCompliance] = useState(null);
   const [pending, setPending] = useState(null);
@@ -19,13 +20,14 @@ export default function EnvironmentalCharts() {
 
   const baseUrl = "https://sima-es01.onrender.com";
 
-  // 1️⃣ Cargar proyectos
   useEffect(() => {
     const fetchProjects = async () => {
       try {
+        setLoading(true);
         const headers = { Authorization: `Bearer ${sessionStorage.getItem('token')}` };
         const res = await axios.get(`${baseUrl}/projects/`, { headers });
         setProjects(res.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error al cargar proyectos:", error);
       }
@@ -33,7 +35,6 @@ export default function EnvironmentalCharts() {
     fetchProjects();
   }, []);
 
-  // 2️⃣ Cargar planes del proyecto seleccionado
   useEffect(() => {
     const fetchPlans = async () => {
       if (!selectedProject) {
@@ -52,11 +53,11 @@ export default function EnvironmentalCharts() {
     fetchPlans();
   }, [selectedProject]);
 
-  // 3️⃣ Cargar datos del plan seleccionado
   useEffect(() => {
     const fetchData = async () => {
       if (!selectedPlan) return;
       try {
+        setLoading(true);
         const headers = { Authorization: `Bearer ${sessionStorage.getItem('token')}` };
 
         const [resCompliance, resPending, resReport, resEvalStatus] = await Promise.all([
@@ -66,10 +67,13 @@ export default function EnvironmentalCharts() {
           axios.get(`${baseUrl}/environmental-plans/${selectedPlan}/reportPrueba`, { headers }),
         ]);
 
+        console.log(resCompliance.data);
+
         setCompliance(resCompliance.data);
         setPending(resPending.data);
         setReportByDate(resReport.data.data);
         setEvaluationStatus(resEvalStatus.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error al cargar datos del plan:", error);
       }
@@ -79,11 +83,17 @@ export default function EnvironmentalCharts() {
 
   const COLORS = ["#0088FE", "#FF8042", "#00C49F", "#FFBB28"];
 
+  if (loading) return (
+    <div className="text-center py-4 bg-light my-4 w-75 m-auto rounded shadow">
+      <h2>Cargando Datos..</h2>
+      <div className="spinner-border text-success-emphasis fs-6" role="status">
+      </div>
+    </div>
+  );
+
   return (
     <div className="p-4">
-      {/* 🔹 Selects arriba */}
       <div className="flex gap-4 mb-6 m-auto w-75 bg-white rounded shadow p-4">
-        {/* Proyecto */}
         <label>Proyecto: </label>
         <select
           value={selectedProject}
@@ -98,7 +108,6 @@ export default function EnvironmentalCharts() {
           ))}
         </select>
 
-        {/* Plan Ambiental */}
         <label>Plan Ambiental: </label>
         <select
           value={selectedPlan}
@@ -115,20 +124,33 @@ export default function EnvironmentalCharts() {
         </select>
       </div>
 
-      {/* 🔹 Gráficos */}
       {selectedPlan && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 w-75 m-auto">
           <div className="bg-white shadow rounded-xl p-4 rounded p-4 shadow">
-            <h3 className="text-lg font-bold mb-2">Cumplimiento (%)</h3>
+            <h3 className="text-lg font-bold mb-2">Reporte de Actividades</h3>
             {compliance && (
-              <BarChart width={300} height={200} data={[compliance]}>
+              <BarChart
+                width={800}
+                height={300}
+                data={[
+                  { name: "Actividades del PMA", value: compliance.totalActivities },
+                  { name: "Actividades Evaluadas", value: compliance.activitiesEvaluated },
+                  { name: "Actividades que cumplen el PMA", value: compliance.activitiesSatisfy }
+                ]}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="totalActivities" hide />
-                <YAxis domain={[0, 100]} />
+                <XAxis dataKey="name" />
+                <YAxis domain={[0, (dataMax) => dataMax + 5]} />
                 <RechartsTooltip />
-                <Bar dataKey="percentageSatisfy" fill="#00C49F" />
+                <Bar dataKey="value">
+                  <Cell fill="#00C49F" /> {/* Barra 1 */}
+                  <Cell fill="#FF8042" /> {/* Barra 2 */}
+                  <Cell fill="#0088FE" /> {/* Barra 3 */}
+                </Bar>
               </BarChart>
             )}
+
+
           </div>
 
           <div className="bg-white shadow rounded-xl p-4">
@@ -187,3 +209,5 @@ export default function EnvironmentalCharts() {
     </div>
   );
 }
+
+export default EnvironmentalCharts;

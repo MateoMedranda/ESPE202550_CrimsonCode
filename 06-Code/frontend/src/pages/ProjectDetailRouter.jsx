@@ -17,7 +17,7 @@ export default function ProjectDetail() {
     const [modalImage, setModalImage] = useState(null);
 
     if (loading) return (
-        <div className="text-center py-4 bg-light">
+        <div className="text-center py-4 bg-light my-4 w-75 m-auto rounded shadow">
             <h2>Cargando Proyecto</h2>
             <div className="spinner-border text-success-emphasis fs-6" role="status">
             </div>
