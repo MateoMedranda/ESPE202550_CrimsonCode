@@ -1,5 +1,6 @@
 .header_sistem{
-    background-color: rgb(255, 255, 255);
+    background-color: white;
+    color: rgb(0, 0, 0);
 }
 
 .conf_user{
@@ -7,7 +8,8 @@
 }
 
 .menu{
-    background-color: rgb(162, 187, 255);
+    background-color: rgb(15, 26, 56);
+    color:white;
     font-family: "Quicksand",sans-serif;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.466);
 }
@@ -113,7 +115,7 @@ body{
 .active-circle {
   width: 16px;
   height: 16px;
-  border: 2px solid #2b0f8f;
+  border: 2px solid #5a4a94;
   border-radius: 50%;
   display: inline-block;
   position: relative;
@@ -127,13 +129,13 @@ body{
   left: 50%;
   width: 6px;
   height: 6px;
-  background-color: #247494;
+  background-color: #62d2ff;
   border-radius: 50%;
   transform: translate(-50%, -50%);
 }
 
 .active-menu .nav-link {
-  color: #2b0f8f;
+  color: #b9a6ff;
 }
 
 @keyframes fadeIn {

@@ -89,7 +89,7 @@ export default function Menu() {
 
   return (
     <>
-      <header className="navbar bg-white navbar-expand-lg header_sistem">
+      <header className="navbar navbar-expand-lg header_sistem">
         <div className="container">
           <div className="d-flex justify-content-between align-items-center w-100">
             <div className="d-flex align-items-center">
@@ -105,7 +105,7 @@ export default function Menu() {
               <i className="bi bi-bell me-3"></i>
               <button
                 type="button"
-                className="btn btn-link d-flex align-items-center text-black text-decoration-none nav-link dropdown-toggle"
+                className="btn btn-link d-flex align-items-center text-decoration-none nav-link dropdown-toggle"
                 id="PerfilDropdown"
                 onClick={toggleDropdown}
                 ref={buttonRef}
@@ -147,7 +147,7 @@ export default function Menu() {
         </div>
       </header>
 
-      <div className="navbar navbar-expand-lg navbar-light sticky-top shadow menu">
+      <div className="navbar navbar-expand-lg navbar-dark sticky-top shadow menu">
         <div className="container-fluid">
           <button
             className="navbar-toggler"
