@@ -95,7 +95,7 @@ export default function Menu() {
             <div className="d-flex align-items-center">
               <img
                 className="mx-3 d-none d-md-flex"
-                src="../img/Logo.png"
+                src="img/Logo.png"
                 alt="Logo"
                 width="80"
               />
