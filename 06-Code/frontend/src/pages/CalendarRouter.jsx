@@ -1,6 +1,5 @@
-import CalendarManager from "./hooks/CalendarManager";
+import CalendarManager from "../hooks/CalendarManager";
 import { useState,useEffect, useRef} from "react";
-import bootstrap from "bootstrap/dist/js/bootstrap.bundle";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -11,7 +10,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 
-export default function CalendarRouter({token}) {
+export default function CalendarRouter() {
     const{
         CalendarContentGet,
         notificationPost,
@@ -22,7 +21,7 @@ export default function CalendarRouter({token}) {
         message,
         handleAddNotification,
         handleSaveNotification
-    } = CalendarManager(token);
+    } = CalendarManager(sessionStorage.getItem('token'));
 
     const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState([]);

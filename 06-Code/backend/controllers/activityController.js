@@ -1,216 +1,239 @@
 const activity = require("../models/activity");
 const control = require("../models/control");
 const EPM = require("../models/environmentalPlan");
+require("dotenv").config();
 const { Op } = require('sequelize');
 const puppeteer = require('puppeteer');
 control.belongsTo(activity, { foreignKey: 'activity_id' });
 activity.hasMany(control, { foreignKey: 'activity_id' });
 
+const PdfPrinter = require('pdfmake');
+const pdfFonts = require('pdfmake/build/vfs_fonts');
+
+const fonts = {
+  Roboto: {
+    normal: 'Roboto-Regular.ttf',
+    bold: 'Roboto-Medium.ttf',
+    italics: 'Roboto-Italic.ttf',
+    bolditalics: 'Roboto-MediumItalic.ttf'
+  }
+};
+
+const printer = new PdfPrinter(fonts);
+printer.vfs = pdfFonts;  // ASÍ dices que busque las fuentes en este vfs virtual
+
 
 exports.getAllActivities = async (req, res) => {
-    try {
-        const { planId } = req.params;
-        const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
-        res.status(200).json(activities);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+  try {
+    const { planId } = req.params;
+    const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
+    res.status(200).json(activities);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.getActivityById = async (req, res) => {
-    try {
-        const activityObject = await activity.findOne({ where: { environmentalplan_id: req.params.planId, activity_id: req.params.activityId } });
-        if (!activityObject) {
-            return res.status(404).json({ message: "The activity was not found or does not exist" });
-        }
-        res.status(200).json(activityObject);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+  try {
+    const activityObject = await activity.findOne({ where: { environmentalplan_id: req.params.planId, activity_id: req.params.activityId } });
+    if (!activityObject) {
+      return res.status(404).json({ message: "The activity was not found or does not exist" });
     }
+    res.status(200).json(activityObject);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.createActivity = async (req, res) => {
-    try {
-        const environmentalplan_id = req.params.planId;
-        const { aspect, impact, measure, verification, frecuency } = req.body;
+  try {
+    const environmentalplan_id = req.params.planId;
+    const { aspect, impact, measure, verification, frecuency } = req.body;
 
-        if (!environmentalplan_id || isNaN(Number(environmentalplan_id)) || !aspect || !impact || !measure || !verification || !frecuency) {
-            return res.status(400).json({ message: "Empty parameters are not allowed or the format is incorrect" });
-        }
-
-        const newActivity = await activity.create({
-            environmentalplan_id,
-            activity_aspect: aspect,
-            activity_impact: impact,
-            activity_measure: measure,
-            activity_verification: verification,
-            activity_frecuency: frecuency
-        });
-
-        res.status(201).json(newActivity);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+    if (!environmentalplan_id || isNaN(Number(environmentalplan_id)) || !aspect || !impact || !measure || !verification || !frecuency) {
+      return res.status(400).json({ message: "Empty parameters are not allowed or the format is incorrect" });
     }
+
+    const newActivity = await activity.create({
+      environmentalplan_id,
+      activity_aspect: aspect,
+      activity_impact: impact,
+      activity_measure: measure,
+      activity_verification: verification,
+      activity_frecuency: frecuency
+    });
+
+    res.status(201).json(newActivity);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.updateActivity = async (req, res) => {
-    try {
+  try {
 
-        const id = req.params.activityId;
+    const id = req.params.activityId;
 
-        const activityObject = await activity.findByPk(id);
+    const activityObject = await activity.findByPk(id);
 
-        if (!activityObject) {
-            return res.status(404).json({ message: "Activity not found" });
-        }
-
-        const { aspect, impact, measure, verification, frecuency } = req.body;
-
-        await activityObject.update({
-            activity_aspect: aspect,
-            activity_impact: impact,
-            activity_measure: measure,
-            activity_verification: verification,
-            activity_frecuency: frecuency
-        });
-
-        res.status(200).json(activityObject);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+    if (!activityObject) {
+      return res.status(404).json({ message: "Activity not found" });
     }
+
+    const { aspect, impact, measure, verification, frecuency } = req.body;
+
+    await activityObject.update({
+      activity_aspect: aspect,
+      activity_impact: impact,
+      activity_measure: measure,
+      activity_verification: verification,
+      activity_frecuency: frecuency
+    });
+
+    res.status(200).json(activityObject);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.deleteActivity = async (req, res) => {
-    try {
-        const id = req.params.activityId;
+  try {
+    const id = req.params.activityId;
 
-        const activityObject = await activity.findByPk(id);
+    const activityObject = await activity.findByPk(id);
 
-        if (!activityObject) {
-            return res.status(404).json({ message: "Activity not found" });
-        }
-
-        await activityObject.destroy();
-
-        res.status(204).send();
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+    if (!activityObject) {
+      return res.status(404).json({ message: "Activity not found" });
     }
+
+    await activityObject.destroy();
+
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 function calculatelimitFrecuency(frecuency) {
-    limit = 99999;
-    switch (frecuency.toLowerCase()) {
-        case 'mensual': limit = 30; break;
-        case 'bimestral': limit = 60; break;
-        case 'trimestral': limit = 90; break;
-        case 'anual': limit = 365; break;
-    }
+  limit = 99999;
+  switch (frecuency.toLowerCase()) {
+    case 'mensual': limit = 30; break;
+    case 'bimestral': limit = 60; break;
+    case 'trimestral': limit = 90; break;
+    case 'anual': limit = 365; break;
+  }
 
-    return limit;
+  return limit;
 }
 
-function calculateDaysSinceLastControl(DayLastControl){
-    return  (new Date() - new Date(DayLastControl)) / (1000 * 60 * 60 * 24);
+function calculateDaysSinceLastControl(DayLastControl) {
+  return (new Date() - new Date(DayLastControl)) / (1000 * 60 * 60 * 24);
 }
 
 exports.getCompliance = async (req, res) => {
-    try {
-        const planId = Number(req.params.planId);
-        const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
+  try {
+    const planId = Number(req.params.planId);
+    const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
+    const activitiesNA = await activity.findAll({ where: { environmentalplan_id: planId, activity_frecuency: "No aplica" } });
 
-        let evaluate = 0;
-        let satisfy = 0;
+    let evaluate = 0;
+    let nonSatisfy = 0;
+    let satisfy = 0;
 
-        for (const activityr of activities) {
+    for (const activityr of activities) {
 
-            const controls = await control.findAll({ where: { activity_id: activityr.activity_id }, order: [['createdat', 'DESC']] });
-            console.log(`Actividad ID: ${activityr.activity_id}, Frecuencia: ${activityr.activity_frecuency}`);
+      const controls = await control.findAll({ where: { activity_id: activityr.activity_id }, order: [['createdat', 'DESC']] });
+      console.log(`Actividad ID: ${activityr.activity_id}, Frecuencia: ${activityr.activity_frecuency}`);
 
 
-            if (controls.length == 0) continue;
+      if (controls.length == 0) continue;
 
-            const lastControl = controls[0];
-            const daysSinceLastControl = calculateDaysSinceLastControl(lastControl.createdat);
+      const lastControl = controls[0];
+      const daysSinceLastControl = calculateDaysSinceLastControl(lastControl.createdat);
 
-            let limit = calculatelimitFrecuency(activityr.activity_frecuency);
+      let limit = calculatelimitFrecuency(activityr.activity_frecuency);
 
-            if (daysSinceLastControl <= limit) {
-                evaluate++;
-                if (lastControl.control_criterion.toLowerCase() == "cumple" && lastControl.control_verification.toLowerCase() != "anulado") {
-                    satisfy++;
-                }
-            }
+      if (daysSinceLastControl <= limit) {
+        evaluate++;
+        if (lastControl.control_criterion.toLowerCase() == "cumple" && lastControl.control_verification.toLowerCase() != "anulado") {
+          satisfy++;
         }
-
-        let percentage = activities.length ? (satisfy / activities.length * 100).toFixed(2) : 0;
-
-        res.status(200).json(
-            {
-                totalActivities: activities.length,
-                activitiesEvaluated: evaluate,
-                activitiesSatisfy: satisfy,
-                percentageSatisfy: percentage
-            }
-        );
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+        if(lastControl.control_criterion.toLowerCase() == "no cumple" && lastControl.control_verification.toLowerCase() != "anulado"){
+          nonSatisfy++;
+        }
+      }
     }
+
+    let percentage = activities.length ? (satisfy / activities.length * 100).toFixed(2) : 0;
+
+    res.status(200).json(
+      {
+        totalActivities: activities.length,
+        activitiesEvaluated: evaluate,
+        activitiesSatisfy: satisfy,
+        activitiesNoSatisfy: nonSatisfy,
+        activitiesNotApply: activitiesNA.length,
+        percentageSatisfy: percentage
+      }
+    );
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.getActivitiesPending = async (req, res) => {
-    try {
-        const planId = Number(req.params.planId);
-        const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
-        const pendingActivities = [];
+  try {
+    const planId = Number(req.params.planId);
+    const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
+    const pendingActivities = [];
 
-        for (const activityr of activities) {
-            const controls = await control.findAll({
-                where: {
-                    activity_id: activityr.activity_id,
-                    control_verification: { [Op.ne]: 'Anulado' }
-                },
-                order: [['createdat', 'DESC']]
-            });
+    for (const activityr of activities) {
+      const controls = await control.findAll({
+        where: {
+          activity_id: activityr.activity_id,
+          control_verification: { [Op.ne]: 'Anulado' }
+        },
+        order: [['createdat', 'DESC']]
+      });
 
-            let lastControlDate = null;
-            let diffDays = null;
+      let lastControlDate = null;
+      let diffDays = null;
 
-            if (controls.length > 0) {
-                lastControlDate = new Date(controls[0].createdat);
-                diffDays = calculateDaysSinceLastControl(controls[0].createdat);
-            }
+      if (controls.length > 0) {
+        lastControlDate = new Date(controls[0].createdat);
+        diffDays = calculateDaysSinceLastControl(controls[0].createdat);
+      }
 
-            const limit = calculatelimitFrecuency(activityr.activity_frecuency);
-            const shouldBeControlled = !lastControlDate || diffDays > limit;
+      const limit = calculatelimitFrecuency(activityr.activity_frecuency);
+      const shouldBeControlled = !lastControlDate || diffDays > limit;
 
-            if (shouldBeControlled) {
-                pendingActivities.push({
-                    activity_id: activityr.activity_id,
-                    activity_measure: activityr.activity_measure,
-                    activity_frecuency: activityr.activity_frecuency,
-                    lastControlDate: lastControlDate ? lastControlDate.toISOString().split('T')[0] : 'Nunca',
-                    daysSinceLastControl: lastControlDate ? Math.floor(diffDays) : 'N/A'
-                });
-            }
-        }
-
-        res.status(200).json({
-            totalActivities: activities.length,
-            pendingActivities: pendingActivities.length,
-            details: pendingActivities
+      if (shouldBeControlled) {
+        pendingActivities.push({
+          activity_id: activityr.activity_id,
+          activity_measure: activityr.activity_measure,
+          activity_frecuency: activityr.activity_frecuency,
+          lastControlDate: lastControlDate ? lastControlDate.toISOString().split('T')[0] : 'Nunca',
+          daysSinceLastControl: lastControlDate ? Math.floor(diffDays) : 'N/A'
         });
-
-    } catch (err) {
-        console.error("Error en /pending/:", err);
-        res.status(500).json({ message: err.message });
+      }
     }
+
+    res.status(200).json({
+      totalActivities: activities.length,
+      pendingActivities: pendingActivities.length,
+      details: pendingActivities
+    });
+
+  } catch (err) {
+    console.error("Error en /pending/:", err);
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.getControllReportByDate = async (req, res) => {
   try {
     const planId = req.params.planId;
-    const { from, to} = req.query;
+    const { from, to } = req.query;
 
     if (!from || !to) {
       return res.status(400).json({ message: "Cannot have empty atributes, please send from, to" });
@@ -316,243 +339,166 @@ exports.getEnvironmentalPlanReport = async (req, res) => {
   try {
     const planId = Number(req.params.planId);
 
-    const EPObject = await EPM.findOne({ where: {environmentalplan_id: req.params.planId } });
+    const EPObject = await EPM.findOne({ where: { environmentalplan_id: planId } });
 
-    const activities = await activity.findAll({
-      where: { environmentalplan_id: planId }
-    });
+    const activities = await activity.findAll({ where: { environmentalplan_id: planId } });
 
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-    let activitiesEString = "";
-    let activitiesNEString = "";
     let activitiesEvaluated = 0;
     let activitiesNonEvaluated = 0;
     let satisfy = 0;
     let nonSatisfy = 0;
 
+    // Tablas para pdfmake
+    // Actividades Evaluadas: filas con [Actividad, Frecuencia, Evaluación, Observación]
+    const evaluatedRows = [
+      ['Actividad', 'Frecuencia', 'Evaluación', 'Observación'], // encabezado
+    ];
+    // Actividades No Evaluadas
+    const nonEvaluatedRows = [
+      ['Actividad', 'Frecuencia', 'Criterio', 'Observación'], // encabezado
+    ];
+
     for (const activityr of activities) {
       const controls = await control.findAll({
         where: {
           activity_id: activityr.activity_id,
-          control_verification: { [Op.ne]: 'Anulado' }
+          control_verification: { [Op.ne]: 'Anulado' },
         },
-        order: [['createdat', 'DESC']]
+        order: [['createdat', 'DESC']],
       });
 
-      const recentControl = controls.find(ctrl => new Date(ctrl.createdat) >= oneMonthAgo);
+      const recentControl = controls.find((ctrl) => new Date(ctrl.createdat) >= oneMonthAgo);
 
       if (recentControl && recentControl.control_criterion.toLowerCase() !== 'no aplica') {
-        activitiesEString +=  `<tr><td>${activityr.activity_measure}</td><td>${activityr.activity_frecuency}</td><td>${recentControl.control_criterion}</td><td>${recentControl.control_observation}</td></tr>`;
+        evaluatedRows.push([
+          activityr.activity_measure,
+          activityr.activity_frecuency,
+          recentControl.control_criterion,
+          recentControl.control_observation || '',
+        ]);
         activitiesEvaluated++;
-        if(recentControl.control_criterion.toLowerCase() == "cumple"){
-            satisfy++;
-        }else if(recentControl.control_criterion.toLowerCase() == "no cumple"){
-            nonSatisfy++;
-        }
-
+        if (recentControl.control_criterion.toLowerCase() === 'cumple') satisfy++;
+        else if (recentControl.control_criterion.toLowerCase() === 'no cumple') nonSatisfy++;
       } else {
-        const lastControl = controls.length > 0 ? controls[0] : null;
-        activitiesNEString +=  `<tr><td>${activityr.activity_measure}</td><td>${activityr.activity_frecuency}</td><td>'N/A'</td><td>'N/A'</td></tr>`;
-        activitiesNonEvaluated ++;
+        nonEvaluatedRows.push([
+          activityr.activity_measure,
+          activityr.activity_frecuency,
+          'N/A',
+          'N/A',
+        ]);
+        activitiesNonEvaluated++;
       }
     }
 
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
+    // Definimos el contenido del PDF
+    const docDefinition = {
+      pageMargins: [40, 60, 40, 60],
+      info: {
+        title: `Reporte Plan Ambiental - ${EPObject.environmentalplan_name}`,
+      },
+      footer(currentPage, pageCount) {
+        return {
+          text: `Página ${currentPage} de ${pageCount} - Sistema Gestión Ambiental © ${new Date().getFullYear()}`,
+          alignment: 'center',
+          fontSize: 8,
+          margin: [0, 10, 0, 0],
+        };
+      },
+      content: [
+        {
+          columns: [
+            {
+              image: await fetchImageToBase64(
+                'https://biosigmambiental.com/wp-content/uploads/2019/09/cropped-cropped-logo-png-01.png'
+              ),
+              width: 60,
+            },
+            {
+              text: 'Reporte Plan De Manejo Ambiental',
+              fontSize: 22,
+              bold: true,
+              margin: [10, 20, 0, 10],
+            },
+          ],
+        },
+        { text: EPObject.environmentalplan_name, style: 'header' },
+        { text: `Fecha de emisión: ${new Date().toLocaleDateString()}`, margin: [0, 0, 0, 20] },
 
-    const html = `
-      <html>
-        <head>
-          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-          <style>
-            @page {
-              margin: 40px 50px;
-            }
-            body {
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-              color: #333;
-              font-size: 12px;
-            }
-            header {
-              display: flex;
-              align-items: center;
-              border-bottom: 2px solid #2980b9;
-              padding-bottom: 10px;
-              margin-bottom: 20px;
-            }
-            header img {
-              height: 60px;
-              margin-right: 20px;
-            }
-            header h1 {
-              font-size: 28px;
-              color: #2980b9;
-              margin: 0;
-            }
-            .subheader {
-              font-size: 14px;
-              color: #555;
-              margin-bottom: 20px;
-            }
-            #chart-container {
-              width: 600px;
-              margin: 0 auto 30px auto;
-              text-align: center;
-            }
-            h2 {
-              font-size: 18px;
-              color: #2980b9;
-              margin-bottom: 10px;
-              margin-top: 40px;
-            }
-            table {
-              width: 100%;
-              border-collapse: collapse;
-              margin-bottom: 40px;
-            }
-            table, th, td {
-              border: 1px solid #ddd;
-            }
-            th {
-              background-color: #2980b9;
-              color: white;
-              padding: 12px 10px;
-              text-align: left;
-            }
-            td {
-              padding: 10px;
-            }
-            tr:nth-child(even) {
-              background-color: #f2f6fb;
-            }
-            footer {
-              position: fixed;
-              bottom: 30px;
-              left: 50px;
-              right: 50px;
-              font-size: 10px;
-              color: #888;
-              border-top: 1px solid #ccc;
-              padding-top: 5px;
-              text-align: center;
-            }
-            .pageNumber:after {
-              content: counter(page);
-            }
-          </style>
-        </head>
-        <body>
-          <header>
-            <img src="${logo}" alt="Logo">
-            <h1>Reporte Plan De Manejo Ambiental</h1>
-          </header>
-          <h1>${EPObject.environmentalplan_name}</h1>
-          <div class="subheader">Fecha de emisión: ${new Date().toLocaleDateString()}</div>
+        // Resumen con datos
+        {
+          columns: [
+            {
+              width: '*',
+              stack: [
+                { text: 'Resumen:', bold: true, margin: [0, 0, 0, 10] },
+                {
+                  ul: [
+                    `Total actividades: ${activities.length}`,
+                    `Actividades evaluadas: ${activitiesEvaluated}`,
+                    `Cumplen: ${satisfy}`,
+                    `No cumplen: ${nonSatisfy}`,
+                    `No aplican / No evaluadas: ${activitiesNonEvaluated}`,
+                  ],
+                },
+              ],
+            },
+          ],
+          margin: [0, 0, 0, 20],
+        },
 
-          <div id="chart-container">
-            <canvas id="chart" width="600" height="300"></canvas>
-          </div>
+        { text: 'Actividades Evaluadas', style: 'subheader' },
+        {
+          table: {
+            headerRows: 1,
+            widths: ['*', 80, 80, '*'],
+            body: evaluatedRows,
+          },
+          layout: 'lightHorizontalLines',
+          margin: [0, 0, 0, 20],
+        },
 
-          <h2>Actividades Evaluadas</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Actividad</th>
-                <th>Responsable</th>
-                <th>Evaluación</th>
-                <th>Observación</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${activitiesEString}
-            </tbody>
-          </table>
+        { text: 'Actividades No Evaluadas', style: 'subheader' },
+        {
+          table: {
+            headerRows: 1,
+            widths: ['*', 80, 80, '*'],
+            body: nonEvaluatedRows,
+          },
+          layout: 'lightHorizontalLines',
+          margin: [0, 0, 0, 20],
+        },
+      ],
+      styles: {
+        header: { fontSize: 18, bold: true, margin: [0, 10, 0, 10] },
+        subheader: { fontSize: 14, bold: true, margin: [0, 10, 0, 5], color: '#2980b9' },
+      },
+    };
 
-          <h2>Actividades No Evaluadas</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Actividad</th>
-                <th>Frecuencia</th>
-                <th>Criterio</th>
-                <th>Observación</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${activitiesNEString}
-            </tbody>
-          </table>
+    // Helper para traer imagen y convertir a base64
+    async function fetchImageToBase64(url) {
+      const res = await fetch(url);
+      const buffer = await res.arrayBuffer();
+      const base64 = Buffer.from(buffer).toString('base64');
+      const mimeType = res.headers.get('content-type');
+      return `data:${mimeType};base64,${base64}`;
+    }
 
-          <footer>
-            Página <span class="pageNumber"></span> - Sistema Gestión Ambiental © ${new Date().getFullYear()}
-          </footer>
-
-          <script>
-            const drawChart = async () => {
-              return new Promise((resolve) => {
-                const ctx = document.getElementById('chart').getContext('2d');
-                new Chart(ctx, {
-                  type: 'bar',
-                  data: {
-                    labels: [
-                      'Total actividades',
-                      'Evaluadas',
-                      'Cumplen',
-                      'No cumplen',
-                      'No aplica'
-                    ],
-                    datasets: [{
-                      label: 'Actividades',
-                      data: [${activities.length}, ${activitiesEvaluated}, ${satisfy}, ${nonSatisfy}, ${activitiesNonEvaluated}],
-                      backgroundColor: [
-                        '#3498db',
-                        '#2ecc71',
-                        '#27ae60',
-                        '#e74c3c',
-                        '#95a5a6'
-                      ]
-                    }]
-                  },
-                  options: {
-                    animation: false,
-                    responsive: false,
-                    plugins: {
-                      legend: { display: false }
-                    },
-                    scales: {
-                      y: { beginAtZero: true }
-                    }
-                  }
-                });
-                setTimeout(resolve, 1000); 
-              });
-            };
-            drawChart();
-          </script>
-        </body>
-      </html>
-    `;
-
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-
-    await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 1500)));
-
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: { top: '40px', bottom: '60px', left: '50px', right: '50px' }
+    const pdfDoc = printer.createPdfKitDocument(docDefinition);
+    const chunks = [];
+    pdfDoc.on('data', (chunk) => chunks.push(chunk));
+    pdfDoc.on('end', () => {
+      const result = Buffer.concat(chunks);
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'inline; filename=reporte.pdf');
+      res.send(result);
     });
-
-    await browser.close();
-
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'inline; filename=reporte.pdf');
-    res.send(pdfBuffer);
+    pdfDoc.end();
 
   } catch (error) {
-    console.error('Error generando PDF:', error);
+    console.error('Error generando PDF con pdfmake:', error);
     res.status(500).send('Error generando el PDF');
   }
 };

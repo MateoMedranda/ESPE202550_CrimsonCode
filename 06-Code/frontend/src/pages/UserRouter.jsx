@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from "react";
+<<<<<<< HEAD:06-Code/frontend/src/Router/UserRouter.jsx
 import { useAuth } from "../Context/AuthContext";
 import useUserController from "./hooks/UserManager";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,6 +9,15 @@ import UserTable from "./components/User/UserTable";
 import informationModal from "./components/User/InformationModal"
 import UserHeader from "./components/User/UserHeader";
 export default function User({ token }) {
+=======
+import useUserController from "../hooks/UserManager";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
+export default function User() {
+    const token = sessionStorage.getItem('token');
+>>>>>>> e3bfaac0329cb90485c47147fefb812a1ecd7529:06-Code/frontend/src/pages/UserRouter.jsx
     const {
     UserTableGet,
     handleAddUser,

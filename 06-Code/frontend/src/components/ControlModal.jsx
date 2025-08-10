@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Tooltip } from "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../../css/ControlModal.css";
+import "../css/ControlModal.css";
 import { useActivitiesControls } from "../hooks/useActivitiesControl";
 
 function ControlModal({ show, onClose, token, activity }) {

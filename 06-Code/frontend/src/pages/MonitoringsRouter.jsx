@@ -14,8 +14,8 @@ export default function MonitoringsRouter({ projectId, token }) {
         monitoring_date: ""
     });
 
-    const baseListUrl = `http://localhost:3001/projects/${projectId}/monitorings`;
-    const baseCrudUrl = `http://localhost:3001/monitorings`;
+    const baseListUrl = `https://sima-es01.onrender.com/projects/${projectId}/monitorings`;
+    const baseCrudUrl = `https://sima-es01.onrender.com/monitorings`;
 
     const fetchMonitorings = async () => {
         try {

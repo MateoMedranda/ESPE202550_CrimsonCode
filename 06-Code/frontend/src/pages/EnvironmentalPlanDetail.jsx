@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import { usePlanActivities } from "./hooks/usePlanActivities";
-import ActivityModal from "./components/ActivityModal";
+import { usePlanActivities } from "../hooks/usePlanActivities";
+import ActivityModal from "../components/ActivityModal";
 import * as bootstrap from "bootstrap";
 import { useNavigate } from 'react-router-dom';
-import ControlModal from "./components/ControlModal";
+import ControlModal from "../components/ControlModal";
 
-export default function EnvironmentalPlanDetail({ token }) {
+export default function EnvironmentalPlanDetail() {
+    const token = sessionStorage.getItem('token');
     const navigate = useNavigate();
     const { planId } = useParams();
     const location = useLocation();
@@ -190,7 +191,6 @@ export default function EnvironmentalPlanDetail({ token }) {
 
             </div>
 
-            {/* Filtro con icono lupa y tamaño pequeño */}
             <div className="input-group input-group-sm mb-3 mt-3" style={{ maxWidth: "300px" }}>
                 <span className="input-group-text bg-white border-end-0" id="search-addon">
                     <i className="bi bi-search"></i>
@@ -298,22 +298,22 @@ export default function EnvironmentalPlanDetail({ token }) {
                                         <td>
                                             <div className="d-flex justify-content-center">
                                                 <button
-                                                    className="btn bg-success-subtle btn-sm mx-2 icon-hover"
-                                                    title="Controles"
+                                                    className="btn btn-sm mx-2 icon-hover"
+                                                    title="Controles" style={{backgroundColor:"#51E069", borderColor: "green"}}
                                                     onClick={() => openControlsModal(act)}
                                                 >
                                                     <i className="bi bi-clipboard-check-fill me-2"></i> Controles
                                                 </button>
 
                                                 <i
-                                                    className="bi bi-pencil-square mx-2 fs-3 icon-hover"
-                                                    style={{ color: "blue", cursor: "pointer" }}
+                                                    className="bi bi-pencil-fill mx-2 fs-3 icon-hover"
+                                                    style={{ color: "#0F69BA", cursor: "pointer" }}
                                                     title="Editar"
                                                     onClick={() => openEditModal(act)}
                                                 ></i>
                                                 <i
-                                                    className="bi bi-x-circle mx-2 fs-3 icon-hover"
-                                                    style={{ color: "red", cursor: "pointer" }}
+                                                    className="bi bi-trash-fill mx-2 fs-3 icon-hover"
+                                                    style={{ color: "#BA0F0F", cursor: "pointer" }}
                                                     title="Eliminar"
                                                     onClick={() => handleDelete(act.activity_id)}
                                                 ></i>

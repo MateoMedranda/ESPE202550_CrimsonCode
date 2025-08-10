@@ -1,14 +1,28 @@
 import { useState } from "react";
+<<<<<<< HEAD:06-Code/frontend/src/Router/LoginRouter.jsx
 import "../css/login.css";
 import { useAuth } from "../Context/AuthContext";
+=======
+import { useAuth } from '../context/AuthContext';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import '../css/login.css';
+import { useNavigate } from "react-router-dom";
+>>>>>>> e3bfaac0329cb90485c47147fefb812a1ecd7529:06-Code/frontend/src/pages/LoginRouter.jsx
 
-export default function Login() {
+function Login() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const { login } = useAuth();
+<<<<<<< HEAD:06-Code/frontend/src/Router/LoginRouter.jsx
 
+=======
+  
+>>>>>>> e3bfaac0329cb90485c47147fefb812a1ecd7529:06-Code/frontend/src/pages/LoginRouter.jsx
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -29,7 +43,12 @@ export default function Login() {
 
       if (!res.ok) {
         const err = await res.json();
+<<<<<<< HEAD:06-Code/frontend/src/Router/LoginRouter.jsx
         setErrorMsg(err.message || "Error en el login");
+=======
+        setErrorMsg(err.message || "Error al iniciar sesión");
+        setLoading(false);
+>>>>>>> e3bfaac0329cb90485c47147fefb812a1ecd7529:06-Code/frontend/src/pages/LoginRouter.jsx
         return;
       }
 
@@ -44,6 +63,7 @@ export default function Login() {
         }
       );
 
+<<<<<<< HEAD:06-Code/frontend/src/Router/LoginRouter.jsx
       
       if (!permitsRes.ok) {
         const err = await permitsRes.json();
@@ -52,6 +72,10 @@ export default function Login() {
       }
       const permits = await permitsRes.json();
       login(data.token, data.user, permits);
+=======
+      login(data.token,data.user);
+      navigate("/", { replace: true });
+>>>>>>> e3bfaac0329cb90485c47147fefb812a1ecd7529:06-Code/frontend/src/pages/LoginRouter.jsx
 
     } catch (err) {
       console.error(err);
@@ -137,3 +161,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default Login;
