@@ -50,7 +50,8 @@ const Allpermits = [
   "profiles_readactions",
   "profiles_readsupervisionperiod", "profiles_createsupervisionperiod", "profiles_deletesupervisionperiod", "profiles_updatesupervisionperiod",
   "profiles_readpermit", "profiles_createpermit", "profiles_updatepermit", "profiles_deletepermit",
-  "profiles_readreminder", "profiles_createreminder", "profiles_deletereminder", "profiles_updatereminder"
+  "profiles_readreminder", "profiles_createreminder", "profiles_deletereminder", "profiles_updatereminder",
+  "profiles_readcontrol","profiles_createcontrol","profiles_deletecontrol", "profiles_updatecontrol"
 ];
 
 async function createProfile(placeholders,values,columns) {
