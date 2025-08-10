@@ -12,7 +12,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 
 export default function CalendarRouter() {
-  const {token} = useAuth();  
+  const {token,permits} = useAuth();  
   const{
         CalendarContentGet,
         notificationPost,
@@ -31,6 +31,9 @@ export default function CalendarRouter() {
   useEffect(() => {
   setLoading(false); 
 }, []);
+  const canCreate = permits?.Recordatorio?.profiles_createreminder?.value === true;
+  const canView = permits?.Recordatorio?.profiles_readreminder?.value === true;
+  const canEdit = permits?.Recordatorio?.profiles_updatereminder?.value === true;
 
 const handleDatesSet = async (info) => {
     const visibleDate = info.view.currentStart;
@@ -75,12 +78,17 @@ const handleDatesSet = async (info) => {
         </div>
         <hr />
         <div className="d-flex justify-content-end">
-          <button
+          {
+          canCreate && (
+            <button
             className="btn_add btn bg-info-subtle border-black"
             onClick={handleAddNotification}
           >
             <i className="bi bi-plus-circle"></i> Agregar Notificación
           </button>
+          )
+          }
+          
         </div>
         <hr />
         <div className="container">

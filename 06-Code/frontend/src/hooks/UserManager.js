@@ -8,7 +8,7 @@ export default function UserManager(Token) {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState([]);
     const [message, setMessage] = useState("");
-
+    const [profileData,setProfiledata]=useState([]);
     const UserTableGet = async () => {
     setLoading(true);
     try {
@@ -50,21 +50,10 @@ export default function UserManager(Token) {
 
         const data = await response.json();
 
-        const selectElement = profilesContainerRef.current;
-        if (selectElement) {
-        selectElement.innerHTML = '<option value="seleccione">Seleccione...</option>';
-        data.forEach((profile) => {
-            const option = document.createElement("option");
-            option.value = profile.id;
-            option.textContent = profile.name;
-            selectElement.appendChild(option);
-        });
-        }
-
         const modalEl = document.getElementById("user_register");
         const modal = new bootstrap.Modal(modalEl);
         modal.show();
-
+       setProfiledata(data);
     } catch (error) {
         console.error("Error loading profiles:", error);
         alert("Error al obtener los datos de los perfiles.");
@@ -77,7 +66,7 @@ export default function UserManager(Token) {
     }
 
     const handleSaveUser = async () => {
-        const name = document.getElementById("name").value.trim();
+  const name = document.getElementById("name").value.trim();
   const surname = document.getElementById("surname").value.trim();
   const email = document.getElementById("email").value.trim();
   const born_date = document.getElementById("born_date").value.trim();
@@ -113,7 +102,6 @@ export default function UserManager(Token) {
   if (user_profile === "seleccione") return handleMessage("Debe seleccionar un perfil de usuario");
 
   try {
-
     const response = await fetch("https://sima-es01.onrender.com/api/user/users", {
       method: "POST",
       headers: {
@@ -139,19 +127,25 @@ export default function UserManager(Token) {
       return handleMessage(result.error || "Error en el servidor");
     }
 
+    const modalEl = document.getElementById("user_register");
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    if (modal) {
+      modal.hide();
+      document.body.classList.remove("modal-open");
+      document.body.style.paddingRight = "";
+      const backdrop = document.querySelector(".modal-backdrop");
+      if (backdrop) backdrop.remove();
+    }
+
+    await UserTableGet();
     handleMessage("Usuario registrado correctamente!");
-    UserTableGet(); 
-    bootstrap.Modal.getInstance(
-              document.getElementById("user_register")
-            ).hide();
-            handleMessage("Usuario guardado correctamente");
-            UserTableGet();
   } catch (error) {
     console.error("Error al registrar usuario:", error);
     handleMessage("Error al registrar usuario.");
   }
+};
 
-    }
+
     const handleMessage = (msg) => {
     setMessage(msg);
     const modalEl = document.getElementById("information_container");
@@ -184,6 +178,7 @@ export default function UserManager(Token) {
         if (selectElement) {
         selectElement.innerHTML = '<option value="seleccione">Seleccione...</option>';
         data.forEach((profile) => {
+          if(profile.profiles_state !== "ACTIVE") return;
             const option = document.createElement("option");
             option.value = profile.profiles_id;
             option.textContent = profile.profiles_name;
@@ -259,7 +254,7 @@ export default function UserManager(Token) {
   
     const handleToggleUser = async (id,state) =>{
           const nuevoEstado = state === "ACTIVE" ? "INACTIVE" : "ACTIVE";
-    fetch(`https://sima-es01.onrender.com/api/user/users${id}`, {
+    fetch(`https://sima-es01.onrender.com/api/user/users/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -290,7 +285,8 @@ export default function UserManager(Token) {
     message,
     userTableRef,
     profilesEditContainerRef,
-    message
+    message,
+    profileData
   }
 
 }

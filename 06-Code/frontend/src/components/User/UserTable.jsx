@@ -50,7 +50,7 @@ export default function UserTable({ user, loading, handleEditUser, handleToggleS
                         </button>
                         <button
                           className={`btn btn-sm ${btnEstado}`}
-                          onClick={() => handleToggleUser(id, state)}
+                          onClick={() => handleToggleState(id, state)}
                         >
                           <i className={`bi ${iconoEstado}`}></i> {accion}
                         </button>

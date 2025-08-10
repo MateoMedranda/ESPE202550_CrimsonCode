@@ -2,20 +2,38 @@
     background-color: white;
     color: rgb(0, 0, 0);
 }
-
+.textMenu{
+    color: rgb(234, 213, 213);
+     margin: 0;
+}
 .conf_user{
     z-index: 1050 !important;
 }
 
 .menu{
-    background-color: rgb(15, 26, 56);
+    background-color: rgb(15, 50, 56);
     color:white;
     font-family: "Quicksand",sans-serif;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.466);
 }
+.menu .nav-link,
+.menu .nav-link i,
+.menu .textMenu {
+  color: #ffffff !important; 
+}
 
+.menu .nav-link:hover i,
+.menu .nav-link:hover .textMenu {
+  color: #ffd369 !important; 
+}
+
+.menu .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* espacio entre icono y texto */
+}
 .sub_menu{
-    background-color: rgb(162, 187, 255) !important;
+    background-color: rgb(162, 232, 255) !important;
 }
 
 body{
@@ -135,7 +153,7 @@ body{
 }
 
 .active-menu .nav-link {
-  color: #b9a6ff;
+  color: #a2f1f6;
 }
 
 @keyframes fadeIn {

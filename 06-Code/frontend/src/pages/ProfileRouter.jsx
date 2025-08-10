@@ -1,13 +1,18 @@
 import React, { useState,useEffect } from "react";
 import useProfilesController from "../hooks/ProfileManager";
 import { useAuth } from "../Context/AuthContext";
+import ProfileHeader from "../components/Profiles/ProfileHeader";
+import ProfileTable from "../components/Profiles/ProfileTable";
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 export default function Profiles() {
-  const {token} = useAuth();    
+  const {token,permits } = useAuth();   
+    const canEdit = permits?.Perfiles?.profiles_updateprofiles?.value === true;
+    const canCreate = permits?.Perfiles?.profiles_createprofiles?.value === true;
+    const canView = permits?.Perfiles?.profiles_readprofiles?.value === true; 
     const {
     ProfileTableGet,
     handleAddPermits,
@@ -45,79 +50,12 @@ export default function Profiles() {
   return (
     <div className="container mt-4">
       <fieldset className="border p-4 shadow agregar bg-light rounded">
-        <div className="text-center bg-success-subtle">
-          <h2 className="title">
-            <b>Menu Perfiles</b>
-          </h2>
-        </div>
-        <hr />
-        <div className="d-flex justify-content-end">
-          <button
-            className="btn_add btn bg-info-subtle border-black"
-            onClick={handleAddPermits}
-          >
-            <i className="bi bi-plus-circle"></i> Agregar Perfil
-          </button>
-        </div>
-        <hr />
-        <div className="container">
-          <div className="table-responsive">
-            <table className="table table-striped">
-              <thead className="table-secondary">
-                <tr>
-                  <th>Perfil</th>
-                  <th>Estado</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                    <tr>
-                      <td colSpan="3" className="text-center">Cargando...</td>
-                    </tr>
-                  ) : profiles.length === 0 ? (
-                    <tr>
-                      <td colSpan="3" className="text-center">No hay perfiles disponibles.</td>
-                    </tr>
-                  ) : (
-                  profiles.map(({ profiles_id, profiles_name, profiles_state }) => {
-                    const estadoTexto = profiles_state === 'ACTIVE' ? 'Activo' : 'Inactivo';
-                    const btnEstado = profiles_state === 'ACTIVE' ? 'btn-danger' : 'btn-success';
-                    const iconoEstado = profiles_state === 'ACTIVE' ? 'bi-check-circle' : 'bi-x-circle';
-                    const accion = profiles_state === 'ACTIVE' ? 'Desactivar' : 'Activar';
-
-                    return (
-                      <tr key={profiles_id}>
-                        <td>{profiles_name}</td>
-                        <td>{estadoTexto}</td>
-                        <td>
-                          <button
-                            className="btn btn-sm btn-primary me-1"
-                            onClick={() => handleEditPermits(profiles_id, profiles_name)}
-                          >
-                            <i className="bi bi-pencil"></i> Editar
-                          </button>
-                          <button
-                            className="btn btn-sm btn-info me-1"
-                            onClick={() => handleViewPermits( profiles_id,profiles_name)}
-                          >
-                            <i className="bi bi-eye-fill"></i> Ver Permisos
-                          </button>
-                          <button
-                            className={`btn btn-sm ${btnEstado}`}
-                            onClick={() => handleToggleState(profiles_id, profiles_state)}
-                          >
-                            <i className={`bi ${iconoEstado}`}></i> {accion}
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <ProfileHeader canCreate={canCreate} handleAddPermits={handleAddPermits}/>
+      {canView && (
+        <ProfileTable canEdit={canEdit} handleEditPermits= {handleEditPermits} handleViewPermits={handleEditPermits} 
+      handleToggleState={handleToggleState} loading={loading} profiles={profiles} />
+      )}
+      
       </fieldset>
 
       {/* Modal */}
