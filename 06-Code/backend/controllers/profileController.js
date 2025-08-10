@@ -155,7 +155,7 @@ const user_friendly_permit_names = {
     "profiles_createreminder" :"Generar Recordatorio",
     "profiles_deletereminder" :"Eliminar Recordatorio",
     "profiles_updatereminder" :"Actualizar Recordatorio",
-    "profiles_readcontrol": "Actualizar Control",
+    "profiles_readcontrol": "Ver Control",
     "profiles_createcontrol": "Generar Control",
     "profiles_deletecontrol": "Eliminar Control",
     "profiles_updatecontrol": "Actualizar Control"
