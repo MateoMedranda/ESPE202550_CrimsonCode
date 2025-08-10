@@ -13,7 +13,6 @@ export default function CalendarManager(token) {
     const [notification, setNotification] = useState([]);
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
-    
     const CalendarContentGet = async (date) => {
         const dateOnly = date.toISOString().split("T")[0];
 

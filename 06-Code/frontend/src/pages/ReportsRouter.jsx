@@ -5,6 +5,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   LineChart, Line
 } from "recharts";
+import { useAuth } from "../Context/AuthContext";
 
 function EnvironmentalCharts() {
   const [projects, setProjects] = useState([]);
@@ -12,7 +13,7 @@ function EnvironmentalCharts() {
   const [selectedProject, setSelectedProject] = useState("");
   const [selectedPlan, setSelectedPlan] = useState("");
   const [loading, setLoading] = useState(true);
-
+  const {token} = useAuth();
   const [compliance, setCompliance] = useState(null);
   const [pending, setPending] = useState(null);
   const [reportByDate, setReportByDate] = useState([]);
@@ -24,7 +25,7 @@ function EnvironmentalCharts() {
     const fetchProjects = async () => {
       try {
         setLoading(true);
-        const headers = { Authorization: `Bearer ${sessionStorage.getItem('token')}` };
+        const headers = { Authorization: `Bearer ${token}` };
         const res = await axios.get(`${baseUrl}/projects/`, { headers });
         setProjects(res.data);
         setLoading(false);
@@ -43,7 +44,7 @@ function EnvironmentalCharts() {
         return;
       }
       try {
-        const headers = { Authorization: `Bearer ${sessionStorage.getItem('token')}` };
+        const headers = { Authorization: `Bearer ${token}` };
         const res = await axios.get(`${baseUrl}/projects/${selectedProject}/environmental-plans`, { headers });
         setPlans(res.data);
       } catch (error) {
@@ -58,7 +59,7 @@ function EnvironmentalCharts() {
       if (!selectedPlan) return;
       try {
         setLoading(true);
-        const headers = { Authorization: `Bearer ${sessionStorage.getItem('token')}` };
+        const headers = { Authorization: `Bearer ${token}` };
 
         const [resCompliance, resPending, resReport, resEvalStatus] = await Promise.all([
           axios.get(`${baseUrl}/environmental-plans/${selectedPlan}/compliance/`, { headers }),

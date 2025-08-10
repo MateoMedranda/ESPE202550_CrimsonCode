@@ -3,7 +3,7 @@ import { Modal, Collapse } from "bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import { createPopper } from "@popperjs/core";
 import { useAuth } from "../Context/AuthContext";
-import Menu_logout from "../pages/LogoutRouter.jsx";
+import  Menu_logout from "../pages/LogoutRouter";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -17,7 +17,6 @@ export default function Menu() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout, token } = useAuth();
-
   const [open, setOpen] = useState(false);
   const buttonRef = useRef(null);
   const menuRef = useRef(null);

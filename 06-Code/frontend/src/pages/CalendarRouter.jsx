@@ -1,5 +1,6 @@
 import CalendarManager from "../hooks/CalendarManager";
 import { useState,useEffect, useRef} from "react";
+import { useAuth } from "../Context/AuthContext";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -11,7 +12,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 
 export default function CalendarRouter() {
-    const{
+  const {token} = useAuth();  
+  const{
         CalendarContentGet,
         notificationPost,
         notifications, 
@@ -21,7 +23,7 @@ export default function CalendarRouter() {
         message,
         handleAddNotification,
         handleSaveNotification
-    } = CalendarManager(sessionStorage.getItem('token'));
+    } = CalendarManager(token);
 
     const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState([]);

@@ -1,12 +1,13 @@
 import React, { useState,useEffect } from "react";
 import useProfilesController from "../hooks/ProfileManager";
+import { useAuth } from "../Context/AuthContext";
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 export default function Profiles() {
-  const token = sessionStorage.getItem('token');    
+  const {token} = useAuth();    
     const {
     ProfileTableGet,
     handleAddPermits,

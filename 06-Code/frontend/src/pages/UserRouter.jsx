@@ -1,12 +1,12 @@
 import React, { useState,useEffect } from "react";
 import { useAuth } from "../Context/AuthContext";
-import useUserController from "./hooks/UserManager";
+import useUserController from "../hooks/UserManager";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import UserTable from "./components/User/UserTable";
-import informationModal from "./components/User/InformationModal"
-import UserHeader from "./components/User/UserHeader";
+import UserTable from "../components/User/UserTable";
+import informationModal from "../components/User/InformationModal"
+import UserHeader from "../components/User/UserHeader";
 export default function User({ token }) {
     const {
     UserTableGet,

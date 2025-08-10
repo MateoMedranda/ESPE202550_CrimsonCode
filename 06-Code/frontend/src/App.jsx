@@ -6,19 +6,20 @@ import './css/project_managment.css';
 import './css/project_page.css';
 
 import { Modal, Collapse } from 'bootstrap';
-import Profiles from './Router/ProfileRouter.jsx';
-import Users from './Router/UserRouter.jsx';
-import Calendar from './Router/CalendarRouter.jsx';
-import handleLogout, { Menu_logout } from './Router/LogoutRouter.jsx';
+import Profiles from './pages/ProfileRouter.jsx';
+import Users from './pages/UserRouter.jsx';
+import Calendar from './pages/CalendarRouter.jsx';
+import Menu_logout  from './pages/LogoutRouter.jsx';
+import {handleLogout} from './pages/LogoutRouter.jsx';
 import { useNavigate, Routes, Route, useLocation } from 'react-router-dom';
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPopper } from "@popperjs/core";
-import Projects from './Router/ProjectDetailRouter.jsx';
-import EnvironmentalPlanDetail from './Router/EnvironmentalPlanDetail.jsx';
-import HomePage from './Router/HomePage.jsx';
-import EnvironmentalCharts from './Router/ReportsRouter.jsx';
-import ProfileForm from './Router/InformationUser.jsx';
-import ProjectsRouter from './Router/ProjectRouter.jsx';
+import Projects from './pages/ProjectDetailRouter.jsx';
+import EnvironmentalPlanDetail from './pages/EnvironmentalPlanDetail.jsx';
+import HomePage from './pages/HomePage.jsx';
+import EnvironmentalCharts from './pages/ReportsRouter.jsx';
+import ProfileForm from './pages/InformationUser.jsx';
+import ProjectsRouter from './pages/ProjectRouter.jsx';
 import { useAuth } from "./Context/AuthContext";
 
 function Menu() {
