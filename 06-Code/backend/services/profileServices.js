@@ -71,7 +71,7 @@ async function updateProfile(profile_id, name, permits,setClause) {
   );
 
   await pool.query(
-      `UPDATE profiles SET ${setClause} WHERE profiles_id = $${Allpermits.length + 1}`,
+      `UPDATE profiles SET ${setClause} WHERE profiles_id = $${Allpermits.length}`,
       [...permits, profile_id]
     );
 
