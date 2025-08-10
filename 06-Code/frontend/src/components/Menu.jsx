@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { Modal, Collapse } from "bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import { createPopper } from "@popperjs/core";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../Context/AuthContext";
 import Menu_logout from "../pages/LogoutRouter.jsx";
 
 import "bootstrap/dist/css/bootstrap.min.css";
