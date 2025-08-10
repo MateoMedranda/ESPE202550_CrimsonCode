@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-
-export default function RemindersRouter({ projectId, token }) {
+import { useAuth } from "../Context/AuthContext";
+export default function RemindersRouter({ projectId, Token }) {
   const [reminders, setReminders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [selected, setSelected] = useState(null);
-
+  const {token} =useAuth();
   const [formData, setFormData] = useState({
     reminder_title: "",
     reminder_content: "",

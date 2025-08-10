@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
-
-export default function PermitsRouter({ projectId, token }) {
-  const [permits, setPermits] = useState([]);
+import { useAuth } from "../Context/AuthContext";
+export default function PermitsRouter({ projectId, Token }) {
+  const [permitsPerm, setPermits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [selected, setSelected] = useState(null);
+
+  const {token,permits} = useAuth();
+  const canEdit = permits?.Permisos?.profiles_updatepermit?.value === true;
+  const canCreate = permits?.Permisos?.profiles_createpermit?.value === true;
+  const canView = permits?.Permisos?.profiles_readpermit?.value === true;
+  const canDelete = permits?.Permisos?.profiles_deletepermit?.value === true;
 
   const [formData, setFormData] = useState({
     permit_name: "",
@@ -100,32 +106,40 @@ export default function PermitsRouter({ projectId, token }) {
   if (loading) return <h2>Cargando permisos...</h2>;
 
   return (
-    <div>
+  <>
+    {canView && (
+      <div>
       <div className="d-flex">
         <div className="col">
           <h3 className="title inter-title">Permisos</h3>
         </div>
         <div className="col text-end">
-          <button className="btn bg-info-subtle border-black" onClick={() => setShowAdd(true)}>
+          {canCreate && (
+            <button className="btn bg-info-subtle border-black" onClick={() => setShowAdd(true)}>
             <i className="bi bi-plus-circle"></i> Agregar Permiso
           </button>
+          )}
+          
         </div>
       </div>
+
       <hr />
 
-      {Array.isArray(permits) && permits.length === 0 ? (
+      {Array.isArray(permitsPerm) && permitsPerm.length === 0 ? (
         <div className="text-center text-muted">
           <i className="bi bi-shield-slash" style={{ fontSize: "2rem" }}></i>
           <p>No hay permisos registrados aún.</p>
         </div>
       ) : (
         <div className="row">
-          {permits.map((p) => (
+          {permitsPerm.map((p) => (
             <div key={p.permit_id} className="card m-2 p-3 shadow col-3">
               <h5>{p.permit_name}</h5>
               <p>{p.permit_description}</p>
               <div className="d-flex justify-content-end">
-                <i
+                {canEdit && (
+                  <>
+                  <i
                   className="bi bi-pencil-square mx-2 text-primary"
                   style={{ cursor: "pointer" }}
                   onClick={() => {
@@ -136,15 +150,24 @@ export default function PermitsRouter({ projectId, token }) {
                     });
                     setShowEdit(true);
                   }}
-                ></i>
-                <i
+                />
+                  </>
+                )}
+                
+                {canDelete && (
+                  <>
+                  <i
                   className="bi bi-x-circle mx-2 text-danger"
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     setSelected(p);
                     setShowDelete(true);
                   }}
-                ></i>
+                />
+                  </>
+                )}
+                
+
               </div>
             </div>
           ))}
@@ -265,5 +288,8 @@ export default function PermitsRouter({ projectId, token }) {
         </div>
       )}
     </div>
+    )}
+    
+    </>
   );
 }

@@ -5,9 +5,15 @@ import ActivityModal from "../components/ActivityModal";
 import * as bootstrap from "bootstrap";
 import { useNavigate } from 'react-router-dom';
 import ControlModal from "../components/ControlModal";
-
+import { useAuth } from "../Context/AuthContext";
 export default function EnvironmentalPlanDetail() {
-    const token = sessionStorage.getItem('token');
+    const { token, permits } = useAuth();
+
+    const canView   = permits?.["Planes Ambientales"]?.profiles_readambientalplans?.value === true;
+    const canCreate = permits?.["Planes Ambientales"]?.profiles_createambientalplans?.value === true;
+    const canUpdate = permits?.["Planes Ambientales"]?.profiles_updateambientalplans?.value === true;
+    const canDelete = permits?.["Planes Ambientales"]?.profiles_deleteambientalplans?.value === true;
+    console.log(canCreate,canDelete,canUpdate,canView)
     const navigate = useNavigate();
     const { planId } = useParams();
     const location = useLocation();
@@ -213,12 +219,15 @@ export default function EnvironmentalPlanDetail() {
                 </div>
 
                 <div className="col text-end">
+                    {canCreate &&(
                     <button
                         className="btn button_hover"
                         onClick={openCreateModal}
                     >
                         <i className="bi bi-plus-circle"></i> Agregar Actividad
                     </button>
+                    )}
+                    
                 </div>
 
             </div>

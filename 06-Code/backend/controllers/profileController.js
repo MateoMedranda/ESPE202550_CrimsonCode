@@ -105,7 +105,11 @@ const permitsGroups = {
   "profiles_readreminder": "Recordatorio",
   "profiles_createreminder": "Recordatorio",
   "profiles_deletereminder": "Recordatorio",
-  "profiles_updatereminder": "Recordatorio"
+  "profiles_updatereminder": "Recordatorio",
+  "profiles_readcontrol": "Controles",
+  "profiles_createcontrol": "Controles",
+  "profiles_deletecontrol": "Controles",
+  "profiles_updatecontrol": "Controles"
 };
 
 
@@ -150,7 +154,12 @@ const user_friendly_permit_names = {
     "profiles_readreminder" :"Ver Recordatorio",
     "profiles_createreminder" :"Generar Recordatorio",
     "profiles_deletereminder" :"Eliminar Recordatorio",
-    "profiles_updatereminder" :"Actualizar Recordatorio"
+    "profiles_updatereminder" :"Actualizar Recordatorio",
+    "profiles_readcontrol": "Actualizar Control",
+    "profiles_createcontrol": "Generar Control",
+    "profiles_deletecontrol": "Eliminar Control",
+    "profiles_updatecontrol": "Actualizar Control"
+    
 };
 
 const userFriendlyPermitNames = {};
@@ -220,7 +229,8 @@ const Allpermits = [
   "profiles_readactions",
   "profiles_readsupervisionperiod", "profiles_createsupervisionperiod", "profiles_deletesupervisionperiod", "profiles_updatesupervisionperiod",
   "profiles_readpermit", "profiles_createpermit", "profiles_updatepermit", "profiles_deletepermit",
-  "profiles_readreminder", "profiles_createreminder", "profiles_deletereminder", "profiles_updatereminder"
+  "profiles_readreminder", "profiles_createreminder", "profiles_deletereminder", "profiles_updatereminder",
+  "profiles_readcontrol","profiles_createcontrol","profiles_deletecontrol", "profiles_updatecontrol"
 ];
 
 exports.createProfile = async (req, res) => {

@@ -6,8 +6,10 @@ import { useNavigate } from "react-router-dom";
 import PlanModal from "./PlanModal";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import ActionDropdown from "./ActionDropDown";
+import { useAuth } from "../Context/AuthContext";
 
-export default function EnvironmentalPlansList({ projectId, token }) {
+export default function EnvironmentalPlansList({ projectId, Token }) {
+    const { token, permits } = useAuth();
     const navigate = useNavigate();
     const { environmentalPlan, loading, insertPlan, deletePlan, updatePlan } = EPController(projectId, token);
 
@@ -24,6 +26,12 @@ export default function EnvironmentalPlansList({ projectId, token }) {
         project_emp_process: "",
     });
 
+    const canView   = permits?.["Planes Ambientales"]?.profiles_readambientalplans?.value === true;
+    const canCreate = permits?.["Planes Ambientales"]?.profiles_createambientalplans?.value === true;
+    const canUpdate = permits?.["Planes Ambientales"]?.profiles_updateambientalplans?.value === true;
+    const canDelete = permits?.["Planes Ambientales"]?.profiles_deleteambientalplans?.value === true;
+
+    console.log(canView,canCreate,canUpdate,canDelete)
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -145,20 +153,22 @@ export default function EnvironmentalPlansList({ projectId, token }) {
     if (loading) return <h2>Cargando planes ambientales...</h2>;
 
     return (
-        <div>
+        <>
+        {canView &&(
+            <div>
             {/* Encabezado */}
             <div className="d-flex">
                 <div className="col">
                     <h3 className="title inter-title">Plan De Manejo Ambiental</h3>
                 </div>
                 <div className="col text-end">
-                    <button
+                    {canCreate &&(<button
                         id="add_emp"
                         className="btn_add btn button_hover"
                         onClick={handleAddPlan}
                     >
                         <i className="bi bi-plus-circle"></i> Agregar Plan
-                    </button>
+                    </button>)}
                 </div>
             </div>
             <hr />
@@ -247,5 +257,10 @@ export default function EnvironmentalPlansList({ projectId, token }) {
                 entityLabel={`el plan "${selectedPlan?.environmentalplan_name}"`}
             />
         </div>
+        )
+
+        }
+        
+        </>
     );
 }

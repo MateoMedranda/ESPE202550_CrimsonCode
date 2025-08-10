@@ -3,15 +3,16 @@ import useProjectController from "../hooks/ProjectController";
 import EnvironmentalPlansList from "../components/EnvironmentalPlanList";
 import PermitsRouter from "./PermitsRouter";
 import MonitoringsRouter from "./MonitoringsRouter";
-import RemindersRouter from "./RemindersRouter";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import { useAuth } from "../Context/AuthContext";
 export default function ProjectDetail() {
     const navigate = useNavigate();
-    const token = sessionStorage.getItem('token')
+    const {permits,token } = useAuth();
+
     const { projectId } = useParams();
     const { project, loading } = useProjectController(projectId, token);
     const [modalImage, setModalImage] = useState(null);
@@ -106,7 +107,6 @@ export default function ProjectDetail() {
                 <PermitsRouter projectId={projectId} token={token} />
                 <EnvironmentalPlansList projectId={projectId} token={token} />
                 <MonitoringsRouter projectId={projectId} token={token} />
-                <RemindersRouter projectId={projectId} token={token} />
             </div>
         </div>
     );
