@@ -31,7 +31,7 @@ export default function User({ token }) {
   const canEdit = permits?.Usuarios?.profiles_updateusers?.value === true;
   const canCreate = permits?.Usuarios?.profiles_createusers?.value === true;
   const canView = permits?.Usuarios?.profiles_readusers?.value === true;
-
+  const canDelete = permits?.Usuarios?.profiles_deleteusers?.value === true;
   useEffect(() => {
     UserTableGet();
   }, []);
@@ -61,9 +61,9 @@ export default function User({ token }) {
         <hr />
 
         {canView && (
-          <UserTable user={user} loading={loading}
+          <UserTable userdata={user} loading={loading}
             handleEditUser={handleEditUser} handleToggleState={handleToggleUser}
-            canEdit={canEdit}
+            canEdit={canEdit} canDelete={canDelete}
           />
         )}
 

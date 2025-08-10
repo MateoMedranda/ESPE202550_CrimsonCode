@@ -1,5 +1,6 @@
-export default function ProfileTable({canEdit,handleEditPermits,handleViewPermits,handleToggleState,loading,profiles }){
-       return(
+export default function ProfileTable({canEdit,canDelete,handleEditPermits,handleViewPermits,handleToggleState,loading,profiles}){
+    
+  return(
          <div className="container">
           <div className="table-responsive">
             <table className="table table-striped">
@@ -7,7 +8,7 @@ export default function ProfileTable({canEdit,handleEditPermits,handleViewPermit
                 <tr>
                   <th>Perfil</th>
                   <th>Estado</th>
-                  {canEdit && <th></th>}
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -20,7 +21,9 @@ export default function ProfileTable({canEdit,handleEditPermits,handleViewPermit
                       <td colSpan="3" className="text-center">No hay perfiles disponibles.</td>
                     </tr>
                   ) : (
-                  profiles.map(({ profiles_id, profiles_name, profiles_state }) => {
+                  profiles
+                  .filter(profile => profile.profiles_id !== 1)
+                  .map(({ profiles_id, profiles_name, profiles_state }) => {
                     const estadoTexto = profiles_state === 'ACTIVE' ? 'Activo' : 'Inactivo';
                     const btnEstado = profiles_state === 'ACTIVE' ? 'btn-danger' : 'btn-success';
                     const iconoEstado = profiles_state === 'ACTIVE' ? 'bi-check-circle' : 'bi-x-circle';
@@ -30,29 +33,35 @@ export default function ProfileTable({canEdit,handleEditPermits,handleViewPermit
                       <tr key={profiles_id}>
                         <td>{profiles_name}</td>
                         <td>{estadoTexto}</td>
-                        {canEdit && (
                         <td>
+
+                        {canEdit  &&  (
+                        <>
                           <button
                             className="btn btn-sm btn-primary me-1"
                             onClick={() => handleEditPermits(profiles_id, profiles_name)}
                           >
                             <i className="bi bi-pencil"></i> Editar
                           </button>
-                          <button
-                            className="btn btn-sm btn-info me-1"
+                         </>
+                        )}
+                        
+                          <button className="btn btn-sm btn-info me-1"
                             onClick={() => handleViewPermits( profiles_id,profiles_name)}
                           >
                             <i className="bi bi-eye-fill"></i> Ver Permisos
                           </button>
+                        {canDelete && (
+                        <>
                           <button
                             className={`btn btn-sm ${btnEstado}`}
                             onClick={() => handleToggleState(profiles_id, profiles_state)}
                           >
                             <i className={`bi ${iconoEstado}`}></i> {accion}
-                          </button>
-                        </td>
+                          </button>  
+                        </> 
                     )}
-                        
+                        </td>
                       </tr>
                     );
                   })

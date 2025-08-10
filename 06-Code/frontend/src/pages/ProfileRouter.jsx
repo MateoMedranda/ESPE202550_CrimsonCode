@@ -13,6 +13,7 @@ export default function Profiles() {
     const canEdit = permits?.Perfiles?.profiles_updateprofiles?.value === true;
     const canCreate = permits?.Perfiles?.profiles_createprofiles?.value === true;
     const canView = permits?.Perfiles?.profiles_readprofiles?.value === true; 
+    const canDelete = permits?.Perfiles?.profiles_deleteprofiles?.value === true; 
     const {
     ProfileTableGet,
     handleAddPermits,
@@ -52,7 +53,7 @@ export default function Profiles() {
       <fieldset className="border p-4 shadow agregar bg-light rounded">
       <ProfileHeader canCreate={canCreate} handleAddPermits={handleAddPermits}/>
       {canView && (
-        <ProfileTable canEdit={canEdit} handleEditPermits= {handleEditPermits} handleViewPermits={handleEditPermits} 
+        <ProfileTable canEdit={canEdit} canDelete = {canDelete} handleEditPermits= {handleEditPermits} handleViewPermits={handleViewPermits} 
       handleToggleState={handleToggleState} loading={loading} profiles={profiles} />
       )}
       
