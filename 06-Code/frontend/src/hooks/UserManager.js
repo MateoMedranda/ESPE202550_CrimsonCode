@@ -32,118 +32,42 @@ export default function UserManager(Token) {
     }
   };
 
-    const handleAddUser = async () => {
+    const handleAddUser = () => {
+      const modalEl = document.getElementById("user_register");
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    };
 
-    profilesContainerRef.current.innerHTML = "";
 
-      setLoading(true);
-    try {
-        const response = await fetch('https://sima-es01.onrender.com/api/profile/profiles', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': `Bearer ${Token}`,
-        },
-        });
-
-        if (!response.ok) throw new Error("Error en la respuesta del servidor");
-
-        const data = await response.json();
-
-        const modalEl = document.getElementById("user_register");
-        const modal = new bootstrap.Modal(modalEl);
-        modal.show();
-       setProfiledata(data);
-    } catch (error) {
-        console.error("Error loading profiles:", error);
-        alert("Error al obtener los datos de los perfiles.");
-    } finally {
-        setLoading(false);
-            const modalEl = document.getElementById("user_register");
-            const modal = new bootstrap.Modal(modalEl);
-            modal.show();
-    }
-    }
-
-    const handleSaveUser = async () => {
-  const name = document.getElementById("name").value.trim();
-  const surname = document.getElementById("surname").value.trim();
+const handleSaveUser = async () => {
   const email = document.getElementById("email").value.trim();
-  const born_date = document.getElementById("born_date").value.trim();
-  const username = document.getElementById("user_name").value.trim();
-  const personal_id = document.getElementById("personal_id").value.trim();
-  const phone_number = document.getElementById("phone_number").value.trim();
-  const user_profile = document.getElementById("user_profile").value;
-
-  const password = personal_id;
-
-  const regex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
-  const regex_phone = /^[0-9]{10}$/;
-
-  if (!name) return handleMessage("El nombre no puede estar vacío");
-  if (!regex.test(name)) return handleMessage("El nombre solo debe contener letras y espacios");
-
-  if (!surname) return handleMessage("El apellido no puede estar vacío");
-  if (!regex.test(surname)) return handleMessage("El apellido solo debe contener letras y espacios");
 
   if (!email) return handleMessage("El correo no puede estar vacío");
-
-  if (!born_date) return handleMessage("La fecha de nacimiento no puede estar vacía");
-
-  if (!phone_number) return handleMessage("El número de teléfono no puede estar vacío");
-  if (!regex_phone.test(phone_number)) return handleMessage("El número debe tener 10 dígitos");
-
-  if (!username) return handleMessage("El nombre de usuario no puede estar vacío");
-
-  if (!personal_id) return handleMessage("La cédula no puede estar vacía");
-  if (isNaN(personal_id)) return handleMessage("La cédula debe ser numérica");
-  if (personal_id.length !== 10) return handleMessage("La cédula debe tener 10 dígitos");
-
-  if (user_profile === "seleccione") return handleMessage("Debe seleccionar un perfil de usuario");
+  if (!email.endsWith("@gmail.com")) return handleMessage("Debe ser un correo de Gmail");
 
   try {
-    const response = await fetch("https://sima-es01.onrender.com/api/user/users", {
+    const response = await fetch("https://sima-es01.onrender.com/api/auth/google/start", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${Token}`,
+        "Authorization": `Bearer ${Token}`, 
       },
-      body: JSON.stringify({
-        user_profile,
-        name,
-        surname,
-        personal_id,
-        born_date,
-        email,
-        phone_number,
-        username,
-        password,
-      }),
+      body: JSON.stringify({ email }),
     });
 
     const result = await response.json();
 
     if (!response.ok) {
-      return handleMessage(result.error || "Error en el servidor");
+      return handleMessage(result.error || "Error iniciando autenticación con Google");
     }
 
-    const modalEl = document.getElementById("user_register");
-    const modal = bootstrap.Modal.getInstance(modalEl);
-    if (modal) {
-      modal.hide();
-      document.body.classList.remove("modal-open");
-      document.body.style.paddingRight = "";
-      const backdrop = document.querySelector(".modal-backdrop");
-      if (backdrop) backdrop.remove();
-    }
-
-    await UserTableGet();
-    handleMessage("Usuario registrado correctamente!");
+    window.location.href = result.url;
   } catch (error) {
-    console.error("Error al registrar usuario:", error);
-    handleMessage("Error al registrar usuario.");
+    console.error("Error iniciando OAuth:", error);
+    handleMessage("Error al iniciar autenticación con Google");
   }
 };
+
 
 
     const handleMessage = (msg) => {

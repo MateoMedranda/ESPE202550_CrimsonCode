@@ -32,6 +32,7 @@ const reminderRoutes = require('./routes/remindersRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const monitoringRoutes = require('./routes/monitoringRoutes');
 const permitRoutes = require('./routes/permitRoutes');
+const Register = require('./routes/registerRoute');
 
 app.use("/projects/:projectId",EnvironmentalPlanRouter);
 app.use("/environmental-plans/:planId",activityRouter);
@@ -43,5 +44,6 @@ app.use('/api/reminder', reminderRoutes);
 app.use('/projects', projectRoutes);
 app.use('/monitorings', monitoringRoutes);
 app.use('/permits', permitRoutes);
+app.use('/api/invite',Register)
 
 app.listen(port,() => console.log("System Running in --> "+port));
