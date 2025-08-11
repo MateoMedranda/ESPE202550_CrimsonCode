@@ -33,6 +33,7 @@ export default function UserRegisterModal({ onCancel, startGoogleAuth, canCreate
                 <input
                   type="email"
                   name="email"
+                  id="email"
                   className="form-control border-dark"
                   placeholder="usuario@gmail.com"
                   value={email}
@@ -47,7 +48,7 @@ export default function UserRegisterModal({ onCancel, startGoogleAuth, canCreate
                 Cancelar
               </button>
               <button type="button" className="btn btn-primary" onClick={handleStart}>
-                Continuar con Google
+                Enviar Formulario
               </button>
             </div>
           </div>

@@ -70,8 +70,8 @@ export default function User({ token }) {
         <hr />
 
         <UserRegisterModal
-          onCancel={onCancel} handleSaveUser={handleSaveUser} profilesContainerRef={profilesContainerRef}
-          canCreate={canCreate} profiles={profileData}
+          onCancel={onCancel} startGoogleAuth={handleSaveUser} profilesContainerRef={profilesContainerRef}
+          canCreate={canCreate} 
         />
 
         <UserEditModal onCancel={onCancel} handleUpdateUser={handleUpdateUser}

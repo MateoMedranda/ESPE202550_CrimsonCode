@@ -46,11 +46,10 @@ const handleSaveUser = async () => {
   if (!email.endsWith("@gmail.com")) return handleMessage("Debe ser un correo de Gmail");
 
   try {
-    const response = await fetch("https://sima-es01.onrender.com/api/auth/google/start", {
+    const response = await fetch("https://sima-es01.onrender.com/api/invite/send-email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${Token}`, 
       },
       body: JSON.stringify({ email }),
     });
@@ -58,16 +57,15 @@ const handleSaveUser = async () => {
     const result = await response.json();
 
     if (!response.ok) {
-      return handleMessage(result.error || "Error iniciando autenticación con Google");
+      return handleMessage(result.error || "Error inicializando el sistema");
     }
 
     window.location.href = result.url;
   } catch (error) {
     console.error("Error iniciando OAuth:", error);
-    handleMessage("Error al iniciar autenticación con Google");
+    handleMessage("Error al enviar la invitación");
   }
 };
-
 
 
     const handleMessage = (msg) => {

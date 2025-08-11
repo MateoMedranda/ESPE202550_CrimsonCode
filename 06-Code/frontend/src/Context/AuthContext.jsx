@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect} from "react";
 
 const AuthContext = createContext();
 
@@ -8,6 +8,11 @@ export function AuthProvider({ children }) {
   const [permits, setPermits] = useState(
     JSON.parse(localStorage.getItem("permits") || "[]")
   );
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
 
   const login = (newToken, newUser, newPermits) => {
     setToken(newToken);
@@ -27,7 +32,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, permits, login, logout }}>
+    <AuthContext.Provider value={{ token, user, permits, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
