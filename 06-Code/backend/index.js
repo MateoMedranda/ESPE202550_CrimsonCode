@@ -2,6 +2,9 @@ const port = 3001;
 const express = require("express");
 const cors = require('cors');
 const app = express();
+const path = require('path');
+
+
 require('dotenv').config();
 
 const { Sequelize } = require('sequelize');
@@ -45,5 +48,11 @@ app.use('/projects', projectRoutes);
 app.use('/monitorings', monitoringRoutes);
 app.use('/permits', permitRoutes);
 app.use('/api/invite',Register)
+app.get('/privacy', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
+});
 
+app.get('/terms', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'terms.html'));
+});
 app.listen(port,() => console.log("System Running in --> "+port));
