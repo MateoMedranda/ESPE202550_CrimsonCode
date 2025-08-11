@@ -10,11 +10,9 @@ exports.getAllProfiles = async (req, res) => {
   }
 };
 
-
 exports.getProfilesTable = async (req, res) => {
   try {
-    const { rows } = await ProfileServices.AllProfiles(); 
-
+    const { rows } = await ProfileServices.AllProfiles();
     let tabla = '';
 
     rows.forEach(register => {
@@ -112,54 +110,52 @@ const permitsGroups = {
   "profiles_updatecontrol": "Controles"
 };
 
-
 const user_friendly_permit_names = {
-    "profiles_readprojects" :"Ver Proyectos",
-    "profiles_createprojects" :"Generar Proyectos",
-    "profiles_updateprojects" :"Actualizar Proyectos",
-    "profiles_deleteprojects" :"Eliminar Proyectos",
-    "profiles_readambientalplans" :"Ver Planes Ambientales",
-    "profiles_createambientalplans" :"Generar Planes Ambientales",
-    "profiles_updateambientalplans" :"Actualizar Planes Ambientales",
-    "profiles_deleteambientalplans" :"Eliminar Planes Ambientales",
-    "profiles_readmonitorings" :"Ver Monitoreos",
-    "profiles_writemonitorings" :"Generar Monitoreos",
-    "profiles_updatemonitorings" :"Actualizar Monitoreos",
-    "profiles_deletemonitorings" :"Eliminar Monitoreos",
-    "profiles_readactivities" :"Ver Actividad",
-    "profiles_createactivities" :"Generar Actividad",
-    "profiles_updateactivities" :"Actualizar Actividad",
-    "profiles_deleteactivities" :"Eliminar Actividad",
-    "profiles_createevents" :"Generar Evento",
-    "profiles_readevents" :"Ver Evento",
-    "profiles_updateevents" :"Actualizar Evento",
-    "profiles_deleteevents" :"Eliminar Evento",
-    "profiles_createusers" :"Generar Usuarios",
-    "profiles_readusers" :"Ver Usuarios",
-    "profiles_updateusers" :"Actualizar Usuarios",
-    "profiles_deleteusers" :"Eliminar Usuarios",
-    "profiles_createprofiles" :"Generar Perfiles",
-    "profiles_updateprofiles" :"Actualizar Perfiles",
-    "profiles_readprofiles" :"Ver Perfiles",
-    "profiles_deleteprofiles" :"Eliminar Perfiles",
-    "profiles_readactions" :"Ver Acciones",
-    "profiles_readsupervisionperiod" :"Ver Periodo de Supervision",
-    "profiles_createsupervisionperiod" :"Generar Periodo de Supervision",
-    "profiles_deletesupervisionperiod" :"Eliminar Periodo de Supervision",
-    "profiles_updatesupervisionperiod" :"Actualizar Periodo de Supervision",
-    "profiles_readpermit" :"Ver Permiso",
-    "profiles_createpermit" :"Generar Permiso",
-    "profiles_updatepermit" :"Actualizar Permiso",
-    "profiles_deletepermit" :"Eliminar Permiso",
-    "profiles_readreminder" :"Ver Recordatorio",
-    "profiles_createreminder" :"Generar Recordatorio",
-    "profiles_deletereminder" :"Eliminar Recordatorio",
-    "profiles_updatereminder" :"Actualizar Recordatorio",
-    "profiles_readcontrol": "Ver Control",
-    "profiles_createcontrol": "Generar Control",
-    "profiles_deletecontrol": "Eliminar Control",
-    "profiles_updatecontrol": "Actualizar Control"
-    
+  "profiles_readprojects": "Ver Proyectos",
+  "profiles_createprojects": "Generar Proyectos",
+  "profiles_updateprojects": "Actualizar Proyectos",
+  "profiles_deleteprojects": "Eliminar Proyectos",
+  "profiles_readambientalplans": "Ver Planes Ambientales",
+  "profiles_createambientalplans": "Generar Planes Ambientales",
+  "profiles_updateambientalplans": "Actualizar Planes Ambientales",
+  "profiles_deleteambientalplans": "Eliminar Planes Ambientales",
+  "profiles_readmonitorings": "Ver Monitoreos",
+  "profiles_writemonitorings": "Generar Monitoreos",
+  "profiles_updatemonitorings": "Actualizar Monitoreos",
+  "profiles_deletemonitorings": "Eliminar Monitoreos",
+  "profiles_readactivities": "Ver Actividad",
+  "profiles_createactivities": "Generar Actividad",
+  "profiles_updateactivities": "Actualizar Actividad",
+  "profiles_deleteactivities": "Eliminar Actividad",
+  "profiles_createevents": "Generar Evento",
+  "profiles_readevents": "Ver Evento",
+  "profiles_updateevents": "Actualizar Evento",
+  "profiles_deleteevents": "Eliminar Evento",
+  "profiles_createusers": "Generar Usuarios",
+  "profiles_readusers": "Ver Usuarios",
+  "profiles_updateusers": "Actualizar Usuarios",
+  "profiles_deleteusers": "Eliminar Usuarios",
+  "profiles_createprofiles": "Generar Perfiles",
+  "profiles_updateprofiles": "Actualizar Perfiles",
+  "profiles_readprofiles": "Ver Perfiles",
+  "profiles_deleteprofiles": "Eliminar Perfiles",
+  "profiles_readactions": "Ver Acciones",
+  "profiles_readsupervisionperiod": "Ver Periodo de Supervision",
+  "profiles_createsupervisionperiod": "Generar Periodo de Supervision",
+  "profiles_deletesupervisionperiod": "Eliminar Periodo de Supervision",
+  "profiles_updatesupervisionperiod": "Actualizar Periodo de Supervision",
+  "profiles_readpermit": "Ver Permiso",
+  "profiles_createpermit": "Generar Permiso",
+  "profiles_updatepermit": "Actualizar Permiso",
+  "profiles_deletepermit": "Eliminar Permiso",
+  "profiles_readreminder": "Ver Recordatorio",
+  "profiles_createreminder": "Generar Recordatorio",
+  "profiles_deletereminder": "Eliminar Recordatorio",
+  "profiles_updatereminder": "Actualizar Recordatorio",
+  "profiles_readcontrol": "Ver Control",
+  "profiles_createcontrol": "Generar Control",
+  "profiles_deletecontrol": "Eliminar Control",
+  "profiles_updatecontrol": "Actualizar Control"
 };
 
 const userFriendlyPermitNames = {};
@@ -171,19 +167,19 @@ exports.getPermits = async (req, res) => {
   const { id, just_permits } = req.body;
 
   try {
-    const {columnResults } = await ProfileServices.getPermitsData();
+    const { columnResults } = await ProfileServices.getPermitsData();
     const permits = {};
 
     if (id) {
       const { rows: profileResults } = await ProfileServices.ProfilesSearch(id);
 
-      if (profileResults.length === 0) return res.status(200).json({"message": "Perfil no encontrado"});
+      if (profileResults.length === 0) return res.status(200).json({ "message": "Perfil no encontrado" });
 
       const profile = profileResults[0];
 
       columnResults.forEach(row => {
         const columnName = row.column_name;
-        const group = permitsGroups[columnName] || 'Otros';
+        const group = permitsGroups[columnName] || 'Controles';
         const value = profile[columnName] === true || profile[columnName] === 1;
 
         if (!permits[group]) permits[group] = {};
@@ -197,7 +193,7 @@ exports.getPermits = async (req, res) => {
     } else if (just_permits) {
       columnResults.forEach(row => {
         const columnName = row.column_name;
-        const group = permitsGroups[columnName] || 'Otros';
+        const group = permitsGroups[columnName] || 'Controles';
 
         if (!permits[group]) permits[group] = {};
         permits[group][columnName] = {
@@ -217,7 +213,6 @@ exports.getPermits = async (req, res) => {
   }
 };
 
-
 const Allpermits = [
   "profiles_readprojects", "profiles_createprojects", "profiles_updateprojects", "profiles_deleteprojects",
   "profiles_readambientalplans", "profiles_createambientalplans", "profiles_updateambientalplans", "profiles_deleteambientalplans",
@@ -230,13 +225,13 @@ const Allpermits = [
   "profiles_readsupervisionperiod", "profiles_createsupervisionperiod", "profiles_deletesupervisionperiod", "profiles_updatesupervisionperiod",
   "profiles_readpermit", "profiles_createpermit", "profiles_updatepermit", "profiles_deletepermit",
   "profiles_readreminder", "profiles_createreminder", "profiles_deletereminder", "profiles_updatereminder",
-  "profiles_readcontrol","profiles_createcontrol","profiles_deletecontrol", "profiles_updatecontrol"
+  "profiles_readcontrol", "profiles_createcontrol", "profiles_deletecontrol", "profiles_updatecontrol"
 ];
 
 exports.createProfile = async (req, res) => {
   const profile_name = req.body.profile_name;
   let selected_permits = req.body.selected_permits || [];
-  if(selected_permits === undefined || selected_permits === null) {
+  if (selected_permits === undefined || selected_permits === null) {
     return res.status(400).json({ error: 'Permisos seleccionados no pueden estar vacíos' });
   }
   if (!Array.isArray(selected_permits)) {
@@ -252,12 +247,11 @@ exports.createProfile = async (req, res) => {
 
     const columns = ['profiles_name', ...Allpermits];
     const placeholders = columns.map((_, idx) => `$${idx + 1}`).join(', ');
-    const values = [profile_name, ...Allpermits.map(p => selected_permits.includes(p) ? 1 : 0)];
+    const values = [profile_name, ...Allpermits.map(p => selected_permits.includes(p) ? true : false)];
 
-    await ProfileServices.createProfile( placeholders,values,columns);
-    
+    await ProfileServices.createProfile(placeholders, values, columns);
+
     res.status(200).json({ status: "ok" });
-
   } catch (err) {
     console.error('Error al crear perfil:', err);
     res.status(500).json({ error: 'Error interno al crear el perfil', details: err.message });
@@ -265,33 +259,34 @@ exports.createProfile = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-   const profile_id = req.params.id;
+  const profile_id = req.params.id;
   const { name, permits } = req.body;
 
   if (!profile_id) {
     return res.status(400).json({ message: 'Se necesita el id del perfil a actualizar.' });
   }
 
-  if ( !name) {
+  if (!name) {
     return res.status(400).json({ message: 'Se necesita un nombre de perfil a actualizar.' });
   }
 
   if (!permits) {
-    return res.status(400).json({ message: 'Se necesitapermisos seleccionados para actualizar.'});
+    return res.status(400).json({ message: 'Se necesitan permisos seleccionados para actualizar.' });
   }
 
   try {
     const { rows: existingProfiles } = await ProfileServices.checkProfileExistence(name, profile_id);
 
     if (existingProfiles.length > 0) {
-      return res.status(400).json({ message: 'Nombre de perfil ya existente.'});
+      return res.status(400).json({ message: 'Nombre de perfil ya existente.' });
     }
+
     const setClause = Allpermits.map((permit, i) => `${permit} = $${i + 1}`).join(', ');
-    const permitValues = Allpermits.map(p => permits[p] ? 1 : 0);
+    const permitValues = Allpermits.map(p => permits[p] === true ? true : false); 
 
-    await ProfileServices.updateProfile(profile_id, name, permitValues,setClause);
+    await ProfileServices.updateProfile(profile_id, name, permitValues, setClause);
 
-    res.status(200).json({ message: 'Perfil acutalizado' });
+    res.status(200).json({ message: 'Perfil actualizado' });
   } catch (error) {
     console.error('Error updating profile:', error);
     res.status(500).json({ message: 'Error updating profile: ' + error.message });
@@ -299,23 +294,23 @@ exports.updateProfile = async (req, res) => {
 };
 
 exports.toggleProfile = async (req, res) => {
-    const profile = req.params.id; 
-  const {  state } = req.body;
+  const profile = req.params.id;
+  const { state } = req.body;
 
   if (!profile || !state) {
-    return res.status(400).send('falta el id del perfil o el estado');
+    return res.status(400).send('Falta el id del perfil o el estado');
   }
 
-  if( state !== 'ACTIVE' && state !== 'INACTIVE') {
+  if (state !== 'ACTIVE' && state !== 'INACTIVE') {
     return res.status(400).send('Estado no válido, debe ser ACTIVE o INACTIVE');
   }
-  
+
   try {
     if (state === 'INACTIVE') {
       const { rows } = await ProfileServices.IsProfileAsigned(profile);
 
       if (parseInt(rows[0].count) > 0) {
-        return res.status(200).send("El usuario esta asignado");
+        return res.status(200).send("El usuario está asignado");
       }
     }
 
