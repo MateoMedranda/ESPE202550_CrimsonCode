@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-const API_BASE_URL = 'https://espe202550-crimsoncode.onrender.com/api/invite'; 
+const API_BASE_URL = 'https://sima-es01.onrender.com/api/invite'; 
 
 function RegisterPage() {
   const [searchParams] = useSearchParams();
@@ -21,7 +21,7 @@ function RegisterPage() {
 
     const verifyToken = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/register/validate-token?token=${token}`);
+        const res = await fetch(`${API_BASE_URL}/validate-token?token=${token}`);
         const data = await res.json();
         if (!data.valid) {
           setError('❌ Enlace expirado o inválido');

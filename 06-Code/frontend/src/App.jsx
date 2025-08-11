@@ -22,7 +22,6 @@ import ProfileForm from './pages/InformationUser.jsx';
 import ProjectsRouter from './pages/ProjectRouter.jsx';
 import { useAuth } from './Context/AuthContext';
 import { useMenuVisibility } from './hooks/Menuhooks.js';
-import RegisterPage from './pages/registerRouter.jsx'; 
 
 function Menu() {
   const INACTIVITY_TIMEOUT = 1800000;
@@ -100,7 +99,7 @@ function Menu() {
   const toggleDropdown = () => setOpen(!open);
 
   const isActive = (path) => {
-    if (path === '/projects/1') {
+    if (path === '/projects') { // Updated to match your navigation button
       return location.pathname.startsWith('/projects');
     }
     return location.pathname === path;
@@ -177,10 +176,10 @@ function Menu() {
               </li>
 
               {visibility.showProjects && (
-                <li className={`nav-item opcion fw-bold mx-2 ${isActive('/projects/1') ? 'active-menu' : ''}`}>
+                <li className={`nav-item opcion fw-bold mx-2 ${isActive('/projects') ? 'active-menu' : ''}`}>
                   <button className="nav-link btn d-flex align-items-center" onClick={() => navigate('/projects')}>
                     <i className="bi bi-folder"></i> <p className='textMenu'>PROYECTOS</p>
-                    {isActive('/projects/1') && <span className="active-circle ms-2"></span>}
+                    {isActive('/projects') && <span className="active-circle ms-2"></span>}
                   </button>
                 </li>
               )}
@@ -235,7 +234,6 @@ function Menu() {
           {visibility.showUsers && <Route path="/users" element={<Users token={token} />} />}
           {visibility.showProfiles && <Route path="/profiles" element={<Profiles token={token} />} />}
           <Route path="/userInfo" element={<ProfileForm />} />
-          <Route path="/registro" element={<RegisterPage />} /> 
         </Routes>
       </main>
       <Menu_logout />
