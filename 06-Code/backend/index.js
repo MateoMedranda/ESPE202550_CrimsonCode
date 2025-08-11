@@ -51,8 +51,7 @@ app.use('/api/invite',Register)
 app.get('/privacy', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
 });
-
 app.get('/terms', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'terms.html'));
-});
+}); 
 app.listen(port,() => console.log("System Running in --> "+port));

@@ -22,6 +22,7 @@ import ProfileForm from './pages/InformationUser.jsx';
 import ProjectsRouter from './pages/ProjectRouter.jsx';
 import { useAuth } from './Context/AuthContext';
 import { useMenuVisibility } from './hooks/Menuhooks.js';
+import RegisterPage from './pages/registerRouter.jsx'; 
 
 function Menu() {
   const INACTIVITY_TIMEOUT = 1800000;
@@ -234,6 +235,7 @@ function Menu() {
           {visibility.showUsers && <Route path="/users" element={<Users token={token} />} />}
           {visibility.showProfiles && <Route path="/profiles" element={<Profiles token={token} />} />}
           <Route path="/userInfo" element={<ProfileForm />} />
+          <Route path="/registro" element={<RegisterPage />} /> 
         </Routes>
       </main>
       <Menu_logout />

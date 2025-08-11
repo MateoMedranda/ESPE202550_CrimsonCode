@@ -37,10 +37,10 @@ exports.postInvite = async (req, res) => {
     await transporter.sendMail({
       from: `"Sistema" <${process.env.GMAIL_USER}>`,
       to: email,
-      subject: "Invitación para registro",
+      subject: "Invitación para registro en el Sistema SIMA",
       html: `
-        <h3>Registro en el sistema de SIMA</h3>
-        <p>Haz clic en el enlace para registrarte (válido por 1 hora):</p>
+        <h2>Registro en el sistema de SIMA</h2>
+        <p>Haz clic en el enlace para registrarte en el sistema (válido por 1 hora):</p>
         <a href="${inviteLink}" target="_blank">${inviteLink}</a>
       `
     });

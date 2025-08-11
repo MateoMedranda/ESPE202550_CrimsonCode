@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { MemoryRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { AuthProvider, useAuth } from "./Context/AuthContext";
 import Login from "./pages/LoginRouter.jsx";
 import { Menu } from "./App.jsx";
@@ -16,9 +16,9 @@ function RootApp() {
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
-      <MemoryRouter>
+      <BrowserRouter> 
         <RootApp />
-      </MemoryRouter>
+      </BrowserRouter>
     </AuthProvider>
   </StrictMode>
 );
