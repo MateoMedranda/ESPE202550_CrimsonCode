@@ -50,7 +50,7 @@ async function createUser(values) {
         users_users,
         users_password
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      VALUES (1,$1, $2, $3, $4, $5, $6, $7, $8)
     `;
 
     await pool.query(query, values);

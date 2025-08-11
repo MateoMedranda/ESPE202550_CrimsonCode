@@ -178,7 +178,7 @@ exports.createUser = async (req,res) =>
 {
   try {
     const {
-      user_profile,
+      
       name,
       surname,
       personal_id,
@@ -189,9 +189,7 @@ exports.createUser = async (req,res) =>
       password
       
     } = req.body;
-    if(user_profile === undefined ||user_profile === null || user_profile === ''){
-      return res.status(400).json({ error: 'El perfil del usuario es obligatorio' });
-    } 
+    
     if(name === undefined ||name === null || name === ''){
       return res.status(400).json({ error: 'El nombre del usuario es obligatorio' });
     } 
@@ -236,7 +234,6 @@ exports.createUser = async (req,res) =>
   const hashPassword = await bcrypt.hash(password, 10);
 
     const values = [
-      user_profile,
       name,
       surname,
       personal_id,

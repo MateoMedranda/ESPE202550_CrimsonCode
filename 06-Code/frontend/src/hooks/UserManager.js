@@ -95,12 +95,13 @@ const handleSaveUser = async () => {
         if (!response.ok) throw new Error("Error en la respuesta del servidor");
 
         const data = await response.json();
-        console.log(data);
+
         const selectElement = profilesEditContainerRef.current;
         if (selectElement) {
         selectElement.innerHTML = '<option value="seleccione">Seleccione...</option>';
         data.forEach((profile) => {
           if(profile.profiles_state !== "ACTIVE") return;
+          if(profile.profile_id == 0 ) return;
             const option = document.createElement("option");
             option.value = profile.profiles_id;
             option.textContent = profile.profiles_name;
