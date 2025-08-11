@@ -1,5 +1,5 @@
 const pool = require('../models/db'); 
-
+const Allpermits = require('../constants/permits')
 async function AllProfiles() {
   const query = `SELECT DISTINCT profiles_name, profiles_state, profiles_id FROM profiles`;
   const { rows } = await pool.query(query);
@@ -39,19 +39,6 @@ async function ProfilesSearch(id) {
   return {rows};
 }
 
-const Allpermits = [
-  "profiles_readprojects", "profiles_createprojects", "profiles_updateprojects", "profiles_deleteprojects",
-  "profiles_readambientalplans", "profiles_createambientalplans", "profiles_updateambientalplans", "profiles_deleteambientalplans",
-  "profiles_readmonitorings", "profiles_writemonitorings", "profiles_updatemonitorings", "profiles_deletemonitorings",
-  "profiles_createactivities", "profiles_readactivities", "profiles_updateactivities", "profiles_deleteactivities",
-  "profiles_createevents", "profiles_readevents", "profiles_updateevents", "profiles_deleteevents",
-  "profiles_createusers", "profiles_readusers", "profiles_updateusers", "profiles_deleteusers",
-  "profiles_createprofiles", "profiles_updateprofiles", "profiles_readprofiles", "profiles_deleteprofiles",
-  "profiles_readactions",
-  "profiles_readsupervisionperiod", "profiles_createsupervisionperiod", "profiles_deletesupervisionperiod", "profiles_updatesupervisionperiod",
-  "profiles_readpermit", "profiles_createpermit", "profiles_updatepermit", "profiles_deletepermit",
-  "profiles_readreminder", "profiles_createreminder", "profiles_deletereminder", "profiles_updatereminder"
-];
 
 async function createProfile(placeholders,values,columns) {
   const insertQuery = `
@@ -62,20 +49,17 @@ async function createProfile(placeholders,values,columns) {
   await pool.query(insertQuery, values);
 }
 
-async function updateProfile(profile_id, name, permits,setClause) {
+async function updateProfile(profile_id, name, permits) {
+  const setClause = ["profiles_name = $1"]
+    .concat(Allpermits.map((permit, i) => `${permit} = $${i + 2}`))
+    .join(', ');
 
-  await pool.query(
-    'UPDATE profiles SET profiles_name = $1 WHERE profiles_id = $2',
-    [name, profile_id]
-  );
+  const values = [name, ...Allpermits.map(p => permits[p] ? true : false), profile_id];
 
-  await pool.query(
-      `UPDATE profiles SET ${setClause} WHERE profiles_id = $${Allpermits.length + 1}`,
-      [...permits, profile_id]
-    );
+  const query = `UPDATE profiles SET ${setClause} WHERE profiles_id = $${values.length}`;
 
+  await pool.query(query, values);
 }
-
 async function IsProfileAsigned(profile_id) {
   const query = `
     SELECT COUNT(*) AS count
