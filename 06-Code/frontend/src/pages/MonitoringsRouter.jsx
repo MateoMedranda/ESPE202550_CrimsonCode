@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
-
-export default function MonitoringsRouter({ projectId, token }) {
+import { useAuth } from "../Context/AuthContext";
+export default function MonitoringsRouter({ projectId, Token }) {
     const [monitorings, setMonitorings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showAdd, setShowAdd] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [selected, setSelected] = useState(null);
-
+    const {permits,token } = useAuth();
     const [formData, setFormData] = useState({
         monitoring_type: "",
         monitoring_description: "",
         monitoring_date: ""
     });
-
+    const canView = permits?.Monitoreos?.profiles_readmonitorings?.value ===true;
+    const canEdit = permits?.Monitoreos?.profiles_updatemonitorings?.value ===true;
+    const canCreate = permits?.Monitoreos?.profiles_writemonitorings?.value ===true;
+    const canDelete = permits?.Monitoreos?.profiles_deletemonitorings?.value ===true;
     const baseListUrl = `https://sima-es01.onrender.com/projects/${projectId}/monitorings`;
     const baseCrudUrl = `https://sima-es01.onrender.com/monitorings`;
 
@@ -95,15 +98,23 @@ export default function MonitoringsRouter({ projectId, token }) {
     if (loading) return <h2>Cargando monitoreos...</h2>;
 
     return (
-        <div>
+        <>
+        {canView &&  
+        (
+            <div>
             <div className="d-flex">
                 <div className="col">
                     <h3 className="title inter-title">Monitoreos</h3>
                 </div>
                 <div className="col text-end">
-                    <button className="btn bg-info-subtle border-black" onClick={() => setShowAdd(true)}>
+                    {canCreate && (
+                        <>
+                        <button className="btn bg-info-subtle border-black" onClick={() => setShowAdd(true)}>
                         <i className="bi bi-plus-circle"></i> Agregar Monitoreo
                     </button>
+                        </>
+                    )}
+                    
                 </div>
             </div>
             <hr />
@@ -141,69 +152,72 @@ export default function MonitoringsRouter({ projectId, token }) {
                 </div>
             )}
 
-{showAdd && (
-  <div className="modal d-block bg-dark bg-opacity-50" onClick={() => setShowAdd(false)}>
-    <div className="modal-dialog modal-lg" onClick={(e) => e.stopPropagation()}>
-      <div className="modal-content bg-light rounded shadow border-0">
-        <form onSubmit={handleSave}>
-          <fieldset className="border-0 p-4">
-            <h3 className="fw-bold">Nuevo Monitoreo</h3>
-            <hr />
-            <div className="row mb-3">
-              <div className="col-md-6 mb-3">
-                <label className="form-label">Tipo de Monitoreo: *</label>
-                <input
-                  name="monitoring_type"
-                  type="text"
-                  className="form-control shadow-sm"
-                  value={formData.monitoring_type}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="col-md-6 mb-3">
-                <label className="form-label">Fecha: *</label>
-                <input
-                  name="monitoring_date"
-                  type="date"
-                  className="form-control shadow-sm"
-                  value={formData.monitoring_date}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+    {showAdd && (
+        <div className="modal d-block bg-dark bg-opacity-50" onClick={() => setShowAdd(false)}>
+            <div className="modal-dialog modal-lg" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content bg-light rounded shadow border-0">
+                <form onSubmit={handleSave}>
+                <fieldset className="border-0 p-4">
+                    <h3 className="fw-bold">Nuevo Monitoreo</h3>
+                    <hr />
+                    <div className="row mb-3">
+                    <div className="col-md-6 mb-3">
+                        <label className="form-label">Tipo de Monitoreo: *</label>
+                        <input
+                        name="monitoring_type"
+                        type="text"
+                        className="form-control shadow-sm"
+                        value={formData.monitoring_type}
+                        onChange={handleChange}
+                        required
+                        />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                        <label className="form-label">Fecha: *</label>
+                        <input
+                        name="monitoring_date"
+                        type="date"
+                        className="form-control shadow-sm"
+                        value={formData.monitoring_date}
+                        onChange={handleChange}
+                        required
+                        />
+                    </div>
+                    </div>
+                    <div className="mb-3">
+                    <label className="form-label">Descripción: *</label>
+                    <textarea
+                        name="monitoring_description"
+                        className="form-control shadow-sm"
+                        value={formData.monitoring_description}
+                        onChange={handleChange}
+                        required
+                    />
+                    </div>
+                    <hr />
+                    <div className="d-flex justify-content-end gap-2">
+                    <button type="submit" className="btn px-4" style={{ backgroundColor: '#cde7d8' }}>
+                        Guardar
+                    </button>
+                    <button
+                        type="button"
+                        className="btn px-4"
+                        style={{ backgroundColor: '#f3caca' }}
+                        onClick={() => setShowAdd(false)}
+                    >
+                        Cancelar
+                    </button>
+                    </div>
+                </fieldset>
+                </form>
             </div>
-            <div className="mb-3">
-              <label className="form-label">Descripción: *</label>
-              <textarea
-                name="monitoring_description"
-                className="form-control shadow-sm"
-                value={formData.monitoring_description}
-                onChange={handleChange}
-                required
-              />
             </div>
-            <hr />
-            <div className="d-flex justify-content-end gap-2">
-              <button type="submit" className="btn px-4" style={{ backgroundColor: '#cde7d8' }}>
-                Guardar
-              </button>
-              <button
-                type="button"
-                className="btn px-4"
-                style={{ backgroundColor: '#f3caca' }}
-                onClick={() => setShowAdd(false)}
-              >
-                Cancelar
-              </button>
-            </div>
-          </fieldset>
-        </form>
-      </div>
-    </div>
-  </div>
-)}
         </div>
+    )}
+        </div>
+        )}
+        
+        </>
     );
 }
 

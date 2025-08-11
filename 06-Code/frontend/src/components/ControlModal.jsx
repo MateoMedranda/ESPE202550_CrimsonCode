@@ -3,9 +3,14 @@ import { Tooltip } from "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/ControlModal.css";
 import { useActivitiesControls } from "../hooks/useActivitiesControl";
-
-function ControlModal({ show, onClose, token, activity }) {
+import { useAuth } from "../Context/AuthContext";
+function ControlModal({ show, onClose, Token, activity }) {
     const [showForm, setShowForm] = useState(false);
+    const { token, permits } = useAuth();
+    const canViewControl  = permits?.Controles?.profiles_readcontrol?.value === true;
+    const canCreateControl = permits?.Controles?.profiles_createcontrol?.value === true;
+    const canUpdateControl = permits?.Controles?.profiles_updatecontrol?.value === true;
+    const canDeleteControl = permits?.Controles?.profiles_deletecontrol?.value === true;
     const tooltipRef = useRef(null);
 
     const activityId = activity?.activity_id;
@@ -56,13 +61,18 @@ function ControlModal({ show, onClose, token, activity }) {
 
                     {/* Botón */}
                     <div className="px-4 pt-3">
-                        <button
-                            className="btn btn-outline-primary mb-3"
-                            onClick={() => setShowForm(!showForm)}
-                        >
-                            <i className="bi bi-plus-circle me-2"></i>
-                            {showForm ? "Cerrar formulario" : "Agregar nuevo control"}
-                        </button>
+                        {canCreateControl &&(
+                            <>
+                            <button
+                                className="btn btn-outline-primary mb-3"
+                                onClick={() => setShowForm(!showForm)}
+                            >
+                                <i className="bi bi-plus-circle me-2"></i>
+                                {showForm ? "Cerrar formulario" : "Agregar nuevo control"}
+                            </button>
+                            </>
+                        )}
+                        
 
                         {/* Cajón animado */}
                         <div className={`drawer-container ${showForm ? "open" : ""}`}>
@@ -105,7 +115,9 @@ function ControlModal({ show, onClose, token, activity }) {
                     </div>
 
                     {/* Seguimiento */}
-                    <div className="bg-light px-4 pb-4">
+                    {canViewControl && (
+                        <>
+                        <div className="bg-light px-4 pb-4">
                         <hr />
                         {loading ? (
                             <div className="text-center py-4">
@@ -175,6 +187,9 @@ function ControlModal({ show, onClose, token, activity }) {
                             </div>
                         )}
                     </div>
+                        </>
+                    )}
+                    
                 </div>
             </div>
         </div>

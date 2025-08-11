@@ -30,8 +30,6 @@ export default function EnvironmentalPlansList({ projectId, Token }) {
     const canCreate = permits?.["Planes Ambientales"]?.profiles_createambientalplans?.value === true;
     const canUpdate = permits?.["Planes Ambientales"]?.profiles_updateambientalplans?.value === true;
     const canDelete = permits?.["Planes Ambientales"]?.profiles_deleteambientalplans?.value === true;
-
-    console.log(canView,canCreate,canUpdate,canDelete)
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };

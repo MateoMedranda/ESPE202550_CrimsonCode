@@ -9,11 +9,15 @@ import { useAuth } from "../Context/AuthContext";
 export default function EnvironmentalPlanDetail() {
     const { token, permits } = useAuth();
 
-    const canView   = permits?.["Planes Ambientales"]?.profiles_readambientalplans?.value === true;
-    const canCreate = permits?.["Planes Ambientales"]?.profiles_createambientalplans?.value === true;
-    const canUpdate = permits?.["Planes Ambientales"]?.profiles_updateambientalplans?.value === true;
-    const canDelete = permits?.["Planes Ambientales"]?.profiles_deleteambientalplans?.value === true;
-    console.log(canCreate,canDelete,canUpdate,canView)
+    const canViewEnvPlan   = permits?.["Planes Ambientales"]?.profiles_readambientalplans?.value === true;
+    const canCreateEnvPlan = permits?.["Planes Ambientales"]?.profiles_createambientalplans?.value === true;
+    const canUpdateEnvPlan = permits?.["Planes Ambientales"]?.profiles_updateambientalplans?.value === true;
+    const canDeleteEnvPlan = permits?.["Planes Ambientales"]?.profiles_deleteambientalplans?.value === true;
+    const canViewControl  = permits?.Controles?.profiles_readcontrol?.value === true;
+    const canCreateControl = permits?.Controles?.profiles_createcontrol?.value === true;
+    const canUpdateControl = permits?.Controles?.profiles_updatecontrol?.value === true;
+    const canDeleteControl = permits?.Controles?.profiles_deletecontrol?.value === true;
+
     const navigate = useNavigate();
     const { planId } = useParams();
     const location = useLocation();
@@ -219,7 +223,7 @@ export default function EnvironmentalPlanDetail() {
                 </div>
 
                 <div className="col text-end">
-                    {canCreate &&(
+                    {canCreateEnvPlan &&(
                     <button
                         className="btn button_hover"
                         onClick={openCreateModal}
@@ -306,26 +310,44 @@ export default function EnvironmentalPlanDetail() {
                                         <td>{new Date(act.updatedat).toLocaleDateString()}</td>
                                         <td>
                                             <div className="d-flex justify-content-center">
-                                                <button
-                                                    className="btn btn-sm mx-2 icon-hover"
-                                                    title="Controles" style={{backgroundColor:"#51E069", borderColor: "green"}}
-                                                    onClick={() => openControlsModal(act)}
-                                                >
-                                                    <i className="bi bi-clipboard-check-fill me-2"></i> Controles
-                                                </button>
-
-                                                <i
+                                                {
+                                                    canViewControl && (
+                                                        <>
+                                                        <button
+                                                        className="btn btn-sm mx-2 icon-hover"
+                                                        title="Controles" style={{backgroundColor:"#51E069", borderColor: "green"}}
+                                                        onClick={() => openControlsModal(act)}
+                                                    >
+                                                        <i className="bi bi-clipboard-check-fill me-2"></i> Controles
+                                                    </button>
+                                                        </>
+                                                    )
+                                                }
+                                                
+                                                {canUpdateEnvPlan && (
+                                                    <>
+                                                    <i
                                                     className="bi bi-pencil-fill mx-2 fs-3 icon-hover"
                                                     style={{ color: "#0F69BA", cursor: "pointer" }}
                                                     title="Editar"
                                                     onClick={() => openEditModal(act)}
-                                                ></i>
-                                                <i
+                                                ></i>   
+                                                    </>
+                                                )
+
+                                                }
+                                                
+                                                {canDeleteEnvPlan && (
+                                                    <>
+                                                    <i
                                                     className="bi bi-trash-fill mx-2 fs-3 icon-hover"
                                                     style={{ color: "#BA0F0F", cursor: "pointer" }}
                                                     title="Eliminar"
                                                     onClick={() => handleDelete(act.activity_id)}
                                                 ></i>
+                                                    </>
+                                                )}
+                                                
                                             </div>
                                         </td>
                                     </tr>
