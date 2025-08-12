@@ -10,15 +10,13 @@ function RegisterPage() {
   const [searchParams] = useSearchParams();
   const [isValid, setIsValid] = useState(false);
   const [formData, setFormData] = useState({
-    user_profile: '',
     name: '',
     surname: '',
     personal_id: '',
     born_date: '',
     email: '',
     phone_number: '',
-    username: '',
-    password: ''
+    username: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);

@@ -178,7 +178,6 @@ exports.createUser = async (req,res) =>
 {
   try {
     const {
-      
       name,
       surname,
       personal_id,
