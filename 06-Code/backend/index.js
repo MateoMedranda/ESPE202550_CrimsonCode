@@ -36,6 +36,7 @@ const projectRoutes = require('./routes/projectRoutes');
 const monitoringRoutes = require('./routes/monitoringRoutes');
 const permitRoutes = require('./routes/permitRoutes');
 const Register = require('./routes/registerRoute');
+const Google = require('./routes/GoogleRoutes');
 
 app.use("/projects/:projectId",EnvironmentalPlanRouter);
 app.use("/environmental-plans/:planId",activityRouter);
@@ -47,7 +48,8 @@ app.use('/api/reminder', reminderRoutes);
 app.use('/projects', projectRoutes);
 app.use('/monitorings', monitoringRoutes);
 app.use('/permits', permitRoutes);
-app.use('/api/invite',Register)
+app.use('/api/invite',Register);
+app.use('api/auth',Google);
 app.get('/privacy', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
 });

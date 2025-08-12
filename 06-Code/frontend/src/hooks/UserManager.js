@@ -43,8 +43,7 @@ const handleSaveUser = async () => {
   const email = document.getElementById("email").value.trim();
 
   if (!email) return handleMessage("El correo no puede estar vacío");
-  if (!email.endsWith("@gmail.com")) return handleMessage("Debe ser un correo de Gmail");
-
+  console.log(email)
   try {
     const response = await fetch("https://sima-es01.onrender.com/api/invite/send-email", {
       method: "POST",

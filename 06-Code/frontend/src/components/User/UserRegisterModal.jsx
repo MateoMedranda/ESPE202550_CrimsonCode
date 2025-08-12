@@ -6,10 +6,6 @@ export default function UserRegisterModal({ onCancel, startGoogleAuth, canCreate
   if (!canCreate) return null;
 
   const handleStart = () => {
-    if (!email.endsWith("@gmail.com")) {
-      alert("Solo correos de Gmail son permitidos.");
-      return;
-    }
     startGoogleAuth(email);
   };
 
