@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const API_BASE_URL =  'https://sima-es01.onrender.com';
+const API_BASE_URL = 'https://sima-es01.onrender.com';
 
 function RegisterPage() {
   const [searchParams] = useSearchParams();
@@ -17,75 +17,91 @@ function RegisterPage() {
     phone_number: '',
     username: '',
   });
-  const [populatedFields, setPopulatedFields] = useState(new Set()); // Track fields from OAuth/invite
+  const [populatedFields, setPopulatedFields] = useState(new Set());
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    document.body.appendChild(script);
 
-    window.handleCredentialResponse = async (response) => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/auth/google`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token: response.credential }),
-        });
-        const data = await res.json();
-        if (res.ok && data.email) {
-          const newFormData = { ...formData };
-          const newPopulated = new Set();
+  const handleCredentialResponse = async (response) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/auth/google`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: response.credential }),
+      });
+      const data = await res.json();
+      if (res.ok && data.email) {
+        const newFormData = { ...formData };
+        const newPopulated = new Set();
 
-          if (data.given_name) {
-            newFormData.name = data.given_name;
-            newPopulated.add('name');
-          }
-          if (data.family_name) {
-            newFormData.surname = data.family_name;
-            newPopulated.add('surname');
-          }
-          if (data.email) {
-            newFormData.email = data.email;
-            newPopulated.add('email');
-          }
-          if (data.sub) {
-            newFormData.username = `user_${data.sub.slice(0, 10)}`; 
-            newPopulated.add('username');
-          }
-          if (data.name && !newFormData.name && !newFormData.surname) {
-            const [given, family] = data.name.split(' ');
-            newFormData.name = given || '';
-            newFormData.surname = family || '';
-            newPopulated.add('name');
-            newPopulated.add('surname');
-          }
-          if (!newFormData.username && newFormData.name && newFormData.surname) {
-            newFormData.username = `${newFormData.name.toLowerCase()}.${newFormData.surname.toLowerCase()}`;
-          }
-
-          setFormData(newFormData);
-          setPopulatedFields(newPopulated);
-          setIsValid(true);
-          setError('');
-        } else {
-          setError('⚠ Error en autenticación con Google');
-          console.error('Google OAuth response:', data);
+        if (data.given_name) {
+          newFormData.name = data.given_name;
+          newPopulated.add('name');
         }
-      } catch (error) {
-        setError('⚠ Error de conexión con Google');
-        console.error('Google OAuth error:', error);
-      }
-    };
+        if (data.family_name) {
+          newFormData.surname = data.family_name;
+          newPopulated.add('surname');
+        }
+        if (data.email) {
+          newFormData.email = data.email;
+          newPopulated.add('email');
+        }
+        if (data.sub) {
+          newFormData.username = `user_${data.sub.slice(0, 10)}`;
+          newPopulated.add('username');
+        }
+        if (data.name && !newFormData.name && !newFormData.surname) {
+          const [given, family] = data.name.split(' ');
+          newFormData.name = given || '';
+          newFormData.surname = family || '';
+          newPopulated.add('name');
+          newPopulated.add('surname');
+        }
+        if (!newFormData.username && newFormData.name && newFormData.surname) {
+          newFormData.username = `${newFormData.name.toLowerCase()}.${newFormData.surname.toLowerCase()}`;
+        }
 
-    return () => {
-      document.body.removeChild(script);
-      delete window.handleCredentialResponse;
-    };
-  }, []);
+        setFormData(newFormData);
+        setPopulatedFields(newPopulated);
+        setIsValid(true);
+        setError('');
+      } else {
+        setError('⚠ Error en autenticación con Google');
+        console.error('Google OAuth response:', data);
+      }
+    } catch (error) {
+      setError('⚠ Error de conexión con Google');
+      console.error('Google OAuth error:', error);
+    }
+  };
+
+  useEffect(() => {
+  const script = document.createElement('script');
+  script.src = 'https://accounts.google.com/gsi/client';
+  script.async = true;
+  script.defer = true;
+  script.onload = () => {
+    if (window.google && document.getElementById('googleSignInDiv')) {
+      window.google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        callback: handleCredentialResponse,
+      });
+
+      window.google.accounts.id.renderButton(
+        document.getElementById('googleSignInDiv'),
+        { theme: 'outline', size: 'large' }
+      );
+    } else {
+      console.error('Google script loaded but div not found.');
+    }
+  };
+  document.body.appendChild(script);
+
+  return () => {
+    document.body.removeChild(script);
+  };
+}, []);
+
 
   useEffect(() => {
     const token = searchParams.get('token');
@@ -152,25 +168,7 @@ function RegisterPage() {
       <div className="card shadow-lg p-4 rounded-3" style={{ maxWidth: '500px', width: '100%', backgroundColor: 'white' }}>
         <h2 className="text-center mb-4">Formulario de Registro</h2>
         <div className="text-center mb-3">
-          <div
-            id="g_id_onload"
-            data-client_id={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-            data-callback="handleCredentialResponse"
-            data-auto_prompt="false"
-          ></div>
-          <div
-            className="g_id_signin"
-            data-type="standard"
-            data-size="large"
-            data-theme="outline"
-            data-text="sign_in_with"
-            data-shape="rectangular"
-          ></div>
-          {!window.google && (
-            <p className="text-danger text-sm mt-2">
-              No se pudo cargar el botón de Google. Verifica tu conexión o desactiva bloqueadores de anuncios.
-            </p>
-          )}
+          <div id="googleSignInDiv"></div>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">

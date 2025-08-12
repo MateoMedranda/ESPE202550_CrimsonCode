@@ -49,7 +49,7 @@ app.use('/projects', projectRoutes);
 app.use('/monitorings', monitoringRoutes);
 app.use('/permits', permitRoutes);
 app.use('/api/invite',Register);
-app.use('api/auth',Google);
+app.use('/api/auth',Google);
 app.get('/privacy', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
 });
