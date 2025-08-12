@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const API_BASE_URL = import.meta.env.VITE_NODE_ENV === 'production'
-  ? 'https://sima-es01.onrender.com'
-  : 'http://localhost:3001';
+const API_BASE_URL =  'https://sima-es01.onrender.com';
 
 function RegisterPage() {
   const [searchParams] = useSearchParams();

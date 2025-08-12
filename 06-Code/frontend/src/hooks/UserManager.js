@@ -59,7 +59,6 @@ const handleSaveUser = async () => {
       return handleMessage(result.error || "Error inicializando el sistema");
     }
 
-    window.location.href = result.url;
   } catch (error) {
     console.error("Error iniciando OAuth:", error);
     handleMessage("Error al enviar la invitación");
