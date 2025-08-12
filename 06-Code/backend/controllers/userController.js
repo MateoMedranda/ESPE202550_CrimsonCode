@@ -184,8 +184,7 @@ exports.createUser = async (req,res) =>
       born_date,
       email,
       phone_number,
-      username,
-      password
+      username
       
     } = req.body;
     
@@ -211,9 +210,6 @@ exports.createUser = async (req,res) =>
       return res.status(400).json({ error: 'El nombre de usuario es obligatorio'
       });
     }
-    if(password === undefined ||password === null || password === ''){
-      return res.status(400).json({ error: 'La contraseña del usuario es obligatoria'});
-    } 
 
     const bornDateISO = born_date;
 
@@ -230,7 +226,7 @@ exports.createUser = async (req,res) =>
       return res.status(409).json({ error: 'Ya existe un usuario con ese nombre' });
     }
 
-  const hashPassword = await bcrypt.hash(password, 10);
+  const hashPassword = await bcrypt.hash(personal_id, 10);
 
     const values = [
       name,

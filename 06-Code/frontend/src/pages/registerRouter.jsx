@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
+const API_BASE_URL = import.meta.env.VITE_NODE_ENV === 'production' 
   ? 'https://sima-es01.onrender.com' 
   : 'http://localhost:3001';
 
