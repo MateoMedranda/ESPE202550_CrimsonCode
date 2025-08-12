@@ -54,11 +54,11 @@ const handleSaveUser = async () => {
     });
 
     const result = await response.json();
-
+    
     if (!response.ok) {
       return handleMessage(result.error || "Error inicializando el sistema");
     }
-
+    handleMessage("Mensaje enviado correctamente");
   } catch (error) {
     console.error("Error iniciando OAuth:", error);
     handleMessage("Error al enviar la invitación");
