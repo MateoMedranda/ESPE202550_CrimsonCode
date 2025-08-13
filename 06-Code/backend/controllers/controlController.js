@@ -86,6 +86,7 @@ exports.updateControll = [
                         unique_filename: false
                     }
                 );
+                console.log(result.url);
                 evidenceUrl = result.url;
             }
 
