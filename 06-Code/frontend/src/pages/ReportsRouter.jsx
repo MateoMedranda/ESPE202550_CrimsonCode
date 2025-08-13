@@ -93,8 +93,8 @@ function EnvironmentalCharts() {
   );
 
   return (
-    <div className="p-4">
-      <div className="flex gap-4 mb-6 m-auto w-75 bg-white rounded shadow p-4">
+    <div className="p-4 w-100">
+      <div className="flex gap-4 mb-6 m-auto w-100 bg-white rounded shadow p-4">
         <label>Proyecto: </label>
         <select
           value={selectedProject}
@@ -126,7 +126,7 @@ function EnvironmentalCharts() {
       </div>
 
       {selectedPlan && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 w-75 m-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 w-100 m-auto">
           <div className="bg-white p-4 rounded p-4 shadow m-auto mb-5">
             <h3 className="text-lg font-bold mb-3">Reporte de Actividades</h3>
             <hr></hr>
@@ -262,45 +262,6 @@ function EnvironmentalCharts() {
             </div>
           </div>
 
-          {/*
-          <div className="bg-white shadow rounded-xl p-4 col-span-1 md:col-span-2">
-            <h3 className="text-lg font-bold mb-2">Controles por Fecha</h3>
-            <LineChart width={600} height={300} data={reportByDate}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="createdat" tickFormatter={(date) => date.split("T")[0]} />
-              <YAxis />
-              <RechartsTooltip />
-              <Line type="monotone" dataKey="control_id" stroke="#0088FE" />
-            </LineChart>
-          </div>
-
-          <div className="bg-white shadow rounded-xl p-4 col-span-1 md:col-span-2">
-            <h3 className="text-lg font-bold mb-2">Evaluación de Actividades</h3>
-            {evaluationStatus && (
-              <PieChart width={400} height={300}>
-                <Pie
-                  data={[
-                    { name: "Evaluadas", value: evaluationStatus.activitiesEvaluated.length },
-                    { name: "No Evaluadas", value: evaluationStatus.activitiesNoEvaluated.length },
-                  ]}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label
-                  outerRadius={100}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {COLORS.map((color, index) => (
-                    <Cell key={`cell-${index}`} fill={color} />
-                  ))}
-                </Pie>
-                <RechartsTooltip />
-                <Legend />
-              </PieChart>
-            )}
-          </div>
-          */}
         </div>
       )}
     </div>
