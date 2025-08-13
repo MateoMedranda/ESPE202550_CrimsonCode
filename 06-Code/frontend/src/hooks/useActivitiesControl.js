@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../Context/AuthContext";
 
 export function useActivitiesControls(activity_id, token) {
     const [controls, setControls] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
     const baseUrl = `https://sima-es01.onrender.com/activities/${activity_id}/controls/`;
 
     useEffect(() => {
@@ -30,10 +29,14 @@ export function useActivitiesControls(activity_id, token) {
         fetchControls();
     }, [activity_id, token]);
 
-    const createControl = async (controlData) => {
+
+    const createControl = async (formData) => {
         try {
-            const response = await axios.post(baseUrl, controlData, {
-                headers: { Authorization: `Bearer ${token}` },
+            const response = await axios.post(baseUrl, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                },
             });
             setControls((prev) => [...prev, response.data]);
             return response.data;
@@ -42,11 +45,15 @@ export function useActivitiesControls(activity_id, token) {
         }
     };
 
-    const updateControl = async (controlId, controlData) => {
+
+    const updateControl = async (controlId, formData) => {
         try {
             const url = `${baseUrl}${controlId}`;
-            const response = await axios.put(url, controlData, {
-                headers: { Authorization: `Bearer ${token}` },
+            const response = await axios.put(url, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                },
             });
             setControls((prev) =>
                 prev.map((c) => (c.control_id === controlId ? response.data : c))
@@ -56,6 +63,7 @@ export function useActivitiesControls(activity_id, token) {
             throw err;
         }
     };
+
 
     const deleteControl = async (controlId) => {
         try {
@@ -77,7 +85,6 @@ export function useActivitiesControls(activity_id, token) {
             throw err;
         }
     };
-
 
     return {
         controls,
