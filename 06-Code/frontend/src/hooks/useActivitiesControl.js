@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 
 export function useActivitiesControls(activity_id, token) {
@@ -32,8 +31,18 @@ export function useActivitiesControls(activity_id, token) {
 
     const createControl = async (controlData) => {
         try {
-            const response = await axios.post(baseUrl, controlData, {
-                headers: { Authorization: `Bearer ${token}` },
+            const formData = new FormData();
+            formData.append("criterion", controlData.criterion);
+            formData.append("observation", controlData.observation);
+            if (controlData.evidence) {
+                formData.append("evidence", controlData.evidence);
+            }
+
+            const response = await axios.post(baseUrl, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                },
             });
             setControls((prev) => [...prev, response.data]);
             return response.data;
@@ -44,9 +53,19 @@ export function useActivitiesControls(activity_id, token) {
 
     const updateControl = async (controlId, controlData) => {
         try {
+            const formData = new FormData();
+            if (controlData.criterion) formData.append("criterion", controlData.criterion);
+            if (controlData.observation) formData.append("observation", controlData.observation);
+            if (controlData.evidence) {
+                formData.append("evidence", controlData.evidence);
+            }
+
             const url = `${baseUrl}${controlId}`;
-            const response = await axios.put(url, controlData, {
-                headers: { Authorization: `Bearer ${token}` },
+            const response = await axios.put(url, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                },
             });
             setControls((prev) =>
                 prev.map((c) => (c.control_id === controlId ? response.data : c))
@@ -77,7 +96,6 @@ export function useActivitiesControls(activity_id, token) {
             throw err;
         }
     };
-
 
     return {
         controls,
