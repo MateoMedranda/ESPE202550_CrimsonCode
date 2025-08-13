@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../Context/AuthContext";
 
 export default function PermitsRouter({ projectId, API_BASE = "https://sima-es01.onrender.com" }) {
-  // ---- Auth & permisos ----
+
   const { token, permits } = useAuth();
   const canEdit   = permits?.Permisos?.profiles_updatepermit?.value === true;
   const canCreate = permits?.Permisos?.profiles_createpermit?.value === true;
   const canView   = permits?.Permisos?.profiles_readpermit?.value   === true;
   const canDelete = permits?.Permisos?.profiles_deletepermit?.value === true;
 
-  // ---- State ----
+
   const [permitsList, setPermitsList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
