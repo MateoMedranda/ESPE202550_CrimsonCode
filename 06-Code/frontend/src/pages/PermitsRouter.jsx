@@ -1,28 +1,37 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../Context/AuthContext";
 
-export default function PermitsRouter({ projectId, token }) {
-  const [permits, setPermits] = useState([]);
+export default function PermitsRouter({ projectId, API_BASE = "https://sima-es01.onrender.com" }) {
+  // ---- Auth & permisos ----
+  const { token, permits } = useAuth();
+  const canEdit   = permits?.Permisos?.profiles_updatepermit?.value === true;
+  const canCreate = permits?.Permisos?.profiles_createpermit?.value === true;
+  const canView   = permits?.Permisos?.profiles_readpermit?.value   === true;
+  const canDelete = permits?.Permisos?.profiles_deletepermit?.value === true;
+
+  // ---- State ----
+  const [permitsList, setPermitsList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const [selected, setSelected] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [selected, setSelected] = useState(null);
 
   const [formData, setFormData] = useState({
     permit_name: "",
     permit_description: "",
-    permit_archive: "" // guardaremos la URL aquí cuando editemos
+    permit_archive: "" 
   });
 
-  // NUEVO: archivo real para subir
+
   const [permitFile, setPermitFile] = useState(null);
 
-  // Cambia esto por tu URL en Render al desplegar
-  const API_BASE = `https://sima-es01.onrender.com`;
-  const baseUrl = `${API_BASE}/projects/${projectId}/permits`;
+
+  const baseUrl          = `${API_BASE}/projects/${projectId}/permits`;
   const permitActionsUrl = `${API_BASE}/permits`;
-  const uploadUrl = `${API_BASE}/upload`;
+  const uploadUrl        = `${API_BASE}/upload`;
+
 
   const fetchPermits = async () => {
     try {
@@ -30,10 +39,10 @@ export default function PermitsRouter({ projectId, token }) {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
-      setPermits(Array.isArray(data) ? data : []);
+      setPermitsList(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error al obtener permisos:", err);
-      setPermits([]);
+      setPermitsList([]);
     } finally {
       setLoading(false);
     }
@@ -41,13 +50,13 @@ export default function PermitsRouter({ projectId, token }) {
 
   useEffect(() => {
     fetchPermits();
-  }, [projectId]); // eslint-disable-line
+  }, [projectId]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // NUEVO: subir un archivo a /upload y devolver la URL
+
   const uploadOne = async (file) => {
     const fd = new FormData();
     fd.append("file", file);
@@ -57,31 +66,32 @@ export default function PermitsRouter({ projectId, token }) {
       body: fd
     });
     if (!res.ok) throw new Error("Error subiendo archivo");
-    const data = await res.json(); // { url, filename, ... }
+    const data = await res.json(); 
     return data.url;
   };
+
   const toCloudinaryDownload = (url, filename = "archivo") => {
     if (!url) return "";
-    if (!url.includes("/upload/")) return url; // no es cloudinary, deja tal cual
-  
-    // evita duplicar fl_attachment si ya existe
-    if (url.includes("fl_attachment")) return url;
-  
+    if (!url.includes("/upload/")) return url; 
+    if (url.includes("fl_attachment")) return url; 
+
     const safe =
       String(filename)
         .toLowerCase()
         .replace(/\s+/g, "_")
         .replace(/[^a-z0-9._-]/g, "") || "archivo";
-  
+
     return url.replace("/upload/", `/upload/fl_attachment:${safe}/`);
   };
+
+
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      // 1) Subir archivo real si se escogió
+
       const fileUrl = permitFile ? await uploadOne(permitFile) : "";
 
-      // 2) Crear permiso con la URL
+
       const res = await fetch(permitActionsUrl, {
         method: "POST",
         headers: {
@@ -91,7 +101,7 @@ export default function PermitsRouter({ projectId, token }) {
         body: JSON.stringify({
           name: formData.permit_name,
           description: formData.permit_description,
-          file: fileUrl,           // <- URL real
+          file: fileUrl,
           idProject: projectId
         }),
       });
@@ -100,11 +110,7 @@ export default function PermitsRouter({ projectId, token }) {
 
       await fetchPermits();
       setShowAdd(false);
-      setFormData({
-        permit_name: "",
-        permit_description: "",
-        permit_archive: ""
-      });
+      setFormData({ permit_name: "", permit_description: "", permit_archive: "" });
       setPermitFile(null);
     } catch (err) {
       console.error(err);
@@ -114,12 +120,10 @@ export default function PermitsRouter({ projectId, token }) {
 
   const handleUpdate = async () => {
     try {
-      // Mantén el archivo actual salvo que se elija uno nuevo
+
       let fileUrl = formData.permit_archive || selected?.permit_archive || "";
 
-      if (permitFile) {
-        fileUrl = await uploadOne(permitFile);
-      }
+      if (permitFile) fileUrl = await uploadOne(permitFile);
 
       const res = await fetch(`${permitActionsUrl}/${selected.permit_id}`, {
         method: "PUT",
@@ -130,7 +134,7 @@ export default function PermitsRouter({ projectId, token }) {
         body: JSON.stringify({
           name: formData.permit_name,
           description: formData.permit_description,
-          file: fileUrl,       // <- URL final (misma o nueva)
+          file: fileUrl,
           idProject: projectId,
         }),
       });
@@ -165,6 +169,14 @@ export default function PermitsRouter({ projectId, token }) {
 
   if (loading) return <h2>Cargando permisos...</h2>;
 
+  if (!canView) {
+    return (
+      <div className="text-muted">
+        <i className="bi bi-shield-lock me-2"></i>No tienes permisos para ver esta sección.
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="d-flex">
@@ -172,47 +184,51 @@ export default function PermitsRouter({ projectId, token }) {
           <h3 className="title inter-title">Permisos</h3>
         </div>
         <div className="col text-end">
-          <button className="btn bg-info-subtle border-black" onClick={() => setShowAdd(true)}>
-            <i className="bi bi-plus-circle"></i> Agregar Permiso
-          </button>
+          {canCreate && (
+            <button className="btn bg-info-subtle border-black" onClick={() => setShowAdd(true)}>
+              <i className="bi bi-plus-circle"></i> Agregar Permiso
+            </button>
+          )}
         </div>
       </div>
       <hr />
 
-      {Array.isArray(permits) && permits.length === 0 ? (
+      {Array.isArray(permitsList) && permitsList.length === 0 ? (
         <div className="text-center text-muted">
           <i className="bi bi-shield-slash" style={{ fontSize: "2rem" }}></i>
           <p>No hay permisos registrados aún.</p>
         </div>
       ) : (
         <div className="row">
-            {permits.map((p) => (
-              <div key={p.permit_id} className="col-12 col-md-6 mb-3">
-                <div className="permit-pill d-flex align-items-center justify-content-between px-4 py-3">
-                  <span className="permit-pill__title text-truncate">{p.permit_name}</span>
+          {permitsList.map((p) => (
+            <div key={p.permit_id} className="col-12 col-md-6 mb-3">
+              <div className="permit-pill d-flex align-items-center justify-content-between px-4 py-3">
+                <span className="permit-pill__title text-truncate">{p.permit_name}</span>
 
-                  <div className="dropdown">
-                    <button
-                      className="btn btn-light btn-sm rounded-3"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                      aria-label="acciones permiso"
-                    >
-                      <i className="bi bi-list fs-5"></i>
-                    </button>
-                    <ul className="dropdown-menu dropdown-menu-end">
-                      <li>
-                        <button
-                          className="dropdown-item"
-                          onClick={() => {
-                            setSelected(p);
-                            setShowDetails(true); 
-                          }}
-                        >
-                          <i className="bi bi-card-text me-2"></i> Mostrar detalles
-                        </button>
-                      </li>
+                <div className="dropdown">
+                  <button
+                    className="btn btn-light btn-sm rounded-3"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    aria-label="acciones permiso"
+                  >
+                    <i className="bi bi-list fs-5"></i>
+                  </button>
+                  <ul className="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <button
+                        className="dropdown-item"
+                        onClick={() => {
+                          setSelected(p);
+                          setShowDetails(true);
+                        }}
+                      >
+                        <i className="bi bi-card-text me-2"></i> Mostrar detalles
+                      </button>
+                    </li>
+
+                    {canEdit && (
                       <li>
                         <button
                           className="dropdown-item"
@@ -221,6 +237,7 @@ export default function PermitsRouter({ projectId, token }) {
                             setFormData({
                               permit_name: p.permit_name,
                               permit_description: p.permit_description,
+                              permit_archive: p.permit_archive || p.file || ""
                             });
                             setShowEdit(true);
                           }}
@@ -228,28 +245,31 @@ export default function PermitsRouter({ projectId, token }) {
                           <i className="bi bi-pencil-square me-2"></i> Editar
                         </button>
                       </li>
-                      <li><hr className="dropdown-divider" /></li>
-                      <li>
-                        <button
-                          className="dropdown-item text-danger"
-                          onClick={() => {
-                            setSelected(p);
-                            setShowDelete(true);
-                          }}
-                        >
-                          <i className="bi bi-trash me-2"></i> Eliminar
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
+                    )}
+
+                    {canDelete && (
+                      <>
+                        <li><hr className="dropdown-divider" /></li>
+                        <li>
+                          <button
+                            className="dropdown-item text-danger"
+                            onClick={() => {
+                              setSelected(p);
+                              setShowDelete(true);
+                            }}
+                          >
+                            <i className="bi bi-trash me-2"></i> Eliminar
+                          </button>
+                        </li>
+                      </>
+                    )}
+                  </ul>
                 </div>
               </div>
-            ))}
-
-
+            </div>
+          ))}
         </div>
       )}
-
 
       {showAdd && (
         <div className="modal d-block bg-dark bg-opacity-50" onClick={() => setShowAdd(false)}>
@@ -294,14 +314,8 @@ export default function PermitsRouter({ projectId, token }) {
                   </div>
                   <hr />
                   <div className="d-flex justify-content-end gap-2">
-                    <button type="submit" className="btn btn-success px-4">
-                      Guardar
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-secondary px-4"
-                      onClick={() => setShowAdd(false)}
-                    >
+                    <button type="submit" className="btn btn-success px-4">Guardar</button>
+                    <button type="button" className="btn btn-secondary px-4" onClick={() => setShowAdd(false)}>
                       Cancelar
                     </button>
                   </div>
@@ -311,6 +325,7 @@ export default function PermitsRouter({ projectId, token }) {
           </div>
         </div>
       )}
+
       {showDetails && selected && (
         <div className="modal d-block bg-dark bg-opacity-50" onClick={() => setShowDetails(false)}>
           <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
@@ -328,6 +343,19 @@ export default function PermitsRouter({ projectId, token }) {
                   <div className="fw-semibold text-muted">Descripción</div>
                   <div>{selected.permit_description || "Sin descripción"}</div>
                 </div>
+                {(selected.permit_archive || selected.file) && (
+                  <div className="mb-2">
+                    <div className="fw-semibold text-muted">Archivo</div>
+                    <a
+                      href={toCloudinaryDownload(selected.permit_archive || selected.file, selected.permit_name)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn btn-outline-primary btn-sm"
+                    >
+                      <i className="bi bi-box-arrow-down me-2" /> Descargar
+                    </a>
+                  </div>
+                )}
               </div>
               <div className="modal-footer">
                 <button className="btn btn-secondary" onClick={() => setShowDetails(false)}>Cerrar</button>
@@ -336,7 +364,8 @@ export default function PermitsRouter({ projectId, token }) {
           </div>
         </div>
       )}
-      {/* Modal Editar */}
+
+
       {showEdit && (
         <div className="modal d-block bg-dark bg-opacity-50" onClick={() => setShowEdit(false)}>
           <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
@@ -383,7 +412,6 @@ export default function PermitsRouter({ projectId, token }) {
         </div>
       )}
 
-      {/* Modal Eliminar */}
       {showDelete && (
         <div className="modal d-block bg-dark bg-opacity-50" onClick={() => setShowDelete(false)}>
           <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
