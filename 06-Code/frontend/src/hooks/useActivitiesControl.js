@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../Context/AuthContext";
 
 export function useActivitiesControls(activity_id, token) {
     const [controls, setControls] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
     const baseUrl = `https://sima-es01.onrender.com/activities/${activity_id}/controls/`;
 
     useEffect(() => {
@@ -29,15 +29,9 @@ export function useActivitiesControls(activity_id, token) {
         fetchControls();
     }, [activity_id, token]);
 
-    const createControl = async (controlData) => {
-        try {
-            const formData = new FormData();
-            formData.append("criterion", controlData.criterion);
-            formData.append("observation", controlData.observation);
-            if (controlData.evidence) {
-                formData.append("evidence", controlData.evidence);
-            }
 
+    const createControl = async (formData) => {
+        try {
             const response = await axios.post(baseUrl, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -51,15 +45,9 @@ export function useActivitiesControls(activity_id, token) {
         }
     };
 
-    const updateControl = async (controlId, controlData) => {
-        try {
-            const formData = new FormData();
-            if (controlData.criterion) formData.append("criterion", controlData.criterion);
-            if (controlData.observation) formData.append("observation", controlData.observation);
-            if (controlData.evidence) {
-                formData.append("evidence", controlData.evidence);
-            }
 
+    const updateControl = async (controlId, formData) => {
+        try {
             const url = `${baseUrl}${controlId}`;
             const response = await axios.put(url, formData, {
                 headers: {
@@ -75,6 +63,7 @@ export function useActivitiesControls(activity_id, token) {
             throw err;
         }
     };
+
 
     const deleteControl = async (controlId) => {
         try {

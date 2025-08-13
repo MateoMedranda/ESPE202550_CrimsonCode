@@ -10,11 +10,11 @@ function ControlModal({ show, onClose, Token, activity }) {
     const [formData, setFormData] = useState({
         criterion: "Cumple",
         observation: "",
-        evidence: "evidencia.pdf",
+        evidence: null, // Inicializar como null, no string
     });
     const [editingId, setEditingId] = useState(null);
 
-    const { token, permits } = useAuth();
+    const { token, permits, user } = useAuth(); // Traigo user para createdby
     const canViewControl = permits?.Controles?.profiles_readcontrol?.value === true;
     const canCreateControl = permits?.Controles?.profiles_createcontrol?.value === true;
     const canUpdateControl = permits?.Controles?.profiles_updatecontrol?.value === true;
@@ -53,17 +53,36 @@ function ControlModal({ show, onClose, Token, activity }) {
         const { name, value, files } = e.target;
         setFormData({
             ...formData,
-            [name]: files ? files[0] : value,
+            [name]: files && files.length > 0 ? files[0] : value, // Solo asigna archivo si hay
         });
     };
 
     const handleSave = async () => {
+        
         try {
-            if (editingId) {
-                await updateControl(editingId, formData);
-            } else {
-                await createControl(formData);
+            const form = new FormData();
+            form.append("criterion", formData.criterion);
+            form.append("observation", formData.observation);
+            form.append("verification", "Pendiente");
+
+            // Usar el usuario del contexto, si existe
+            const createdByValue = user?.username || "Usuario"; 
+            form.append("createdby", createdByValue);
+
+            // En creación, la evidencia es obligatoria
+            if (formData.evidence && formData.evidence instanceof File) {
+                form.append("evidence", formData.evidence);
+            } else if (!editingId) {
+                alert("Debes seleccionar un archivo de evidencia.");
+                return;
             }
+
+            if (editingId) {
+                await updateControl(editingId, form);
+            } else {
+                await createControl(form);
+            }
+
             setShowForm(false);
             setFormData({ criterion: "Cumple", observation: "", evidence: null });
             setEditingId(null);
@@ -76,7 +95,7 @@ function ControlModal({ show, onClose, Token, activity }) {
         setFormData({
             criterion: control.control_criterion,
             observation: control.control_observation,
-            evidence: null,
+            evidence: null, // No se carga archivo automáticamente
         });
         setEditingId(control.control_id);
         setShowForm(true);
@@ -104,7 +123,7 @@ function ControlModal({ show, onClose, Token, activity }) {
                         <button type="button" className="btn-close btn-close-dark" onClick={onClose}></button>
                     </div>
 
-                    {/* Botón */}
+                    {/* Botón para abrir formulario */}
                     <div className="px-4 pt-3">
                         {canCreateControl && (
                             <button
@@ -120,7 +139,7 @@ function ControlModal({ show, onClose, Token, activity }) {
                             </button>
                         )}
 
-                        {/* Cajón animado */}
+                        {/* Cajón animado con formulario */}
                         <div className={`drawer-container ${showForm ? "open" : ""}`}>
                             <div className="card card-body mb-4 shadow-sm border-0">
                                 <form id="register_control">
@@ -180,7 +199,7 @@ function ControlModal({ show, onClose, Token, activity }) {
                         </div>
                     </div>
 
-                    {/* Seguimiento */}
+                    {/* Tabla de seguimiento */}
                     {canViewControl && (
                         <div className="bg-light px-4 pb-4">
                             <hr />
