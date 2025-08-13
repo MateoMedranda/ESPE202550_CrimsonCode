@@ -34,7 +34,15 @@ export default function EnvironmentalPlansList({ projectId, Token }) {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleAddPlan = () => setShowAddModal(true);
+        const handleAddPlan = () => {
+        setShowAddModal(true);
+        setFormData({
+                project_emp_name: "",
+                project_emp_description: "",
+                project_emp_stage: "",
+                project_emp_process: "",
+            });
+    }; 
 
     const handleOpenPlan = (plan) => {
         navigate(`/projects/${projectId}/plans/${plan.environmentalplan_id}`, {
