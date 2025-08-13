@@ -28,7 +28,7 @@ export default function RemindersRouter({ projectId, token: tokenProp }) {
   );
   const [formData, setFormData] = useState(initialForm);
 
-  const API_BASE = (import.meta?.env?.VITE_API_URL || "https://sima-es01.onrender.com").replace(/\/+$/, "");
+  const API_BASE = `https://sima-es01.onrender.com`;
   const baseUrl = `${API_BASE}/api/reminder`;
 
   const reminderApi = {

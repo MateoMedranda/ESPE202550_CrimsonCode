@@ -4,6 +4,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './css/menu.css';
 import './css/project_managment.css';
 import './css/project_page.css';
+import './css/monitoring.css';
 
 import { Modal, Collapse } from 'bootstrap';
 import Profiles from './pages/ProfileRouter.jsx';
