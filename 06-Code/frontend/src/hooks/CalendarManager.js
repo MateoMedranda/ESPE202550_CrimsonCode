@@ -13,21 +13,20 @@ export default function CalendarManager(token) {
     const [notification, setNotification] = useState([]);
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
-    const CalendarContentGet = async (date) => {
-        const dateOnly = date.toISOString().split("T")[0];
 
+    const CalendarContentGet = async (date) => {
         const response = await fetch("https://sima-es01.onrender.com/api/reminder/all", {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ date: dateOnly }),
+            body: JSON.stringify({ date }),
         });
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     };
+
 
     const notificationPost = async (data) => {
 
