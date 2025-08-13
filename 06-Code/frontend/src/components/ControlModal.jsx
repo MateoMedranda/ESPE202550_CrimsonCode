@@ -53,7 +53,7 @@ function ControlModal({ show, onClose, Token, activity }) {
         const { name, value, files } = e.target;
         setFormData({
             ...formData,
-            [name]: files && files.length > 0 ? files[0] : value, // Solo asigna archivo si hay
+            [name]: files && files.length > 0 ? files[0] : value,
         });
     };
 
@@ -65,11 +65,9 @@ function ControlModal({ show, onClose, Token, activity }) {
             form.append("observation", formData.observation);
             form.append("verification", "Pendiente");
 
-            // Usar el usuario del contexto, si existe
             const createdByValue = user?.username || "Usuario"; 
             form.append("createdby", createdByValue);
 
-            // En creación, la evidencia es obligatoria
             if (formData.evidence && formData.evidence instanceof File) {
                 form.append("evidence", formData.evidence);
             } else if (!editingId) {
@@ -95,7 +93,7 @@ function ControlModal({ show, onClose, Token, activity }) {
         setFormData({
             criterion: control.control_criterion,
             observation: control.control_observation,
-            evidence: null, // No se carga archivo automáticamente
+            evidence: null, 
         });
         setEditingId(control.control_id);
         setShowForm(true);
@@ -123,7 +121,6 @@ function ControlModal({ show, onClose, Token, activity }) {
                         <button type="button" className="btn-close btn-close-dark" onClick={onClose}></button>
                     </div>
 
-                    {/* Botón para abrir formulario */}
                     <div className="px-4 pt-3">
                         {canCreateControl && (
                             <button
@@ -139,7 +136,6 @@ function ControlModal({ show, onClose, Token, activity }) {
                             </button>
                         )}
 
-                        {/* Cajón animado con formulario */}
                         <div className={`drawer-container ${showForm ? "open" : ""}`}>
                             <div className="card card-body mb-4 shadow-sm border-0">
                                 <form id="register_control">
@@ -199,7 +195,6 @@ function ControlModal({ show, onClose, Token, activity }) {
                         </div>
                     </div>
 
-                    {/* Tabla de seguimiento */}
                     {canViewControl && (
                         <div className="bg-light px-4 pb-4">
                             <hr />
@@ -249,7 +244,7 @@ function ControlModal({ show, onClose, Token, activity }) {
                                                         <td>{control.control_verification}</td>
                                                         <td>
                                                             <a
-                                                                href={control.control_evidence}
+                                                                href={`${control.control_evidence}.pdf`}
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
                                                                 className="btn btn-sm btn-primary"
