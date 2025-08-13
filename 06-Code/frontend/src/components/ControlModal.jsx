@@ -58,14 +58,14 @@ function ControlModal({ show, onClose, Token, activity }) {
     };
 
     const handleSave = async () => {
-        
+
         try {
             const form = new FormData();
             form.append("criterion", formData.criterion);
             form.append("observation", formData.observation);
             form.append("verification", "Pendiente");
 
-            const createdByValue = user?.username || "Usuario"; 
+            const createdByValue = user?.username || "Usuario";
             form.append("createdby", createdByValue);
 
             if (formData.evidence && formData.evidence instanceof File) {
@@ -93,7 +93,7 @@ function ControlModal({ show, onClose, Token, activity }) {
         setFormData({
             criterion: control.control_criterion,
             observation: control.control_observation,
-            evidence: null, 
+            evidence: null,
         });
         setEditingId(control.control_id);
         setShowForm(true);
@@ -244,7 +244,7 @@ function ControlModal({ show, onClose, Token, activity }) {
                                                         <td>{control.control_verification}</td>
                                                         <td>
                                                             <a
-                                                                href={`${control.control_evidence}.pdf`}
+                                                                href={`${control.control_evidence}`}
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
                                                                 className="btn btn-sm btn-primary"

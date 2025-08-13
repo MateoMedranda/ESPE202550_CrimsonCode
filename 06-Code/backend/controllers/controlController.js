@@ -42,7 +42,9 @@ exports.createControll = [
         return res.status(400).json({ message: "PDF evidence file is required" });
       }
 
-      const result = await cloudinary.uploader.upload(req.file.path);
+      const result = await cloudinary.uploader.upload(req.file.path,
+        {upload_preset: "unsigned_preset"}
+      );
 
       const newControl = await control.create({
         activity_id,
@@ -75,7 +77,9 @@ exports.updateControll = [
       let evidenceUrl = controlObject.control_evidence;
 
       if (req.file) {
-        const result = await cloudinary.uploader.upload(req.file.path);
+        const result = await cloudinary.uploader.upload(req.file.path,
+            {upload_preset: "unsigned_preset"}
+        );
         evidenceUrl = result.secure_url;
       }
 
