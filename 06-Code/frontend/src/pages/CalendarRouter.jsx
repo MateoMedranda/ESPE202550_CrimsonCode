@@ -36,23 +36,21 @@ export default function CalendarRouter() {
   const canEdit = permits?.Recordatorio?.profiles_updatereminder?.value === true;
 
 const handleDatesSet = async (info) => {
-    const visibleDate = info.view.currentStart;
-    const firstDayOfMonth = new Date(
-    visibleDate.getFullYear(),
-    visibleDate.getMonth(),
-    1
-  );
+  const startDate = info.start.toISOString().split("T")[0]; 
+  const endDate = info.end.toISOString().split("T")[0];    
 
-  const data = await CalendarContentGet(firstDayOfMonth);
+  const data = await CalendarContentGet(startDate); 
 
-    const eventsFormatted = data.map(evt => ({
-        id: evt.id,
-        title: evt.title,
-        start: evt.reminder_date,
-    }));
+  const eventsFormatted = data.map(evt => ({
+    id: evt.id,
+    title: evt.title,
+    start: evt.reminder_date,
+  }));
 
-    setEvents(eventsFormatted);
-    };
+  setEvents(eventsFormatted);
+
+};
+
 
     const onCancel = (modalname) => {
     const modal = document.getElementById(modalname);  

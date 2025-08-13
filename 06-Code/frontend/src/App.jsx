@@ -29,7 +29,7 @@ function Menu() {
   const menuRef = useRef(null);
   const inactivityRef = useRef(null);
   const { user, token, permits } = useAuth();
-  const visibility = useMenuVisibility(permits); // Pass permits to the hook
+  const visibility = useMenuVisibility(permits); 
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -99,7 +99,7 @@ function Menu() {
   const toggleDropdown = () => setOpen(!open);
 
   const isActive = (path) => {
-    if (path === '/projects') { // Updated to match your navigation button
+    if (path === '/projects') { 
       return location.pathname.startsWith('/projects');
     }
     return location.pathname === path;
