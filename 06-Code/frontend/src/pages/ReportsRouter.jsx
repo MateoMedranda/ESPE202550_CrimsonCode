@@ -224,7 +224,6 @@ function EnvironmentalCharts() {
                     <th>Medida de Actividad</th>
                     <th>Frecuencia</th>
                     <th>Último Control</th>
-                    <th>Días desde último control</th>
                   </tr>
                 </thead>
                 <tbody>
