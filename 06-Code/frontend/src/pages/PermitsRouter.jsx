@@ -343,19 +343,6 @@ export default function PermitsRouter({ projectId, API_BASE = "https://sima-es01
                   <div className="fw-semibold text-muted">Descripción</div>
                   <div>{selected.permit_description || "Sin descripción"}</div>
                 </div>
-                {(selected.permit_archive || selected.file) && (
-                  <div className="mb-2">
-                    <div className="fw-semibold text-muted">Archivo</div>
-                    <a
-                      href={toCloudinaryDownload(selected.permit_archive || selected.file, selected.permit_name)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="btn btn-outline-primary btn-sm"
-                    >
-                      <i className="bi bi-box-arrow-down me-2" /> Descargar
-                    </a>
-                  </div>
-                )}
               </div>
               <div className="modal-footer">
                 <button className="btn btn-secondary" onClick={() => setShowDetails(false)}>Cerrar</button>
